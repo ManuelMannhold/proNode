@@ -1,0 +1,35 @@
+.container {
+    width: 200px;
+    height: calc(100vh - 50px);
+    background-color: #2E2372;
+    color: white;
+
+}
+
+.project-main-directory-header {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 10px;
+}
+
+.project-main-directory {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    padding: 10px;
+
+    &:hover {
+        background-color: #3A2F8C;
+        cursor: pointer;
+    }
+}
+
+#content {
+    width: 100%;
+    height: auto;
+}

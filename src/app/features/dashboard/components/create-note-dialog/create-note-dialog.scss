@@ -1,0 +1,32 @@
+.dialog-container {
+  background: #2E2372;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  color: white;
+  padding: 20px;
+}
+
+input, textarea {
+  background: rgba(255, 255, 255, 0.05);
+  border: none;
+  border-radius: 8px;
+  color: white;
+  margin-bottom: 15px;
+  padding: 12px;
+}
+
+button {
+    color: white;
+}
+
+::ng-deep .custom-glass-dialog .mat-mdc-form-field-label {
+  color: rgba(255, 255, 255, 0.7) !important; 
+}
+
+::ng-deep .custom-glass-dialog input, 
+::ng-deep .custom-glass-dialog textarea {
+  color: #ffffff !important; /* Reinweißer Text für die Eingabe */
+  caret-color: #007bff; /* Cursor-Farbe passend zum Logo */
+}

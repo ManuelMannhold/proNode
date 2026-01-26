@@ -1,0 +1,23 @@
+header {
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px 10px;
+    background-color: darkslateblue;
+    color: white;
+}
+
+.navbar {
+    display: flex;
+    gap: 20px;
+}
+
+mat-icon {
+    cursor: pointer;
+    font-size: 24px;
+
+    &:hover {
+        color: lightgray;
+    }
+}

@@ -1,0 +1,20 @@
+<div class="dialog-container">
+  <h2 mat-dialog-title>Neue Notiz erstellen</h2>
+  
+  <mat-dialog-content>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Titel</mat-label>
+      <input matInput placeholder="z.B. Meeting Notes Q1">
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Inhalt</mat-label>
+      <textarea matInput rows="5" placeholder="Schreibe etwas..."></textarea>
+    </mat-form-field>
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Abbrechen</button>
+    <button [mat-dialog-close]="true" [disabled]="true" matButton="filled">Speichern</button>
+  </mat-dialog-actions>
+</div>
