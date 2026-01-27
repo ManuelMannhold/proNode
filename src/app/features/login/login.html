@@ -1,46 +1,47 @@
 <div class="login-page-wrapper">
-  <div class="login-card">
-    
-    <div class="logo-section">
-      <mat-icon class="logo-icon">account_tree</mat-icon>
-      <h1>ProNode</h1>
-      <p class="subtitle">Structure Your Ideas</p>
+    <ngx-particles id="tsparticles" [options]="particlesOptions">
+    </ngx-particles>
+    <div class="login-card">
+
+        <div class="logo-section">
+            <mat-icon class="logo-icon">account_tree</mat-icon>
+            <h1>ProNode</h1>
+            <p class="subtitle">Structure Your Ideas</p>
+        </div>
+
+        <h2>Welcome Back</h2>
+
+        <form class="login-form">
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Email Address</mat-label>
+                <input matInput type="email" placeholder="email@example.com">
+                <mat-icon matSuffix>mail</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Password</mat-label>
+                <input matInput type="password" placeholder="••••••••">
+                <mat-icon matSuffix>lock</mat-icon>
+            </mat-form-field>
+
+            <a href="#" class="forgot-link">Forgot password?</a>
+
+            <button mat-raised-button color="primary" class="login-btn">
+                Log In
+            </button>
+
+            <div class="divider">
+                <span>or sign in with</span>
+            </div>
+
+            <div class="social-logins">
+                <button mat-stroked-button class="social-btn">
+                    <img src="https://authjs.dev/img/providers/google.svg" alt="Google"> Google
+                </button>
+                <button mat-stroked-button class="social-btn">
+                    <img src="https://authjs.dev/img/providers/github.svg" alt="GitHub"> GitHub
+                </button>
+            </div>
+        </form>
     </div>
-
-    <h2>Welcome Back</h2>
-
-    <form class="login-form">
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Email Address</mat-label>
-        <input matInput type="email" placeholder="email@example.com">
-        <mat-icon matSuffix>mail</mat-icon>
-      </mat-form-field>
-
-      <mat-form-field appearance="outline" class="full-width">
-        <mat-label>Password</mat-label>
-        <input matInput type="password" placeholder="••••••••">
-        <mat-icon matSuffix>lock</mat-icon>
-      </mat-form-field>
-
-      <a href="#" class="forgot-link">Forgot password?</a>
-
-      <button mat-raised-button color="primary" class="login-btn">
-        Log In
-      </button>
-
-      <div class="divider">
-        <span>or sign in with</span>
-      </div>
-
-      <div class="social-logins">
-        <button mat-stroked-button class="social-btn">
-          <img src="https://authjs.dev/img/providers/google.svg" alt="Google"> Google
-        </button>
-        <button mat-stroked-button class="social-btn">
-          <img src="https://authjs.dev/img/providers/github.svg" alt="GitHub"> GitHub
-        </button>
-      </div>
-    </form>
-    
-  </div>
 </div>

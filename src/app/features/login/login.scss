@@ -15,14 +15,19 @@
   width: 100%;
   max-width: 420px;
   padding: 40px;
-  background: rgba(255, 255, 255, 0.05); /* Sehr transparent */
-  backdrop-filter: blur(20px);           /* Der Glass-Effekt */
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px); 
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  transition: transform 0.3s ease;
   text-align: center;
   color: white;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 
   .logo-section {
     margin-bottom: 30px;
@@ -75,4 +80,58 @@
       img { width: 18px; margin-right: 8px; vertical-align: middle; }
     }
   }
+}
+
+#tsparticles {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: 0;
+}
+
+.login-card {
+  z-index: 1;
+}
+
+/* 1. Das Haupt-Label (Email / Password) - Knallweiß statt Grau */
+::ng-deep .mat-mdc-form-field .mdc-floating-label {
+  color: white !important;
+  font-weight: 500 !important;
+  letter-spacing: 0.5px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8); 
+}
+
+/* 2. Wenn das Label oben schwebt (Floating) */
+::ng-deep .mat-mdc-form-field.mat-focused .mdc-floating-label,
+::ng-deep .mat-mdc-form-field .mdc-floating-label--float-above {
+  color: #00a2ff !important;
+  background-color: transparent !important;
+}
+
+/* 3. Der Eingabetext (das getippte Wort) */
+::ng-deep .mat-mdc-input-element {
+  color: white !important;
+  font-size: 1rem !important;
+}
+
+::ng-deep .mdc-notched-outline__leading,
+::ng-deep .mdc-notched-outline__notch,
+::ng-deep .mdc-notched-outline__trailing {
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-width: 1.5px !important;
+}
+
+/* 5. Rahmen bei Fokus (Klick ins Feld) */
+::ng-deep .mat-focused .mdc-notched-outline__leading,
+::ng-deep .mat-focused .mdc-notched-outline__notch,
+::ng-deep .mat-focused .mdc-notched-outline__trailing {
+  border-color: #00a2ff !important; 
+  border-width: 2px !important;
+}
+
+/* 6. Die Icons (Mail/Lock) aufhellen */
+::ng-deep .mat-mdc-form-field mat-icon {
+  color: rgba(255, 255, 255, 0.8) !important;
 }
