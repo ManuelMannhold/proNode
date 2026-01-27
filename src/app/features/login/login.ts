@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { NgParticlesService, NgxParticlesModule } from "@tsparticles/angular";
 import { loadFull } from "tsparticles";
 import { RecursivePartial, IOptions } from "@tsparticles/engine";
+import { Auth, signInAnonymously } from '@angular/fire/auth';
+
 
 @Component({
   selector: 'app-login',
@@ -16,7 +18,7 @@ import { RecursivePartial, IOptions } from "@tsparticles/engine";
   styleUrl: './login.scss',
 })
 export class Login {
-  constructor(private router: Router, private readonly particlesService: NgParticlesService) { }
+  constructor(private router: Router, private readonly particlesService: NgParticlesService, private auth: Auth) { }
 
   ngOnInit() {
     this.particlesService.init(async (engine) => {
@@ -25,6 +27,28 @@ export class Login {
   }
 
   async particlesLoaded(): Promise<void> {
+}
+
+async loginAsGuest() {
+  console.log("Simuliere Gast-Login (Bypass)...");
+  
+  // Wir speichern ein einfaches Objekt im LocalStorage
+  const fakeUser = {
+    uid: 'guest-' + Math.random().toString(36).substr(2, 9),
+    displayName: 'Gast-Recruiter',
+    isAnonymous: true
+  };
+  
+  localStorage.setItem('currentUser', JSON.stringify(fakeUser));
+
+  // Jetzt ab zum Dashboard
+  this.router.navigate(['/dashboard']).then(success => {
+    if (success) {
+      console.log('Navigation zum Dashboard erfolgreich!');
+    } else {
+      console.error('Navigation fehlgeschlagen!');
+    }
+  });
 }
 
   public particlesOptions: RecursivePartial<IOptions> = {

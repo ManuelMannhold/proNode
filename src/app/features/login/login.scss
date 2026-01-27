@@ -7,8 +7,6 @@
   align-items: center;
   justify-content: center;
   font-family: 'Roboto', sans-serif;
-  position: absolute;
-  inset: 0;
 }
 
 .login-card {
@@ -93,6 +91,18 @@
 
 .login-card {
   z-index: 1;
+}
+
+.guest-section {
+  margin-top: 15px;
+  .guest-btn {
+    color: rgba(255, 255, 255, 0.6);
+    font-weight: 300;
+    &:hover {
+      color: #00a2ff;
+      background: rgba(255, 255, 255, 0.05);
+    }
+  }
 }
 
 /* 1. Das Haupt-Label (Email / Password) - Knallweiß statt Grau */
