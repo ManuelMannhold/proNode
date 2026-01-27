@@ -11,5 +11,5 @@ import { MatInput } from '@angular/material/input';
   styleUrl: './create-note-dialog.scss',
 })
 export class CreateNoteDialog {
-
+  
 }
