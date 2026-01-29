@@ -1,6 +1,6 @@
 .container {
     width: 200px;
-    height: calc(100vh - 70px);
+    height: 100vh;
     background-color: #2E2372;
     color: white;
 
@@ -33,4 +33,26 @@
 #content {
     width: 100%;
     height: auto;
+}
+
+
+@media (max-width: 740px) {
+  .container {
+    width: 60px;
+    display: flex;
+    flex-direction: column; 
+    align-items: center;
+  }
+
+  .project-main-directory-header h3 {
+    display: none;
+  }
+
+  .project-main-directory {
+    justify-content: center;
+  }
+
+  .project-main-directory h4{
+    display: none;
+  }
 }
