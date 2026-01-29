@@ -5,7 +5,11 @@
 
         <div class="logo-section">
             <mat-icon class="logo-icon">account_tree</mat-icon>
-            <h1>ProNode</h1>
+            <div class="logo-container">
+                <span class="bracket">{{ '{' }}</span>
+                <span class="logo-text">ProNode</span>
+                <span class="bracket">{{ '}' }}</span>
+            </div>
             <p class="subtitle">Structure Your Ideas</p>
         </div>
 
@@ -32,6 +36,7 @@
 
             <div class="guest-section">
                 <button mat-button class="guest-btn" type="button" (click)="loginAsGuest()">
+                    <mat-icon>arrow_forward</mat-icon>
                     Continue as Guest
                 </button>
             </div>

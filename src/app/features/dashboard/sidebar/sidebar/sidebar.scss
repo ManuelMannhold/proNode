@@ -1,9 +1,12 @@
 .container {
     width: 200px;
     height: 100vh;
-    background-color: #2E2372;
-    color: white;
-
+    background-color: #112240;
+    color: #ccd6f6;
+    border-right: 1px solid rgba(0, 162, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    position: relative;
 }
 
 .project-main-directory-header {
@@ -12,8 +15,8 @@
     align-items: center;
     justify-content: center;
     gap: 10px;
-    padding: 10px;
-    background-color: #483d8b;
+    padding: 15px 10px;
+    background-color: rgba(0, 0, 0, 0.2);
 }
 
 .project-main-directory {
@@ -22,37 +25,62 @@
     align-items: center;
     justify-content: flex-start;
     gap: 10px;
-    padding: 10px;
+    padding: 12px 15px;
+    transition: all 0.2s ease;
 
     &:hover {
-        background-color: #3A2F8C;
+        background-color: rgba(0, 162, 255, 0.1);
+        color: #00a2ff;
         cursor: pointer;
+    }
+
+    mat-icon, .icon {
+        color: #00a2ff;
     }
 }
 
 #content {
-    width: 100%;
-    height: auto;
+    flex: 1;
+    overflow-y: auto;
 }
-
 
 @media (max-width: 740px) {
   .container {
-    width: 60px;
-    display: flex;
-    flex-direction: column; 
+    width: 70px;
     align-items: center;
   }
 
-  .project-main-directory-header h3 {
+  .project-main-directory-header h3,
+  .project-main-directory h4 {
     display: none;
   }
 
   .project-main-directory {
     justify-content: center;
+    padding: 15px 0;
   }
+}
 
-  .project-main-directory h4{
-    display: none;
-  }
+.logout-button {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 10px 15px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'Segoe UI', sans-serif;
+    transition: all 0.3s ease;
+
+    &:hover {
+        background: rgba(255, 71, 87, 0.1);
+        color: #ff4757;
+        border-color: #ff4757;
+        box-shadow: 0 0 15px rgba(255, 71, 87, 0.2);
+    }
 }

@@ -15,6 +15,26 @@ input {
   font-family: 'Roboto', sans-serif;
 }
 
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fira Code', 'Courier New', monospace;
+    font-weight: 700;
+    font-size: 32px;
+
+    .bracket {
+        color: #00a2ff;
+        text-shadow: 0 0 8px rgba(0, 162, 255, 0.6);
+    }
+
+    .logo-text {
+        color: #ffffff;
+        margin: 0 4px;
+        letter-spacing: 1px;
+    }
+}
+
 .login-card {
   width: 100%;
   max-width: 420px;
@@ -109,6 +129,25 @@ input {
       color: #00a2ff;
       background: rgba(255, 255, 255, 0.05);
     }
+  }
+}
+
+.guest-btn {
+  display: inline-block;
+  margin-top: 15px;
+  padding: 8px 20px;
+  color: rgba(255, 255, 255, 0.6);
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+
+  &:hover {
+    color: #00a2ff;
+    border-color: #00a2ff;
+    background: rgba(0, 162, 255, 0.05);
+    box-shadow: 0 0 10px rgba(0, 162, 255, 0.2);
   }
 }
 
