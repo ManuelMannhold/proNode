@@ -1,5 +1,30 @@
 <div class="container">
-    <div class="project-main-directory-header"><mat-icon>house</mat-icon><h3>Projekte</h3></div>
+    <div class="project-main-directory-header"><mat-icon>house</mat-icon>
+        <h3>Projekte</h3>
+    </div>
+   <div class="project-main-directory sidebar" (click)="addFolder()">
+  <mat-icon>create_new_folder</mat-icon>
+  <span>Neuer Projektordner</span>
+</div>
+
+<div class="project-main-directory sidebar">
+  @for (folder of folders(); track folder.id) {
+    <div class="folder-item" @folderAnimation> @if (folder.isEditing) {
+        <input #nameInput
+               [value]="folder.name"
+               (keyup.enter)="saveName(folder.id, $event)"
+               (keyup.esc)="folder.isEditing = false"
+               (blur)="saveName(folder.id, $event)"
+               placeholder="Ordnername..."> 
+      } @else {
+        <span (dblclick)="folder.isEditing = true">
+          <mat-icon>folder</mat-icon>
+          {{ folder.name }}
+        </span>
+      }
+    </div>
+  }
+</div>
     <div class="project-main-directory" (click)="openCreateNoteDialog()">
         <mat-icon>edit_note</mat-icon>
         <h4>Neue Notiz</h4>
@@ -9,5 +34,5 @@
     </div>
     <button mat-icon-button (click)="logout()" class="logout-button">
         <mat-icon>logout</mat-icon>
-      </button>
+    </button>
 </div>

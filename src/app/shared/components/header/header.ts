@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +11,7 @@ import { Router } from '@angular/router';
 })
 export class Header implements OnInit {
 
-  constructor(private router: Router) { }
+  constructor() { }
 
   currentUser: any = null;
 

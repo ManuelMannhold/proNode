@@ -1,32 +1,107 @@
 .dialog-container {
-  background: #2E2372;
-  backdrop-filter: blur(15px);
-  -webkit-backdrop-filter: blur(15px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  color: white;
-  padding: 20px;
+  background: rgba(17, 34, 64, 0.95); 
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(0, 162, 255, 0.2); 
+  border-radius: 20px;
+  color: #ccd6f6;
+  padding: 30px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
 }
 
-input, textarea {
-  background: rgba(255, 255, 255, 0.05);
-  border: none;
-  border-radius: 8px;
-  color: white;
-  margin-bottom: 15px;
-  padding: 12px;
+h2 {
+  font-family: 'Segoe UI', system-ui, sans-serif;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 25px;
+  color: #fff;
 }
 
-button {
-    color: white;
+.button-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 15px;
+  margin-top: 10px;
+
+  .cancel-btn {
+    color: #8892b0;
+    &:hover { color: #fff; }
+  }
+
+  .save-btn {
+    background: #00a2ff;
+    color: #020c1b;
+    border-radius: 8px;
+    font-weight: 600;
+    padding: 0 20px;
+    
+    &:disabled {
+      background: rgba(0, 162, 255, 0.2);
+      color: rgba(255, 255, 255, 0.3);
+    }
+  }
 }
 
-::ng-deep .custom-glass-dialog .mat-mdc-form-field-label {
-  color: rgba(255, 255, 255, 0.7) !important; 
+::ng-deep .mat-mdc-select-value{
+  color: white !important;
 }
 
-::ng-deep .custom-glass-dialog input, 
-::ng-deep .custom-glass-dialog textarea {
-  color: #ffffff !important; /* Reinweißer Text für die Eingabe */
-  caret-color: #007bff; /* Cursor-Farbe passend zum Logo */
+::ng-deep .mat-mdc-select-panel {
+  background: rgba(17, 34, 64, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 162, 255, 0.2);
+  
+  .mat-mdc-option {
+    color: #ccd6f6 !important;
+    &:hover {
+      background: rgba(0, 162, 255, 0.1) !important;
+    }
+    &.mdc-list-item--selected {
+      color: #00a2ff !important;
+      background: rgba(0, 162, 255, 0.15) !important;
+    }
+  }
+}
+
+::ng-deep .custom-glass-dialog {
+  .mat-mdc-form-field-label {
+    color: rgba(255, 255, 255, 0.7) !important;
+    display: block !important;
+  }
+
+  .button-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 20px;
+  }
+
+  .cancel-btn {
+    background: transparent !important;
+    color: #8892b0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    &:hover {
+      background: rgba(255, 255, 255, 0.05) !important;
+      color: white !important;
+    }
+  }
+
+  .save-btn {
+    &:not(:disabled) {
+      background: #00a2ff !important;
+      color: #020c1b !important;
+      box-shadow: 0 4px 15px rgba(0, 162, 255, 0.4);
+    }
+    &:disabled {
+      background: rgba(255, 255, 255, 0.05) !important;
+      color: rgba(255, 255, 255, 0.2) !important;
+    }
+  }
+}
+
+.save-btn:disabled {
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  cursor: not-allowed;
 }
