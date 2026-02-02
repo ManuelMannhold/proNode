@@ -248,6 +248,10 @@ input {
     transition: opacity 0.2s;
 }
 
+.mobile-only-toggle {
+    display: none !important;
+}
+
 // --- Footer / Logout ---
 .logout-button {
     margin: auto auto 20px auto;
@@ -274,8 +278,64 @@ input {
 
 // --- Responsive Anpassungen ---
 @media (max-width: 768px) {
+    .mobile-only-toggle {
+        display: flex !important; // Auf Mobile anzeigen
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        padding: 15px 0;
+        cursor: pointer;
+        background-color: rgba(0, 162, 255, 0.1);
+        color: #00a2ff;
+
+        &:hover {
+            background-color: rgba(0, 162, 255, 0.2);
+        }
+    }
+
+    .is-expanded .mobile-only-toggle {
+        justify-content: flex-start;
+        padding-left: 20px;
+    }
+
     .container {
         width: 70px;
+        position: absolute;
+        left: 0;
+        top: 0;
+        z-index: 1000;
+        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        overflow: hidden;
+        margin-top: 64px;
+
+        &.is-expanded {
+            width: 260px !important;
+            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
+            background-color: #112240;
+
+            .folder-name,
+            .note-item span,
+            h4,
+            .logout-button span {
+                display: block !important;
+                opacity: 1;
+                white-space: nowrap;
+            }
+
+            .project-main-directory-header {
+                justify-content: flex-start;
+                padding: 15px 20px;
+            }
+        }
+    }
+
+    .project-main-directory-header {
+        justify-content: center;
+        padding: 15px 0;
+
+        h4 {
+            display: none;
+        }
     }
 
     .project-main-directory-header h4,

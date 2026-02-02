@@ -51,6 +51,7 @@ export class Sidebar {
 
   folders = this.noteService.folders;
   selectedFolderId = signal<string | null>(null);
+  isExpanded = signal(false);
 
   @ViewChild('nameInput') set nameInput(element: ElementRef<HTMLInputElement>) {
     if (element) {
@@ -62,23 +63,30 @@ export class Sidebar {
   }
 
   toggleFolder(folder: Folder) {
-  folder.isExpanded = !folder.isExpanded;
-}
+    folder.isExpanded = !folder.isExpanded;
+  }
+
+  toggleSidebar() {
+    this.isExpanded.set(!this.isExpanded());
+  }
 
   addFolder() {
+    if (window.innerWidth < 768) {
+      this.isExpanded.set(true);
+    }
     const newId = Date.now().toString();
     this.noteService.addFolderStub(newId);
   }
 
   saveName(folderId: string, event: any) {
-  const newName = event.target.value.trim();
-  if (newName) {
-    this.noteService.saveFolder(folderId, newName);
-    this.noteService.setEditing(folderId, false);
-  } else {
-    this.noteService.removeFolderStub(folderId);
+    const newName = event.target.value.trim();
+    if (newName) {
+      this.noteService.saveFolder(folderId, newName);
+      this.noteService.setEditing(folderId, false);
+    } else {
+      this.noteService.removeFolderStub(folderId);
+    }
   }
-}
 
   selectFolder(id: string) {
     this.selectedFolderId.set(id);

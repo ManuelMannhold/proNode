@@ -1,4 +1,8 @@
-<div class="container sidebar-layout">
+<div class="container sidebar-layout" [class.is-expanded]="isExpanded()">
+    <div class="project-main-directory-header mobile-only-toggle" (click)="toggleSidebar()">
+        <mat-icon>{{ isExpanded() ? 'menu_open' : 'menu' }}</mat-icon>
+        <h4 *ngIf="isExpanded()">Menü schließen</h4>
+    </div>
     <div class="sidebar-header">
         <div class="project-main-directory-header" (click)="addFolder()">
             <mat-icon>create_new_folder</mat-icon>
@@ -17,9 +21,7 @@
             <div class="folder-item" cdkDrag>
                 <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
 
-                <mat-icon class="chevron" 
-                          [class.rotated]="folder.isExpanded" 
-                          (click)="toggleFolder(folder)">
+                <mat-icon class="chevron" [class.rotated]="folder.isExpanded" (click)="toggleFolder(folder)">
                     chevron_right
                 </mat-icon>
 
