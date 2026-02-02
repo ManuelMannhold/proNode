@@ -16,7 +16,10 @@ export class NoteService {
 
     onValue(foldersQuery, (snapshot) => {
       const data = snapshot.val();
-      if (data) {
+      if (!data) {
+        this.foldersSignal.set([]);
+        return;
+      }
         const list: Folder[] = [];
         snapshot.forEach((child) => {
           const val = child.val();
@@ -28,7 +31,7 @@ export class NoteService {
         });
         this.foldersSignal.set(list);
       }
-    });
+    );
   }
 
   addNote(newNote: Note) {

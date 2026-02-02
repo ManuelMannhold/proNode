@@ -27,37 +27,32 @@ import { NoteService } from '../../../../core/services/note/note.service';
 export class CreateNoteDialog {
   private noteService = inject(NoteService);
   private dialogRef = inject(MatDialogRef<CreateNoteDialog>);
+  folders = this.noteService.folders;
 
   noteForm = new FormGroup({
-    title: new FormControl('', [Validators.required]),
-    content: new FormControl('', [Validators.required]),
-    parentFolder: new FormControl('root')
+    title: new FormControl('', { validators: [Validators.required], nonNullable: true }),
+    content: new FormControl('', { nonNullable: true }),
+    parentFolder: new FormControl('root', { nonNullable: true })
   });
-
-  folders = [
-    { id: 'root', name: 'Hauptverzeichnis' },
-    { id: 'f1', name: 'Projekt A' },
-    { id: 'f2', name: 'Ideen-Sammlung' }
-  ];
 
   closeDialog() {
     this.dialogRef.close();
   }
 
   saveNote() {
-  if (this.noteForm.invalid) return;
-  const { title, content, parentFolder } = this.noteForm.getRawValue();
+    if (this.noteForm.invalid) return;
+    const { title, content, parentFolder } = this.noteForm.getRawValue();
 
-  const newNote: Note = {
-    id: Date.now().toString(),
-    title: title ?? '',  
-    content: content ?? '',   
-    parentId: parentFolder ?? 'root',
-    createdAt: new Date()
-  };
+    const newNote: Note = {
+      id: Date.now().toString(),
+      title: title ?? '',
+      content: content ?? '',
+      parentId: parentFolder,
+      createdAt: new Date().toISOString()
+    };
 
-  this.noteService.addNote(newNote)
-    .then(() => this.dialogRef.close())
-    .catch(err => console.error('Fehler:', err));
-}
+    this.noteService.addNote(newNote as any)
+      .then(() => this.dialogRef.close())
+      .catch(err => console.error('Fehler beim Speichern:', err));
+  }
 }

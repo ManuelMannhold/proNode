@@ -11,7 +11,7 @@
   <mat-label>Ordner</mat-label>
   <mat-select formControlName="parentFolder">
     <mat-option [value]="'root'">Hauptverzeichnis</mat-option>
-    @for (folder of folders; track folder.id) {
+    @for (folder of (folders() || []); track folder.id) {
       <mat-option [value]="folder.id">{{ folder.name }}</mat-option>
     }
   </mat-select>
