@@ -10,12 +10,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { NoteService } from '../../../../core/services/note/note.service';
 import { Folder, Note } from '../../../../core/models/note/note.model';
 import { CreateNoteDialog } from '../../components/create-note-dialog/create-note-dialog';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-sidebar',
   imports: [MatIconModule, CommonModule, CdkDropList, CdkDrag, MatMenuModule,
     MatIconModule,
-    MatButtonModule],
+    MatButtonModule, MatTooltipModule],
   template: `
     <h2 mat-dialog-title>Ordner löschen?</h2>
     <mat-dialog-content>
