@@ -14,4 +14,5 @@ export interface Folder {
   position: number;
   isOpen?: boolean;
   isEditing?: boolean;
+  isExpanded?: boolean;
 }

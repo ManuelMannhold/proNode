@@ -61,7 +61,9 @@ export class Sidebar {
     }
   }
 
-  // --- Ordner Funktionen ---
+  toggleFolder(folder: Folder) {
+  folder.isExpanded = !folder.isExpanded;
+}
 
   addFolder() {
     const newId = Date.now().toString();
