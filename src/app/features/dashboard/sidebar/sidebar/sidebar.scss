@@ -252,6 +252,30 @@ input {
     display: none !important;
 }
 
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); // Halbtransparente Abdunkelung
+    backdrop-filter: blur(2px);          // Optional: Leichter Blur-Effekt
+    z-index: 999;                        // Direkt unter der Sidebar (1000)
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@media (min-width: 769px) {
+    // Auf Desktop brauchen wir kein Backdrop
+    .sidebar-backdrop {
+        display: none;
+    }
+}
+
 // --- Footer / Logout ---
 .logout-button {
     margin: auto auto 20px auto;
@@ -300,15 +324,16 @@ input {
 
     .container {
         width: 70px;
-        position: absolute;
         left: 0;
         top: 0;
         z-index: 1000;
         transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         overflow: hidden;
-        margin-top: 64px;
+        position: relative;
 
         &.is-expanded {
+            position: absolute;
+            top: 64px;
             width: 260px !important;
             box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
             background-color: #112240;

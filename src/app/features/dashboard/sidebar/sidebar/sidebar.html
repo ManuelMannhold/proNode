@@ -1,3 +1,6 @@
+@if (isExpanded()) {
+  <div class="sidebar-backdrop" (click)="closeSidebar()"></div>
+}
 <div class="container sidebar-layout" [class.is-expanded]="isExpanded()">
     <div class="project-main-directory-header mobile-only-toggle" (click)="toggleSidebar()">
         <mat-icon>{{ isExpanded() ? 'menu_open' : 'menu' }}</mat-icon>

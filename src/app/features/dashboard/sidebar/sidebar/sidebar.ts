@@ -62,6 +62,10 @@ export class Sidebar {
     }
   }
 
+closeSidebar() {
+  this.isExpanded.set(false);
+}
+
   toggleFolder(folder: Folder) {
     folder.isExpanded = !folder.isExpanded;
   }
