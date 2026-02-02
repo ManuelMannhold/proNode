@@ -1,11 +1,15 @@
 <div class="dashboard-layout">
-  <app-header></app-header> 
+  <app-header></app-header>
 
   <div class="main-container">
     <app-sidebar></app-sidebar>
 
     <main class="content-area">
-      <router-outlet></router-outlet> <h1>Willkommen im ProNode Bereich</h1>
+      <router-outlet></router-outlet>
+      @if (!noteService.selectedNote()) {
+      <h1>Willkommen im ProNode Bereich</h1>
+      <p>Wähle eine Notiz aus der Sidebar oder erstelle eine neue.</p>
+      }
     </main>
   </div>
 </div>

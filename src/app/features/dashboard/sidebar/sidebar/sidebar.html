@@ -1,37 +1,67 @@
-<div class="container">
-    <div class="project-main-directory-header"><mat-icon>house</mat-icon>
-        <h3>Projekte</h3>
-    </div>
-   <div class="project-main-directory sidebar" (click)="addFolder()">
-  <mat-icon>create_new_folder</mat-icon>
-  <span>Neuer Projektordner</span>
-</div>
+<div class="container sidebar-layout">
+    <div class="sidebar-header">
+        <div class="project-main-directory-header" (click)="addFolder()">
+            <mat-icon>create_new_folder</mat-icon>
+            <h4>Neuer Projektordner</h4>
+        </div>
 
-<div class="project-main-directory sidebar">
-  @for (folder of folders(); track folder.id) {
-    <div class="folder-item" @folderAnimation> @if (folder.isEditing) {
-        <input #nameInput
-               [value]="folder.name"
-               (keyup.enter)="saveName(folder.id, $event)"
-               (keyup.esc)="folder.isEditing = false"
-               (blur)="saveName(folder.id, $event)"
-               placeholder="Ordnername..."> 
-      } @else {
-        <span (dblclick)="folder.isEditing = true">
-          <mat-icon>folder</mat-icon>
-          {{ folder.name }}
-        </span>
-      }
+        <div class="project-main-directory-header" (click)="openCreateNoteDialog()">
+            <mat-icon>edit_note</mat-icon>
+            <h4>Neue Notiz</h4>
+        </div>
     </div>
-  }
-</div>
-    <div class="project-main-directory" (click)="openCreateNoteDialog()">
-        <mat-icon>edit_note</mat-icon>
-        <h4>Neue Notiz</h4>
-    </div>
-    <div id="content">
 
+    <div class="project-main-directory sidebar" cdkDropList (cdkDropListDropped)="drop($event)">
+        @for (folder of folders(); track folder.id) {
+        <div class="folder-group" @folderAnimation> 
+            <div class="folder-item" cdkDrag>
+                <mat-icon cdkDragHandle class="drag-handle">drag_indicator</mat-icon>
+
+                @if (folder.isEditing) {
+                    <input #nameInput [value]="folder.name" 
+                           (keyup.enter)="saveName(folder.id, $event)"
+                           (keyup.esc)="noteService.removeFolderStub(folder.id)" 
+                           (blur)="saveName(folder.id, $event)" 
+                           placeholder="Ordnername..." autofocus>
+                } @else {
+                    <div class="folder-content" (click)="selectFolder(folder.id)">
+                        <mat-icon>folder</mat-icon>
+                        <span class="folder-name">{{ folder.name }}</span>
+                    </div>
+
+                    <button mat-icon-button [matMenuTriggerFor]="folderMenu" class="more-btn">
+                        <mat-icon>more_vert</mat-icon>
+                    </button>
+
+                    <mat-menu #folderMenu="matMenu" class="custom-folder-menu" xPosition="before">
+                        <button mat-menu-item (click)="noteService.setEditing(folder.id, true)">
+                            <mat-icon>edit</mat-icon>
+                            <span>Umbenennen</span>
+                        </button>
+                        <button mat-menu-item (click)="deleteFolder(folder.id)" style="color: #ff5252;">
+                            <mat-icon style="color: #ff5252;">delete</mat-icon>
+                            <span>Löschen</span>
+                        </button>
+                    </mat-menu>
+                }
+            </div>
+
+            @if (folder.notes && folder.notes.length > 0) {
+                <div class="notes-sub-list">
+                    @for (note of folder.notes; track note.id) {
+                        <div class="note-item" 
+                             (click)="onNoteClick(note)"
+                             [class.active]="noteService.selectedNote()?.id === note.id">
+                            <mat-icon>description</mat-icon>
+                            <span>{{ note.title }}</span>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+        }
     </div>
+
     <button mat-icon-button (click)="logout()" class="logout-button">
         <mat-icon>logout</mat-icon>
     </button>

@@ -1,24 +1,42 @@
-import { Component, ElementRef, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from "@angular/material/icon";
-import { CreateNoteDialog } from '../../components/create-note-dialog/create-note-dialog';
 import { Router } from '@angular/router';
-import { Folder } from '../../../../core/models/note/note.model';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
+import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatButtonModule } from '@angular/material/button';
+import { NoteService } from '../../../../core/services/note/note.service';
+import { Folder, Note } from '../../../../core/models/note/note.model';
+import { CreateNoteDialog } from '../../components/create-note-dialog/create-note-dialog';
 
 @Component({
   selector: 'app-sidebar',
-  imports: [MatIconModule, CommonModule],
+  imports: [MatIconModule, CommonModule, CdkDropList, CdkDrag, MatMenuModule,
+    MatIconModule,
+    MatButtonModule],
+  template: `
+    <h2 mat-dialog-title>Ordner löschen?</h2>
+    <mat-dialog-content>
+      Bist du sicher? Alle Notizen in diesem Ordner gehen verloren.
+    </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-button [mat-dialog-close]="false">Abbrechen</button>
+      <button mat-button [mat-dialog-close]="true" color="warn">Löschen</button>
+    </mat-dialog-actions>
+  `,
+  styles: [`mat-dialog-content { color: #ccd6f6; padding-bottom: 20px; }
+    h2 { color: #ff5252; }`],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
   animations: [
     trigger('folderAnimation', [
-      transition(':enter', [ // Wenn ein Element neu dazukommt
+      transition(':enter', [
         style({ opacity: 0, transform: 'translateY(-10px)' }),
         animate('200ms ease-out', style({ opacity: 1, transform: 'translateY(0)' }))
       ]),
-      transition(':leave', [ // Wenn ein Element gelöscht wird
+      transition(':leave', [
         animate('150ms ease-in', style({ opacity: 0, transform: 'scale(0.9)' }))
       ])
     ])
@@ -26,9 +44,12 @@ import { trigger, transition, style, animate } from '@angular/animations';
 })
 
 export class Sidebar {
-  constructor(private dialog: MatDialog, private router: Router) { }
+  public noteService = inject(NoteService);
+  private dialog = inject(MatDialog);
+  private router = inject(Router);
 
-  folders = signal<Folder[]>([]);
+  folders = this.noteService.folders;
+  selectedFolderId = signal<string | null>(null);
 
   @ViewChild('nameInput') set nameInput(element: ElementRef<HTMLInputElement>) {
     if (element) {
@@ -39,30 +60,51 @@ export class Sidebar {
     }
   }
 
+  // --- Ordner Funktionen ---
+
   addFolder() {
     const newId = Date.now().toString();
-    this.folders.update(allFolders => [{ id: newId, name: '', notes: [], isEditing: true }, ...allFolders]);
+    this.noteService.addFolderStub(newId);
   }
 
   saveName(folderId: string, event: any) {
-    const newName = event.target.value.trim();
+  const newName = event.target.value.trim();
+  if (newName) {
+    this.noteService.saveFolder(folderId, newName);
+    this.noteService.setEditing(folderId, false);
+  } else {
+    this.noteService.removeFolderStub(folderId);
+  }
+}
 
-    this.folders.update(allFolders => {
-      if (newName === '') {
-        return allFolders.filter(f => f.id !== folderId);
-      }
-      return allFolders.map(folder =>
-        folder.id === folderId ? { ...folder, name: newName, isEditing: false } : folder
-      );
-    });
+  selectFolder(id: string) {
+    this.selectedFolderId.set(id);
+  }
+
+  deleteFolder(id: string) {
+    if (confirm('Möchtest du diesen Ordner wirklich löschen?')) {
+      this.noteService.deleteFolder(id);
+    }
+  }
+
+  // --- Notiz Funktionen ---
+
+  onNoteClick(note: Note) {
+    this.noteService.selectNote(note);
   }
 
   openCreateNoteDialog() {
     this.dialog.open(CreateNoteDialog, {
       width: '450px',
-      panelClass: 'custom-glass-dialog',
-      data: { /* hier könntest du die aktuelle Ordner-ID übergeben */ }
+      panelClass: 'custom-glass-dialog'
     });
+  }
+
+  drop(event: CdkDragDrop<Folder[]>) {
+    const currentFolders = [...this.folders()];
+    moveItemInArray(currentFolders, event.previousIndex, event.currentIndex);
+    this.noteService.updateLocalOrder(currentFolders);
+    this.noteService.updateFolderPositions(currentFolders);
   }
 
   logout() {

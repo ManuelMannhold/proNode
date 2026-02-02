@@ -1,7 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Sidebar } from './sidebar/sidebar/sidebar';
 import { Header } from '../../shared/components/header/header';
 import { RouterOutlet } from '@angular/router';
+import { NoteService } from '../../core/services/note/note.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -9,6 +10,10 @@ import { RouterOutlet } from '@angular/router';
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })
+
 export class Dashboard {
+
+  constructor(public noteService: NoteService){}
+
 
 }

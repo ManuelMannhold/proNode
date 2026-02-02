@@ -19,7 +19,7 @@ import { NoteService } from '../../../../core/services/note/note.service';
     MatInputModule,
     MatSelectModule,
     MatOptionModule,
-    MatDialogModule 
+    MatDialogModule
   ],
   templateUrl: './create-note-dialog.html',
   styleUrl: './create-note-dialog.scss',
@@ -45,17 +45,19 @@ export class CreateNoteDialog {
   }
 
   saveNote() {
-    if (this.noteForm.valid) {
-      const newNote: Note = {
-        id: crypto.randomUUID(),
-        title: this.noteForm.value.title ?? '',
-        content: this.noteForm.value.content ?? '',
-        parentId: this.noteForm.value.parentFolder ?? 'root',
-        createdAt: new Date()
-      };
+  if (this.noteForm.invalid) return;
+  const { title, content, parentFolder } = this.noteForm.getRawValue();
 
-      this.noteService.addNote(newNote);
-      this.dialogRef.close();
-    }
-  }
+  const newNote: Note = {
+    id: Date.now().toString(),
+    title: title ?? '',  
+    content: content ?? '',   
+    parentId: parentFolder ?? 'root',
+    createdAt: new Date()
+  };
+
+  this.noteService.addNote(newNote)
+    .then(() => this.dialogRef.close())
+    .catch(err => console.error('Fehler:', err));
+}
 }
