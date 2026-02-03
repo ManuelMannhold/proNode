@@ -201,8 +201,6 @@ export class Sidebar {
 
   selectNote(note: any) {
     this.noteService.selectedNote.set(note);
-
-    // Falls du mobil arbeitest: Sidebar nach Auswahl schließen
-    // this.isExpanded = false; 
+    this.isExpanded.set(false);
   }
 }
