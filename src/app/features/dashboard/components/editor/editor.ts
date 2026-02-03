@@ -23,7 +23,8 @@ export class Editor implements OnInit, OnDestroy {
   shareNote() {
     throw new Error('Method not implemented.');
   }
-  
+
+  public isTitleInvalid = signal(false);
   public noteService = inject(NoteService);
   private route = inject(ActivatedRoute);
   private db = inject(Database);
@@ -115,23 +116,45 @@ export class Editor implements OnInit, OnDestroy {
   }
 
   async updateTitle(newTitle: string) {
-  this.noteTitle.set(newTitle);
-  const currentNote = this.noteService.selectedNote();
-  
-  if (currentNote) {
-    this.noteService.isSaving.set(true); 
-    
-    const titleRef = ref(this.db, `folders/${currentNote.parentId}/notes/${currentNote.id}/title`);
-    
-    try {
-      await set(titleRef, newTitle);
-      setTimeout(() => this.noteService.isSaving.set(false), 800);
-    } catch (error) {
-      console.error(error);
-      this.noteService.isSaving.set(false);
+    this.noteTitle.set(newTitle);
+
+    // 1. Validierung: Ist der Titel leer oder nur Leerzeichen?
+    if (!newTitle || newTitle.trim() === '') {
+      this.isTitleInvalid.set(true);
+      return; // Abbrechen, nicht speichern
+    }
+
+    this.isTitleInvalid.set(false); // Validierung okay
+    const currentNote = this.noteService.selectedNote();
+
+    if (currentNote) {
+      this.noteService.isSaving.set(true);
+      const titleRef = ref(this.db, `folders/${currentNote.parentId}/notes/${currentNote.id}/title`);
+
+      try {
+        await set(titleRef, newTitle);
+        setTimeout(() => this.noteService.isSaving.set(false), 800);
+      } catch (error) {
+        console.error(error);
+        this.noteService.isSaving.set(false);
+      }
     }
   }
-}
+
+  onTitleBlur() {
+    const currentTitle = this.noteTitle();
+
+    // Wenn der Titel leer ist oder nur aus Leerzeichen besteht
+    if (!currentTitle || currentTitle.trim() === '') {
+      const fallbackTitle = 'Unbenannte Notiz';
+
+      this.noteTitle.set(fallbackTitle);
+      this.isTitleInvalid.set(false); // Roten Rahmen entfernen
+
+      // Direkt den Fallback-Titel in der DB speichern
+      this.updateTitle(fallbackTitle);
+    }
+  }
 
   async saveNote() {
     await this.performAutoSave(this.noteContent());

@@ -123,6 +123,18 @@ export class NoteService {
     }
   }
 
+  async deleteNote(folderId: string, noteId: string) {
+    const noteRef = ref(this.db, `folders/${folderId}/notes/${noteId}`);
+    try {
+      await remove(noteRef);
+      if (this.selectedNote()?.id === noteId) {
+        this.selectedNote.set(null);
+      }
+    } catch (error) {
+      console.error('Fehler beim Löschen der Notiz:', error);
+    }
+  }
+
   deleteFolder(id: string) {
     remove(ref(this.db, `folders/${id}`));
   }

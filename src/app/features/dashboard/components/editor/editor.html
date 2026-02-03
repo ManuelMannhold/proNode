@@ -1,8 +1,9 @@
 <div class="editor-container">
     <header class="editor-header">
         <div class="header-left">
-            <input type="text" [ngModel]="noteTitle()" (ngModelChange)="updateTitle($event)" class="title-input"
-                placeholder="Unbenannte Notiz">
+            <input type="text" [ngModel]="noteTitle()" (ngModelChange)="updateTitle($event)" (blur)="onTitleBlur()"
+                class="title-input" [class.invalid]="isTitleInvalid()" placeholder="Titel der Notiz...">
+
             <span class="status-badge">{{ saveStatus() }}</span>
         </div>
 
