@@ -10,10 +10,57 @@
     overflow: hidden;
 }
 
-// Header-Bereich (Logo / Menü)
 .sidebar-header {
+    padding: 20px 15px;
     display: flex;
     flex-direction: column;
+    gap: 12px; // Abstand zwischen den Buttons
+
+    .action-btn {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 16px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 0.9rem;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        width: 100%;
+
+        mat-icon {
+            font-size: 20px;
+            width: 20px;
+            height: 20px;
+        }
+
+        // Der Haupt-Button (Projektordner)
+        &.primary {
+            background: linear-gradient(135deg, #00a2ff 0%, #0076ba 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 162, 255, 0.2);
+
+            &:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 6px 20px rgba(0, 162, 255, 0.3);
+                filter: brightness(1.1);
+            }
+        }
+
+        // Der sekundäre Button (Neue Notiz)
+        &.secondary {
+            background: rgba(255, 255, 255, 0.05);
+            color: #ccd6f6;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+
+            &:hover {
+                background: rgba(255, 255, 255, 0.1);
+                color: #00a2ff;
+                border-color: rgba(0, 162, 255, 0.4);
+            }
+        }
+    }
 }
 
 .project-main-directory-header {
@@ -258,9 +305,9 @@ input {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.5); // Halbtransparente Abdunkelung
-    backdrop-filter: blur(2px);          // Optional: Leichter Blur-Effekt
-    z-index: 999;                        // Direkt unter der Sidebar (1000)
+    background-color: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(2px);        
+    z-index: 999;                    
     animation: fadeIn 0.3s ease;
 }
 
@@ -302,86 +349,55 @@ input {
     }
 }
 
-// --- Responsive Anpassungen ---
+// --- Responsive Anpassungen (NEU & BEREINIGT) ---
 @media (max-width: 768px) {
-    .mobile-only-toggle {
-        display: flex !important; // Auf Mobile anzeigen
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        padding: 15px 0;
-        cursor: pointer;
-        background-color: rgba(0, 162, 255, 0.1);
-        color: #00a2ff;
-
-        &:hover {
-            background-color: rgba(0, 162, 255, 0.2);
-        }
-    }
-
-    .is-expanded .mobile-only-toggle {
-        justify-content: flex-start;
-        padding-left: 20px;
-    }
-
+    
+    // 1. Den alten 70px-Balken links komplett entfernen
     .container {
-        width: 70px;
+        width: 100% !important; 
+        position: static; // Löst die Sidebar aus der festen Verankerung links
+        border-right: none;
+    }
+
+    // 2. Deine Sidebar (jetzt das Slide-Up Panel)
+    .sidebar-layout {
+        position: fixed;
+        bottom: 0;
         left: 0;
-        top: 0;
-        z-index: 1000;
-        transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        overflow: hidden;
-        position: relative;
+        width: 100% !important; // Volle Breite auf Mobile
+        height: 75vh;
+        background-color: #112240;
+        z-index: 1500; // Unter der Bottom-Nav (2001)
+        border-radius: 24px 24px 0 0;
+        transform: translateY(100%); // Versteckt sie unten
+        transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+        display: flex;
+        flex-direction: column;
+        box-shadow: 0 -10px 30px rgba(0, 0, 0, 0.5);
 
         &.is-expanded {
-            position: absolute;
-            top: 64px;
-            height: calc(100dvh - 64px) !important;
-            width: 260px !important;
-            box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
-            background-color: #112240;
-
-            .folder-name,
-            .note-item span,
-            h4,
-            .logout-button span {
-                display: block !important;
-                opacity: 1;
-                white-space: nowrap;
-            }
-
-            .project-main-directory-header {
-                justify-content: flex-start;
-                padding: 15px 20px;
-            }
+            transform: translateY(0); // Slidet hoch
         }
     }
 
-    .project-main-directory-header {
-        justify-content: center;
-        padding: 15px 0;
-
-        h4 {
-            display: none;
-        }
-    }
-
-    .project-main-directory-header h4,
+    // 3. Sichtbarkeit der Texte korrigieren
+    // Dein altes CSS hat h4 und span auf display: none gesetzt! Das muss weg:
     .folder-name,
     .note-item span,
+    .sidebar-header h4,
     .logout-button span {
-        display: none;
+        display: block !important; // Damit du in der hochgefahrenen Sidebar auch was lesen kannst
+        opacity: 1;
     }
 
-    .notes-sub-list {
-        margin-left: 0;
-        border-left: none;
+    // 4. Die alte "Burger-Leiste" endgültig löschen
+    .mobile-only-toggle {
+        display: none !important;
     }
 
-    .folder-item,
-    .note-item {
-        justify-content: center;
-        padding: 12px 0;
+    // 5. Abstände für die Ordnerliste
+    .project-main-directory {
+        padding: 10px 20px 100px 20px; // Extra Padding unten für die Nav-Bar
     }
 }
 
@@ -409,6 +425,121 @@ input {
             .mat-icon {
                 color: #00a2ff !important;
             }
+        }
+    }
+}
+
+.mobile-bottom-nav {
+  display: none;
+
+  @media (max-width: 768px) {
+    display: flex;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 70px;
+    background: #0f172a; // Sehr dunkles Blau/Schwarz passend zu deinem Header
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    justify-content: space-around;
+    align-items: center;
+    z-index: 1000;
+    padding-bottom: env(safe-area-inset-bottom); // S23 Home-Bar Fix
+  }
+}
+
+.nav-item {
+  background: none;
+  border: none;
+  color: #94a3b8; 
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  transition: all 0.2s;
+
+  mat-icon {
+    font-size: 24px;
+    width: 24px;
+    height: 24px;
+  }
+
+  span {
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  &.active {
+    color: #38bdf8;
+  }
+}
+
+// Der "Plus"-Button in der Mitte darf ruhig etwas herausstechen
+.action-button {
+  background: #38bdf8;
+  color: #0f172a;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+  
+  mat-icon {
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+  }
+}
+
+.sidebar-layout {
+  @media (max-width: 768px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80vh; // Fast der ganze Bildschirm
+    background: #0f172a; 
+    z-index: 2000; // Höher als die Bottom-Nav
+    border-radius: 24px 24px 0 0;
+    transform: translateY(100%); // Versteckt
+    transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+    padding: 10px 20px 80px; // Unten Platz für die Nav-Bar lassen
+
+    &.is-expanded {
+      transform: translateY(0); // Slidet hoch
+    }
+    
+    .mobile-handle {
+      width: 40px;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.2);
+      border-radius: 2px;
+      margin: 0 auto 20px;
+    }
+  }
+}
+
+.mobile-bottom-nav {
+  // ... dein bisheriges Design ...
+  z-index: 2001; // Damit die Buttons immer über der Drawer-Kante liegen
+}
+
+.action-btn {
+    position: relative;
+    overflow: hidden; // Wichtig, damit die Welle nicht über den Button-Rand geht
+    
+    // Die Farbe der Welle für den blauen Button
+    &.primary {
+        ::ng-deep .mat-ripple-element {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+    }
+
+    // Die Farbe für den dezenten Button
+    &.secondary {
+        ::ng-deep .mat-ripple-element {
+            background-color: rgba(0, 162, 255, 0.1);
         }
     }
 }

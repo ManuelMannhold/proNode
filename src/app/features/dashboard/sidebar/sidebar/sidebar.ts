@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, inject, signal, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from "@angular/material/icon";
 import { NavigationEnd, Router, RouterLink } from '@angular/router';
@@ -12,12 +12,13 @@ import { Folder, Note } from '../../../../core/models/note/note.model';
 import { CreateNoteDialog } from '../../components/create-note-dialog/create-note-dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { filter } from 'rxjs/operators';
+import { MatRippleModule } from '@angular/material/core';
 
 @Component({
   selector: 'app-sidebar',
   imports: [MatIconModule, CommonModule, CdkDropList, CdkDrag, MatMenuModule,
     MatIconModule,
-    MatButtonModule, MatTooltipModule, RouterLink],
+    MatButtonModule, MatTooltipModule, MatRippleModule, RouterLink],
   template: `
     <h2 mat-dialog-title>Ordner löschen?</h2>
     <mat-dialog-content>
@@ -54,6 +55,12 @@ export class Sidebar {
   folders = this.noteService.folders;
   selectedFolderId = signal<string | null>(null);
   isExpanded = signal(false);
+  isMobile = signal(window.innerWidth < 768);
+
+  @HostListener('window:resize', ['$event'])
+  onResize(event: UIEvent) { 
+    this.isMobile.set(window.innerWidth < 768);
+  }
 
   @ViewChild('nameInput') set nameInput(element: ElementRef<HTMLInputElement>) {
     if (element) {
@@ -82,9 +89,9 @@ export class Sidebar {
     }
   }
 
-closeSidebar() {
-  this.isExpanded.set(false);
-}
+  closeSidebar() {
+    this.isExpanded.set(false);
+  }
 
   toggleFolder(folder: any) {
     const currentSet = new Set(this.expandedFolderIds());
@@ -118,9 +125,12 @@ closeSidebar() {
     }
   }
 
-  selectFolder(id: string) {
-    this.selectedFolderId.set(id);
+  selectFolder(folderId: string) {
+  this.selectedFolderId.set(folderId);
+  if (this.isMobile()) {
+    this.isExpanded.set(false);
   }
+}
 
   deleteFolder(id: string) {
     if (confirm('Möchtest du diesen Ordner wirklich löschen?')) {
@@ -141,16 +151,16 @@ closeSidebar() {
     });
 
     DIALOGREF.afterClosed().subscribe(result => {
-    if (result) {
-      // 1. Hier würdest du normalerweise deinen Service aufrufen:
-      // this.noteService.createNote(result).subscribe(newNote => { ... });
-      
-      // 2. Navigation: Wir schicken den User zum Editor mit der ID der neuen Notiz
-      // Für den Test nehmen wir eine fiktive ID:
-      const mockId = Math.random().toString(36).substring(7);
-      this.router.navigate(['/dashboard/note', mockId]);
-    }
-  });
+      if (result) {
+        // 1. Hier würdest du normalerweise deinen Service aufrufen:
+        // this.noteService.createNote(result).subscribe(newNote => { ... });
+
+        // 2. Navigation: Wir schicken den User zum Editor mit der ID der neuen Notiz
+        // Für den Test nehmen wir eine fiktive ID:
+        const mockId = Math.random().toString(36).substring(7);
+        this.router.navigate(['/dashboard/note', mockId]);
+      }
+    });
   }
 
   drop(event: CdkDragDrop<Folder[]>) {
