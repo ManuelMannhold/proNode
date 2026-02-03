@@ -8,6 +8,7 @@ export class NoteService {
   private foldersSignal = signal<Folder[]>([]);
   public folders = computed(() => this.foldersSignal());
   public selectedNote = signal<Note | null>(null);
+  public isSaving = signal(false);
 
   constructor() { this.initFirebaseSync(); }
 

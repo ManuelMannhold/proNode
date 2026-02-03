@@ -17,7 +17,13 @@ import { Database, ref, set } from '@angular/fire/database';
   styleUrl: './editor.scss',
 })
 export class Editor implements OnInit, OnDestroy {
-  // Services
+  deleteNote() {
+    throw new Error('Method not implemented.');
+  }
+  shareNote() {
+    throw new Error('Method not implemented.');
+  }
+  
   public noteService = inject(NoteService);
   private route = inject(ActivatedRoute);
   private db = inject(Database);
@@ -109,20 +115,20 @@ export class Editor implements OnInit, OnDestroy {
   }
 
   async updateTitle(newTitle: string) {
-  this.noteTitle.set(newTitle); // Lokales Signal updaten
-  
+  this.noteTitle.set(newTitle);
   const currentNote = this.noteService.selectedNote();
+  
   if (currentNote) {
-    const folderId = currentNote.parentId;
-    const noteId = currentNote.id;
+    this.noteService.isSaving.set(true); 
     
-    // Wir nutzen eine ähnliche Logik wie beim Content-Update
-    const titleRef = ref(this.db, `folders/${folderId}/notes/${noteId}/title`);
+    const titleRef = ref(this.db, `folders/${currentNote.parentId}/notes/${currentNote.id}/title`);
+    
     try {
       await set(titleRef, newTitle);
-      console.log('Titel erfolgreich aktualisiert');
+      setTimeout(() => this.noteService.isSaving.set(false), 800);
     } catch (error) {
-      console.error('Fehler beim Titel-Speichern:', error);
+      console.error(error);
+      this.noteService.isSaving.set(false);
     }
   }
 }

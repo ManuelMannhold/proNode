@@ -9,15 +9,15 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 16px 32px; // Mehr vertikaler Platz
-    background-color: rgba(17, 34, 64, 0.8); // Leicht transparent für moderne Optik
-    backdrop-filter: blur(10px); // Edler Glas-Effekt
+    padding: 16px 32px; 
+    background-color: rgba(17, 34, 64, 0.8); 
+    backdrop-filter: blur(10px); 
     border-bottom: 1px solid rgba(0, 162, 255, 0.05);
     z-index: 10;
 
     .header-left {
         flex: 1;
-        margin-right: 20px;
+        min-width: 0;
 
         .title-input {
             background: transparent;
@@ -136,3 +136,4 @@
         }
     }
 }
+
