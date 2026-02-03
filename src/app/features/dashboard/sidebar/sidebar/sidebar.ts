@@ -13,12 +13,13 @@ import { CreateNoteDialog } from '../../components/create-note-dialog/create-not
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { filter } from 'rxjs/operators';
 import { MatRippleModule } from '@angular/material/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-sidebar',
   imports: [MatIconModule, CommonModule, CdkDropList, CdkDrag, MatMenuModule,
     MatIconModule,
-    MatButtonModule, MatTooltipModule, MatRippleModule, RouterLink],
+    MatButtonModule, MatTooltipModule, MatRippleModule],
   template: `
     <h2 mat-dialog-title>Ordner löschen?</h2>
     <mat-dialog-content>
@@ -51,6 +52,8 @@ export class Sidebar {
   private dialog = inject(MatDialog);
   private router = inject(Router);
   expandedFolderIds = signal<Set<string>>(new Set());
+  public selectedNote = this.noteService.selectedNote;
+  private snackBar = inject(MatSnackBar);
 
   folders = this.noteService.folders;
   selectedFolderId = signal<string | null>(null);
@@ -58,7 +61,7 @@ export class Sidebar {
   isMobile = signal(window.innerWidth < 768);
 
   @HostListener('window:resize', ['$event'])
-  onResize(event: UIEvent) { 
+  onResize(event: UIEvent) {
     this.isMobile.set(window.innerWidth < 768);
   }
 
@@ -126,11 +129,11 @@ export class Sidebar {
   }
 
   selectFolder(folderId: string) {
-  this.selectedFolderId.set(folderId);
-  if (this.isMobile()) {
-    this.isExpanded.set(false);
+    this.selectedFolderId.set(folderId);
+    if (this.isMobile()) {
+      this.isExpanded.set(false);
+    }
   }
-}
 
   deleteFolder(id: string) {
     if (confirm('Möchtest du diesen Ordner wirklich löschen?')) {
@@ -173,5 +176,33 @@ export class Sidebar {
   logout() {
     localStorage.removeItem('currentUser');
     this.router.navigate(['/login']);
+  }
+
+  async onDeleteNote(event: MouseEvent, note: any) {
+  event.stopPropagation();
+
+  // 1. Notiz aus der UI "entfernen" (lokal speichern für Notfall)
+  const deletedNote = note;
+  await this.noteService.deleteNote(note.parentId, note.id);
+
+  // 2. Schicke Snackbar anzeigen
+  const snack = this.snackBar.open(`Notiz "${note.title}" gelöscht`, 'RÜCKGÄNGIG', {
+    duration: 5000,
+    panelClass: ['dark-snackbar']
+  });
+
+  // 3. Logik für das Rückgängig machen
+  snack.onAction().subscribe(async () => {
+    // Hier würdest du die Notiz einfach wieder mit set() in Firebase schreiben
+    // await this.noteService.restoreNote(deletedNote);
+    console.log('Wiederherstellung angefordert');
+  });
+}
+
+  selectNote(note: any) {
+    this.noteService.selectedNote.set(note);
+
+    // Falls du mobil arbeitest: Sidebar nach Auswahl schließen
+    // this.isExpanded = false; 
   }
 }

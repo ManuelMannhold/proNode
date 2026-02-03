@@ -201,7 +201,7 @@
     }
 }
 
-// --- Notizen-Struktur (Eingerückt) ---
+   // --- Notizen-Struktur (Eingerückt) ---
 .notes-sub-list {
     margin-left: 24px;
     border-left: 1px solid rgba(0, 162, 255, 0.2);
@@ -212,11 +212,39 @@
         display: flex;
         align-items: flex-start;
         gap: 8px;
-        padding: 6px 10px;
+        padding: 6px 35px 6px 10px; // Rechts Platz für den Button lassen
         border-radius: 4px;
         cursor: pointer;
         transition: all 0.2s ease;
         color: #8892b0;
+        position: relative; // Wichtig für absolute Positionierung des Buttons
+
+        .delete-btn {
+            opacity: 0; 
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%); // Vertikal zentrieren
+            background: transparent;
+            border: none;
+            color: #8892b0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+
+            &:hover {
+                color: #ff4757;
+                transform: translateY(-50%) scale(1.1);
+            }
+
+            mat-icon {
+                font-size: 18px;
+                width: 18px;
+                height: 18px;
+                margin-top: 0; // Zentrierung im Button korrigieren
+            }
+        }
 
         mat-icon {
             flex-shrink: 0;
@@ -240,15 +268,26 @@
             min-width: 0;
         }
 
+        // Hover-Zustand für das gesamte Item
         &:hover {
             background: rgba(0, 162, 255, 0.1);
             color: #00a2ff;
+
+            .delete-btn {
+                opacity: 1; // Mülleimer einblenden
+            }
         }
 
         &.active {
             background: rgba(0, 162, 255, 0.15);
             color: #00a2ff;
             font-weight: bold;
+            
+            // Optional: Mülleimer auch bei aktiven Notizen zeigen
+            .delete-btn {
+                opacity: 0.7;
+                &:hover { opacity: 1; }
+            }
         }
     }
 }
@@ -306,17 +345,23 @@ input {
     width: 100vw;
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(2px);        
-    z-index: 999;                    
+    backdrop-filter: blur(2px);
+    z-index: 999;
     animation: fadeIn 0.3s ease;
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
 }
 
 @media (min-width: 769px) {
+
     // Auf Desktop brauchen wir kein Backdrop
     .sidebar-backdrop {
         display: none;
@@ -351,10 +396,10 @@ input {
 
 // --- Responsive Anpassungen (NEU & BEREINIGT) ---
 @media (max-width: 768px) {
-    
+
     // 1. Den alten 70px-Balken links komplett entfernen
     .container {
-        width: 100% !important; 
+        width: 100% !important;
         position: static; // Löst die Sidebar aus der festen Verankerung links
         border-right: none;
     }
@@ -430,105 +475,105 @@ input {
 }
 
 .mobile-bottom-nav {
-  display: none;
+    display: none;
 
-  @media (max-width: 768px) {
-    display: flex;
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 70px;
-    background: #0f172a; // Sehr dunkles Blau/Schwarz passend zu deinem Header
-    border-top: 1px solid rgba(255, 255, 255, 0.05);
-    justify-content: space-around;
-    align-items: center;
-    z-index: 1000;
-    padding-bottom: env(safe-area-inset-bottom); // S23 Home-Bar Fix
-  }
+    @media (max-width: 768px) {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 70px;
+        background: #0f172a; // Sehr dunkles Blau/Schwarz passend zu deinem Header
+        border-top: 1px solid rgba(255, 255, 255, 0.05);
+        justify-content: space-around;
+        align-items: center;
+        z-index: 1000;
+        padding-bottom: env(safe-area-inset-bottom); // S23 Home-Bar Fix
+    }
 }
 
 .nav-item {
-  background: none;
-  border: none;
-  color: #94a3b8; 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 4px;
-  cursor: pointer;
-  transition: all 0.2s;
+    background: none;
+    border: none;
+    color: #94a3b8;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.2s;
 
-  mat-icon {
-    font-size: 24px;
-    width: 24px;
-    height: 24px;
-  }
+    mat-icon {
+        font-size: 24px;
+        width: 24px;
+        height: 24px;
+    }
 
-  span {
-    font-size: 11px;
-    font-weight: 500;
-  }
+    span {
+        font-size: 11px;
+        font-weight: 500;
+    }
 
-  &.active {
-    color: #38bdf8;
-  }
+    &.active {
+        color: #38bdf8;
+    }
 }
 
 // Der "Plus"-Button in der Mitte darf ruhig etwas herausstechen
 .action-button {
-  background: #38bdf8;
-  color: #0f172a;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  justify-content: center;
-  box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
-  
-  mat-icon {
-    font-size: 28px;
-    width: 28px;
-    height: 28px;
-  }
+    background: #38bdf8;
+    color: #0f172a;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+
+    mat-icon {
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+    }
 }
 
 .sidebar-layout {
-  @media (max-width: 768px) {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    width: 100%;
-    height: 80vh; // Fast der ganze Bildschirm
-    background: #0f172a; 
-    z-index: 2000; // Höher als die Bottom-Nav
-    border-radius: 24px 24px 0 0;
-    transform: translateY(100%); // Versteckt
-    transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1);
-    padding: 10px 20px 80px; // Unten Platz für die Nav-Bar lassen
+    @media (max-width: 768px) {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 80vh; // Fast der ganze Bildschirm
+        background: #0f172a;
+        z-index: 2000; // Höher als die Bottom-Nav
+        border-radius: 24px 24px 0 0;
+        transform: translateY(100%); // Versteckt
+        transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+        padding: 10px 20px 80px; // Unten Platz für die Nav-Bar lassen
 
-    &.is-expanded {
-      transform: translateY(0); // Slidet hoch
+        &.is-expanded {
+            transform: translateY(0); // Slidet hoch
+        }
+
+        .mobile-handle {
+            width: 40px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 2px;
+            margin: 0 auto 20px;
+        }
     }
-    
-    .mobile-handle {
-      width: 40px;
-      height: 4px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 2px;
-      margin: 0 auto 20px;
-    }
-  }
 }
 
 .mobile-bottom-nav {
-  // ... dein bisheriges Design ...
-  z-index: 2001; // Damit die Buttons immer über der Drawer-Kante liegen
+    // ... dein bisheriges Design ...
+    z-index: 2001; // Damit die Buttons immer über der Drawer-Kante liegen
 }
 
 .action-btn {
     position: relative;
     overflow: hidden; // Wichtig, damit die Welle nicht über den Button-Rand geht
-    
+
     // Die Farbe der Welle für den blauen Button
     &.primary {
         ::ng-deep .mat-ripple-element {

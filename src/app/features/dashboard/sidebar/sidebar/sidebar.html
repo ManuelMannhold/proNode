@@ -60,10 +60,13 @@
             @if (isFolderExpanded(folder.id) && folder.notes && folder.notes.length > 0) {
             <div class="notes-sub-list">
                 @for (note of folder.notes; track note.id) {
-                <div class="note-item" [routerLink]="['note', note.id]" routerLinkActive="active"
-                    (click)="isMobile() ? isExpanded.set(false) : null">
-                    <mat-icon>description</mat-icon>
-                    <span>{{ note.title }}</span>
+                <div class="note-item" [class.active]="note.id === selectedNote()?.id">
+                    <mat-icon class="note-icon">description</mat-icon>
+                    <span class="note-title" (click)="selectNote(note)">{{ note.title }}</span>
+
+                    <button class="delete-btn" (click)="onDeleteNote($event, note)">
+                        <mat-icon>delete_outline</mat-icon>
+                    </button>
                 </div>
                 }
             </div>
