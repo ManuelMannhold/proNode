@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from "@angular/material/icon";
-import { Router, RouterLink } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -11,6 +11,7 @@ import { NoteService } from '../../../../core/services/note/note.service';
 import { Folder, Note } from '../../../../core/models/note/note.model';
 import { CreateNoteDialog } from '../../components/create-note-dialog/create-note-dialog';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sidebar',
@@ -48,6 +49,7 @@ export class Sidebar {
   public noteService = inject(NoteService);
   private dialog = inject(MatDialog);
   private router = inject(Router);
+  expandedFolderIds = signal<Set<string>>(new Set());
 
   folders = this.noteService.folders;
   selectedFolderId = signal<string | null>(null);
@@ -62,16 +64,40 @@ export class Sidebar {
     }
   }
 
+  ngOnInit() {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.closeSidebarOnMobile();
+    });
+  }
+
+  toggleSidebar() {
+    this.isExpanded.update(v => !v);
+  }
+
+  private closeSidebarOnMobile() {
+    if (window.innerWidth < 768) {
+      this.isExpanded.set(false);
+    }
+  }
+
 closeSidebar() {
   this.isExpanded.set(false);
 }
 
-  toggleFolder(folder: Folder) {
-    folder.isExpanded = !folder.isExpanded;
+  toggleFolder(folder: any) {
+    const currentSet = new Set(this.expandedFolderIds());
+    if (currentSet.has(folder.id)) {
+      currentSet.delete(folder.id);
+    } else {
+      currentSet.add(folder.id);
+    }
+    this.expandedFolderIds.set(currentSet);
   }
 
-  toggleSidebar() {
-    this.isExpanded.set(!this.isExpanded());
+  isFolderExpanded(folderId: string): boolean {
+    return this.expandedFolderIds().has(folderId);
   }
 
   addFolder() {
