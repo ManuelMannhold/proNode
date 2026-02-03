@@ -1,13 +1,13 @@
 // Hauptcontainer der Sidebar
 .container {
-    width: 200px;
-    height: calc(100vh - 64px);
+    width: 260px;
+    height: 100%;
     background-color: #112240;
     color: #ccd6f6;
     border-right: 1px solid rgba(0, 162, 255, 0.1);
     display: flex;
     flex-direction: column;
-    overflow: hidden; // Verhindert, dass die Sidebar selbst scrollt
+    overflow: hidden;
 }
 
 // Header-Bereich (Logo / Menü)
@@ -277,8 +277,10 @@ input {
 }
 
 // --- Footer / Logout ---
+// --- Footer / Logout ---
 .logout-button {
-    margin: auto auto 20px auto;
+    flex-shrink: 0; // WICHTIG: Verhindert, dass der Button auf Mobile zerquetscht wird
+    margin: 10px auto 20px auto; // Margin-top verringert, damit er Platz hat
     width: 85%;
     display: flex;
     justify-content: center;
@@ -334,6 +336,7 @@ input {
         &.is-expanded {
             position: absolute;
             top: 64px;
+            height: calc(100dvh - 64px) !important;
             width: 260px !important;
             box-shadow: 10px 0 30px rgba(0, 0, 0, 0.5);
             background-color: #112240;

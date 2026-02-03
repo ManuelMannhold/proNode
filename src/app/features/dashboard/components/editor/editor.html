@@ -1,0 +1,27 @@
+@if (!noteService.selectedNote()) {
+      <h1>Willkommen im ProNode Bereich</h1>
+      <p>Wähle eine Notiz aus der Sidebar oder erstelle eine neue.</p>
+      }
+<div class="editor-container">
+    <header class="editor-header">
+        <div class="header-left">
+            <input type="text" [ngModel]="noteTitle()" (ngModelChange)="noteTitle.set($event)" class="title-input"
+                placeholder="Unbenannte Notiz">
+            <span class="status-badge">{{ saveStatus() }}</span>
+        </div>
+
+        <div class="header-right">
+            <button mat-icon-button class="action-btn"><mat-icon>share</mat-icon></button>
+            <button mat-icon-button class="action-btn delete"><mat-icon>delete_outline</mat-icon></button>
+            <button mat-flat-button color="primary" (click)="saveNote()" class="save-btn">
+                <mat-icon>cloud_done</mat-icon>
+                <span>Speichern</span>
+            </button>
+        </div>
+    </header>
+
+    <div class="editor-body">
+        <textarea [ngModel]="noteContent()" (ngModelChange)="noteContent.set($event)"
+            placeholder="Fang an zu schreiben..." spellcheck="false"></textarea>
+    </div>
+</div>

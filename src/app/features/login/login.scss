@@ -6,13 +6,16 @@ input {
 
 .login-page-wrapper {
   height: 100vh;
+  height: 100dvh;
   width: 100%;
+  overflow: hidden;
   background: url('/images/login-background.png') no-repeat center center fixed;
   background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Roboto', sans-serif;
+  position: fixed;
 }
 
 .logo-container {
@@ -149,6 +152,11 @@ input {
     background: rgba(0, 162, 255, 0.05);
     box-shadow: 0 0 10px rgba(0, 162, 255, 0.2);
   }
+}
+
+:ng-deep .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading {
+  width: unset;
+  padding-left: 10px;
 }
 
 /* 1. Das Haupt-Label (Email / Password) - Knallweiß statt Grau */

@@ -6,10 +6,7 @@
 
     <main class="content-area">
       <router-outlet></router-outlet>
-      @if (!noteService.selectedNote()) {
-      <h1>Willkommen im ProNode Bereich</h1>
-      <p>Wähle eine Notiz aus der Sidebar oder erstelle eine neue.</p>
-      }
+      <app-editor></app-editor>
     </main>
   </div>
 </div>
