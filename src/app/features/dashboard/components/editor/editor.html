@@ -21,7 +21,10 @@
     </header>
 
     <div class="editor-body">
-        <textarea [ngModel]="noteContent()" (ngModelChange)="noteContent.set($event)"
-            placeholder="Fang an zu schreiben..." spellcheck="false"></textarea>
-    </div>
+  <textarea 
+  [ngModel]="noteContent()" 
+  (ngModelChange)="onContentChange($event)"
+  placeholder="Fang an zu schreiben...">
+</textarea>
+</div>
 </div>

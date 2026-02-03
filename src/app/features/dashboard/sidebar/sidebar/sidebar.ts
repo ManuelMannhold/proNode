@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, signal, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from "@angular/material/icon";
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { trigger, transition, style, animate } from '@angular/animations';
 import { CdkDrag, CdkDragDrop, CdkDropList, moveItemInArray } from '@angular/cdk/drag-drop';
@@ -16,7 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   selector: 'app-sidebar',
   imports: [MatIconModule, CommonModule, CdkDropList, CdkDrag, MatMenuModule,
     MatIconModule,
-    MatButtonModule, MatTooltipModule],
+    MatButtonModule, MatTooltipModule, RouterLink],
   template: `
     <h2 mat-dialog-title>Ordner löschen?</h2>
     <mat-dialog-content>
@@ -109,10 +109,22 @@ closeSidebar() {
   }
 
   openCreateNoteDialog() {
-    this.dialog.open(CreateNoteDialog, {
+    const DIALOGREF = this.dialog.open(CreateNoteDialog, {
       width: '450px',
       panelClass: 'custom-glass-dialog'
     });
+
+    DIALOGREF.afterClosed().subscribe(result => {
+    if (result) {
+      // 1. Hier würdest du normalerweise deinen Service aufrufen:
+      // this.noteService.createNote(result).subscribe(newNote => { ... });
+      
+      // 2. Navigation: Wir schicken den User zum Editor mit der ID der neuen Notiz
+      // Für den Test nehmen wir eine fiktive ID:
+      const mockId = Math.random().toString(36).substring(7);
+      this.router.navigate(['/dashboard/note', mockId]);
+    }
+  });
   }
 
   drop(event: CdkDragDrop<Folder[]>) {

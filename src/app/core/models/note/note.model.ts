@@ -2,8 +2,8 @@
 export interface Note {
   id: string;
   title: string;
-  content: string;
   parentId: string;
+  content?: string;
   createdAt: string;
 }
 

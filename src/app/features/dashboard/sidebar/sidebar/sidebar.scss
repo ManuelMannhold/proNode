@@ -42,7 +42,7 @@
 .project-main-directory {
     flex: 1;
     overflow-y: auto;
-    overflow-x: hidden; // WICHTIG: Verhindert die horizontale Scrollbar
+    overflow-x: hidden;
     padding: 10px 0;
     display: flex;
     flex-direction: column;

@@ -14,7 +14,6 @@ import { Editor } from "./components/editor/editor";
 
 export class Dashboard {
 
-  constructor(public noteService: NoteService){}
-
+  constructor(public noteService: NoteService) { }
 
 }

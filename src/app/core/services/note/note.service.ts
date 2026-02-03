@@ -20,18 +20,43 @@ export class NoteService {
         this.foldersSignal.set([]);
         return;
       }
-        const list: Folder[] = [];
-        snapshot.forEach((child) => {
-          const val = child.val();
-          list.push({
-            ...val,
-            id: child.key,
-            notes: val.notes ? Object.values(val.notes) : []
-          });
+
+      const list: Folder[] = [];
+
+      snapshot.forEach((child) => {
+        const val = child.val();
+        const folderId = child.key as string;
+
+        // Notizen-Mapping: Wir brauchen die Keys als IDs!
+        const notesArray: Note[] = val.notes
+          ? Object.entries(val.notes).map(([noteId, noteData]: [string, any]) => ({
+            ...noteData,
+            id: noteId,
+            parentId: folderId,
+            content: noteData.content || '' // Sicherstellen, dass content existiert
+          }))
+          : [];
+
+        list.push({
+          ...val,
+          id: folderId,
+          notes: notesArray,
+          isEditing: false
         });
-        this.foldersSignal.set(list);
+      });
+
+      this.foldersSignal.set(list);
+    });
+  }
+
+  getNoteSignal(id: string) {
+    return computed(() => {
+      for (const folder of this.foldersSignal()) {
+        const note = folder.notes.find(n => n.id === id);
+        if (note) return note;
       }
-    );
+      return undefined;
+    });
   }
 
   addNote(newNote: Note) {
@@ -77,6 +102,23 @@ export class NoteService {
       console.log('Positionen dauerhaft gespeichert');
     } catch (error) {
       console.error('Fehler beim Speichern der Positionen:', error);
+    }
+  }
+
+  getNoteById(id: string): Note | undefined {
+    for (const folder of this.foldersSignal()) {
+      const note = folder.notes.find(n => n.id === id);
+      if (note) return note;
+    }
+    return undefined;
+  }
+
+  async updateNoteContent(folderId: string, noteId: string, content: string) {
+    const contentRef = ref(this.db, `folders/${folderId}/notes/${noteId}/content`);
+    try {
+      await set(contentRef, content);
+    } catch (error) {
+      console.error('Fehler beim Speichern des Inhalts:', error);
     }
   }
 

@@ -1,16 +1,14 @@
-import { TestBed } from '@angular/core/testing';
+import { Note } from './note.model';
 
-import { NoteModel } from './note.model';
-
-describe('NoteModel', () => {
-  let service: NoteModel;
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(NoteModel);
-  });
-
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+describe('Note Interface', () => {
+  it('should create a note object', () => {
+    const note: Note = {
+      id: '1',
+      parentId: 'f1',
+      title: 'Test Note',
+      content: 'Hello World',
+      createdAt: ''
+    };
+    expect(note.title).toBe('Test Note');
   });
 });

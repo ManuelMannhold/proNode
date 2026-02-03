@@ -1,5 +1,5 @@
 @if (isExpanded()) {
-  <div class="sidebar-backdrop" (click)="closeSidebar()"></div>
+<div class="sidebar-backdrop" (click)="closeSidebar()"></div>
 }
 <div class="container sidebar-layout" [class.is-expanded]="isExpanded()">
     <div class="project-main-directory-header mobile-only-toggle" (click)="toggleSidebar()">
@@ -60,8 +60,7 @@
             @if (folder.isExpanded && folder.notes && folder.notes.length > 0) {
             <div class="notes-sub-list">
                 @for (note of folder.notes; track note.id) {
-                <div class="note-item" [class.active]="noteService.selectedNote()?.id === note.id"
-                    (click)="onNoteClick(note)">
+                <div class="note-item" [routerLink]="['note', note.id]" routerLinkActive="active">
                     <mat-icon>description</mat-icon>
                     <span>{{ note.title }}</span>
                 </div>

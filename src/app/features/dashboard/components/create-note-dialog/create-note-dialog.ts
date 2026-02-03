@@ -31,7 +31,6 @@ export class CreateNoteDialog {
 
   noteForm = new FormGroup({
     title: new FormControl('', { validators: [Validators.required], nonNullable: true }),
-    content: new FormControl('', { nonNullable: true }),
     parentFolder: new FormControl('root', { nonNullable: true })
   });
 
@@ -41,12 +40,11 @@ export class CreateNoteDialog {
 
   saveNote() {
     if (this.noteForm.invalid) return;
-    const { title, content, parentFolder } = this.noteForm.getRawValue();
+    const { title, parentFolder } = this.noteForm.getRawValue();
 
     const newNote: Note = {
       id: Date.now().toString(),
       title: title ?? '',
-      content: content ?? '',
       parentId: parentFolder,
       createdAt: new Date().toISOString()
     };
