@@ -7,6 +7,7 @@ import { ActivatedRoute } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { NoteService } from '../../../../core/services/note/note.service';
+import { Database, ref, set } from '@angular/fire/database';
 
 @Component({
   selector: 'app-editor',
@@ -19,6 +20,7 @@ export class Editor implements OnInit, OnDestroy {
   // Services
   public noteService = inject(NoteService);
   private route = inject(ActivatedRoute);
+  private db = inject(Database);
 
   // UI States
   noteTitle = signal('');
@@ -105,6 +107,25 @@ export class Editor implements OnInit, OnDestroy {
       }
     }
   }
+
+  async updateTitle(newTitle: string) {
+  this.noteTitle.set(newTitle); // Lokales Signal updaten
+  
+  const currentNote = this.noteService.selectedNote();
+  if (currentNote) {
+    const folderId = currentNote.parentId;
+    const noteId = currentNote.id;
+    
+    // Wir nutzen eine ähnliche Logik wie beim Content-Update
+    const titleRef = ref(this.db, `folders/${folderId}/notes/${noteId}/title`);
+    try {
+      await set(titleRef, newTitle);
+      console.log('Titel erfolgreich aktualisiert');
+    } catch (error) {
+      console.error('Fehler beim Titel-Speichern:', error);
+    }
+  }
+}
 
   async saveNote() {
     await this.performAutoSave(this.noteContent());

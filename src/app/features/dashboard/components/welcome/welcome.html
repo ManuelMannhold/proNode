@@ -1,1 +1,28 @@
-<p>welcome works!</p>
+<div class="welcome-container">
+  <div class="welcome-card">
+    <div class="welcome-icon">
+      <mat-icon>auto_awesome</mat-icon>
+    </div>
+
+    <h1>Willkommen im ProNode Bereich</h1>
+    <p>Wähle eine Notiz aus der Sidebar oder starte direkt mit einer neuen Idee.</p>
+
+    <div class="welcome-actions">
+      <button class="action-card primary" (click)="openCreateNoteDialog()">
+        <mat-icon>add_circle</mat-icon>
+        <div class="text-group">
+          <span class="title">Neue Notiz</span>
+          <span class="subtitle">Schreib direkt los</span>
+        </div>
+      </button>
+
+      <button class="action-card" (click)="addFolder()">
+        <mat-icon>create_new_folder</mat-icon>
+        <div class="text-group">
+          <span class="title">Ordner erstellen</span>
+          <span class="subtitle">Strukturier deine Projekte</span>
+        </div>
+      </button>
+    </div>
+  </div>
+</div>

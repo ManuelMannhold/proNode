@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { Login } from './features/login/login';
 import { Dashboard } from './features/dashboard/dashboard';
 import { Editor } from './features/dashboard/components/editor/editor';
+import { Welcome } from './features/dashboard/components/welcome/welcome';
 
 
 export const routes: Routes = [
@@ -11,7 +12,7 @@ export const routes: Routes = [
     path: 'dashboard',
     component: Dashboard,
     children: [
-      { path: '', redirectTo: 'note/welcome', pathMatch: 'full' },
+      { path: '', component: Welcome },
       { path: 'note/:id', component: Editor }
     ]
   },

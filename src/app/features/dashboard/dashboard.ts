@@ -7,7 +7,7 @@ import { Editor } from "./components/editor/editor";
 
 @Component({
   selector: 'app-dashboard',
-  imports: [Sidebar, Header, RouterOutlet, Editor],
+  imports: [Sidebar, Header, RouterOutlet],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.scss',
 })

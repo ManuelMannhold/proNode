@@ -1,0 +1,114 @@
+.welcome-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: #0f172a;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.welcome-card {
+    max-width: 500px;
+    text-align: center;
+    animation: fadeInUp 0.6s ease-out;
+
+    .welcome-icon {
+        margin-bottom: 20px;
+        mat-icon {
+            font-size: 64px;
+            width: 64px;
+            height: 64px;
+            color: #38bdf8;
+            filter: drop-shadow(0 0 10px rgba(56, 189, 248, 0.3));
+        }
+    }
+
+    h1 {
+    font-size: 2.2rem;
+        font-weight: 800;
+        color: #ffffff;
+        margin-bottom: 12px;
+        line-height: 1.2 !important; 
+        text-align: center;
+}
+
+    p {
+        color: #94a3b8;
+        font-size: 1rem;
+        line-height: 1.5;
+        margin-bottom: 32px;
+    }
+}
+
+.welcome-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+
+    @media (max-width: 600px) {
+        grid-template-columns: 1fr; // Auf dem S23 untereinander stapeln
+    }
+}
+
+.action-card {
+    background: rgba(30, 41, 59, 0.5);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    color: white;
+
+    mat-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+        color: #38bdf8;
+    }
+
+    .text-group {
+        display: flex;
+        flex-direction: column;
+        
+        .title {
+            font-weight: 600;
+            font-size: 1rem;
+        }
+
+        .subtitle {
+            font-size: 0.8rem;
+            color: #64748b;
+        }
+    }
+
+    &:hover {
+        background: rgba(56, 189, 248, 0.1);
+        border-color: #38bdf8;
+        transform: translateY(-5px);
+    }
+
+    &.primary {
+        background: rgba(56, 189, 248, 0.1);
+        border-color: rgba(56, 189, 248, 0.4);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
