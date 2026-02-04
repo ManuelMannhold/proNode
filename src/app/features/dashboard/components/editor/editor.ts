@@ -41,28 +41,20 @@ export class Editor implements OnInit, OnDestroy {
 
   constructor() {
     effect(() => {
-      const current = this.selectedNote();
-      if (current) {
-        this.noteTitle.set(current.title || '');
-        this.noteContent.set(current.content || '');
-        this.isTitleInvalid.set(false);
-      }
-    });
-    // 1. Auto-Save Setup
+    const current = this.selectedNote();
+    if (current) {
+      this.noteTitle.set(current.title || '');
+      this.noteContent.set(current.content || '');
+      this.isTitleInvalid.set(false);
+      this.saveStatus.set('Bereit');
+    }
+  });
+
     this.autoSaveSubscription = this.contentUpdate$.pipe(
       debounceTime(700),
       distinctUntilChanged()
     ).subscribe(content => {
       this.performAutoSave(content);
-    });
-
-    effect(() => {
-      const note = this.noteService.selectedNote();
-      if (note) {
-        this.noteTitle.set(note.title);
-        this.noteContent.set(note.content || '');
-        this.saveStatus.set('Bereit');
-      }
     });
   }
 
@@ -162,14 +154,11 @@ export class Editor implements OnInit, OnDestroy {
   onTitleBlur() {
     const currentTitle = this.noteTitle();
 
-    // Wenn der Titel leer ist oder nur aus Leerzeichen besteht
     if (!currentTitle || currentTitle.trim() === '') {
       const fallbackTitle = 'Unbenannte Notiz';
 
       this.noteTitle.set(fallbackTitle);
-      this.isTitleInvalid.set(false); // Roten Rahmen entfernen
-
-      // Direkt den Fallback-Titel in der DB speichern
+      this.isTitleInvalid.set(false);
       this.updateTitle(fallbackTitle);
     }
   }

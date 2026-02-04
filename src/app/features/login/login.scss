@@ -19,23 +19,23 @@ input {
 }
 
 .logo-container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: 'Fira Code', 'Courier New', monospace;
-    font-weight: 700;
-    font-size: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fira Code', 'Courier New', monospace;
+  font-weight: 700;
+  font-size: 32px;
 
-    .bracket {
-        color: #00a2ff;
-        text-shadow: 0 0 8px rgba(0, 162, 255, 0.6);
-    }
+  .bracket {
+    color: #00a2ff;
+    text-shadow: 0 0 8px rgba(0, 162, 255, 0.6);
+  }
 
-    .logo-text {
-        color: #ffffff;
-        margin: 0 4px;
-        letter-spacing: 1px;
-    }
+  .logo-text {
+    color: #ffffff;
+    margin: 0 4px;
+    letter-spacing: 1px;
+  }
 }
 
 .login-card {
@@ -43,7 +43,7 @@ input {
   max-width: 420px;
   padding: 40px;
   background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(20px); 
+  backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 24px;
@@ -59,19 +59,35 @@ input {
 
   .logo-section {
     margin-bottom: 30px;
+
     .logo-icon {
       font-size: 48px;
       height: 48px;
       width: 48px;
-      color: #00a2ff; /* Dein Akzent-Blau */
+      color: #00a2ff;
+      /* Dein Akzent-Blau */
     }
-    h1 { margin: 10px 0 0; letter-spacing: 2px; }
-    .subtitle { font-size: 0.8rem; opacity: 0.6; }
+
+    h1 {
+      margin: 10px 0 0;
+      letter-spacing: 2px;
+    }
+
+    .subtitle {
+      font-size: 0.8rem;
+      opacity: 0.6;
+    }
   }
 
-  h2 { margin-bottom: 25px; font-weight: 300; }
+  h2 {
+    margin-bottom: 25px;
+    font-weight: 300;
+  }
 
-  .full-width { width: 100%; margin-bottom: 10px; }
+  .full-width {
+    width: 100%;
+    margin-bottom: 10px;
+  }
 
   .forgot-link {
     display: block;
@@ -80,32 +96,61 @@ input {
     color: #00a2ff;
     text-decoration: none;
     margin-bottom: 20px;
-    &:hover { text-decoration: underline; }
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
 
   .login-btn {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    min-height: 45px;
     width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    border-radius: 12px;
-    background-color: #00a2ff;
+
+    mat-spinner {
+      ::ng-deep circle {
+        stroke: white; // Damit der Spinner auf blauem Grund sichtbar ist
+      }
+    }
+  }
+
+  .error-text {
+    color: #ff4a4a;
+    font-size: 0.85rem;
+    margin-top: 10px;
+    text-align: center;
   }
 
   .divider {
     margin: 25px 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
     line-height: 0.1em;
-    span { background: rgba(30, 30, 60, 0.8); padding: 0 10px; font-size: 0.8rem; opacity: 0.5; }
+
+    span {
+      background: rgba(30, 30, 60, 0.8);
+      padding: 0 10px;
+      font-size: 0.8rem;
+      opacity: 0.5;
+    }
   }
 
   .social-logins {
     display: flex;
     gap: 15px;
+
     .social-btn {
       flex: 1;
       border-color: rgba(255, 255, 255, 0.2);
       color: white;
-      img { width: 18px; margin-right: 8px; vertical-align: middle; }
+
+      img {
+        width: 18px;
+        margin-right: 8px;
+        vertical-align: middle;
+      }
     }
   }
 }
@@ -125,9 +170,11 @@ input {
 
 .guest-section {
   margin-top: 15px;
+
   .guest-btn {
     color: rgba(255, 255, 255, 0.6);
     font-weight: 300;
+
     &:hover {
       color: #00a2ff;
       background: rgba(255, 255, 255, 0.05);
@@ -164,7 +211,7 @@ input {
   color: white !important;
   font-weight: 500 !important;
   letter-spacing: 0.5px;
-  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8); 
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
 
 /* 2. Wenn das Label oben schwebt (Floating) */
@@ -191,7 +238,7 @@ input {
 ::ng-deep .mat-focused .mdc-notched-outline__leading,
 ::ng-deep .mat-focused .mdc-notched-outline__notch,
 ::ng-deep .mat-focused .mdc-notched-outline__trailing {
-  border-color: #00a2ff !important; 
+  border-color: #00a2ff !important;
   border-width: 2px !important;
 }
 

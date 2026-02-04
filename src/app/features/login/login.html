@@ -1,8 +1,7 @@
 <div class="login-page-wrapper">
-    <ngx-particles id="tsparticles" [options]="particlesOptions">
-    </ngx-particles>
+    <ngx-particles id="tsparticles" [options]="particlesOptions"></ngx-particles>
+    
     <div class="login-card">
-
         <div class="logo-section">
             <mat-icon class="logo-icon">account_tree</mat-icon>
             <div class="logo-container">
@@ -15,27 +14,41 @@
 
         <h2>Welcome Back</h2>
 
-        <form class="login-form">
+        <form class="login-form" (ngSubmit)="onLogin()" #loginForm="ngForm">
+            
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Email Address</mat-label>
-                <input matInput type="email" placeholder="email@example.com">
+                <input matInput type="email" name="email"
+                       [(ngModel)]="email" 
+                       required email
+                       placeholder="email@example.com"
+                       autocapitalize="none" autocomplete="off">
                 <mat-icon matSuffix>mail</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Password</mat-label>
-                <input matInput type="password" placeholder="••••••••">
+                <input matInput type="password" name="password"
+                       [(ngModel)]="password"
+                       required
+                       placeholder="••••••••">
                 <mat-icon matSuffix>lock</mat-icon>
             </mat-form-field>
 
             <a href="#" class="forgot-link">Forgot password?</a>
 
-            <button mat-raised-button color="primary" class="login-btn">
-                Log In
+            <button mat-raised-button color="primary" class="login-btn" 
+                    type="submit"
+                    [disabled]="isLoading() || !loginForm.valid">
+                <span *ngIf="!isLoading()">Log In</span>
+                <mat-spinner diameter="20" *ngIf="isLoading()"></mat-spinner>
             </button>
 
+            <p class="error-text" *ngIf="errorMessage()">{{ errorMessage() }}</p>
+
             <div class="guest-section">
-                <button mat-button class="guest-btn" type="button" (click)="loginAsGuest()">
+                <button mat-button class="guest-btn" type="button" 
+                        (click)="loginAsGuest()" [disabled]="isLoading()">
                     <mat-icon>arrow_forward</mat-icon>
                     Continue as Guest
                 </button>
@@ -46,10 +59,10 @@
             </div>
 
             <div class="social-logins">
-                <button mat-stroked-button class="social-btn">
+                <button mat-stroked-button class="social-btn" type="button" (click)="loginWithGoogle()">
                     <img src="https://authjs.dev/img/providers/google.svg" alt="Google"> Google
                 </button>
-                <button mat-stroked-button class="social-btn">
+                <button mat-stroked-button class="social-btn" type="button">
                     <img src="https://authjs.dev/img/providers/github.svg" alt="GitHub"> GitHub
                 </button>
             </div>
