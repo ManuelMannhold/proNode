@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>
+    {{ data.type === 'impressum' ? 'Impressum' : 'Datenschutzerklärung' }}
+</h2>
+
+<mat-dialog-content class="legal-content">
+    @if (data.type === 'impressum') {
+    <section>
+        <div>
+            <h3>Angaben gemäß § 5 TMG</h3>
+            <p>Manuel Mannhold<br>
+                Paul-Schreier-Straße 26<br>
+                16761 Hennigsdorf</p>
+        </div>
+        <div>
+            <h3 class="contact-header">Kontakt</h3>
+            <div class="email-wrapper">
+                Email:
+                <a [href]="'mailto:' + emailSignal()" class="legal-link">{{ emailSignal() }}</a>
+                <button mat-icon-button (click)="copyEmail()" matTooltip="E-Mail kopieren">
+                    <mat-icon>content_copy</mat-icon>
+                </button>
+            </div>
+        </div>
+    </section>
+    } @else {
+    <section>
+        <h3>1. Datenschutz auf einen Blick</h3>
+        <p>Diese App nutzt Google Firebase zur Authentifizierung und Datenspeicherung.</p>
+
+        <h3>2. Hosting und Infrastruktur</h3>
+        <p>Wir hosten unsere App bei Firebase (Google Ireland Limited, Gordon House, Barrow Street, Dublin 4, Irland).
+        </p>
+
+        <h3>3. Datenerfassung</h3>
+        <p>Gespeichert werden Ihre E-Mail-Adresse sowie die von Ihnen erstellten Notiz-Inhalte.</p>
+    </section>
+    }
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+    <button mat-button mat-dialog-close>Schließen</button>
+</mat-dialog-actions>

@@ -78,6 +78,13 @@
     <button mat-icon-button (click)="logout()" class="logout-button">
         <mat-icon>logout</mat-icon>
     </button>
+    <div class="sidebar-footer">
+        <div class="legal-links">
+            <a (click)="openLegal('impressum')">Impressum</a>
+            <span class="separator">|</span>
+            <a (click)="openLegal('datenschutz')">Datenschutz</a>
+        </div>
+    </div>
 </div>
 
 <nav class="mobile-bottom-nav">

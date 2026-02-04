@@ -14,6 +14,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { filter } from 'rxjs/operators';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LegalDialog } from '../../components/legal-dialog/legal-dialog';
 
 @Component({
   selector: 'app-sidebar',
@@ -193,5 +194,15 @@ export class Sidebar {
     if (this.isExpanded()) {
       this.isExpanded.set(false);
     }
+  }
+
+  openLegal(type: 'impressum' | 'datenschutz') {
+    this.dialog.open(LegalDialog, {
+      data: { type },
+      width: '90%',
+      maxWidth: '600px',
+      panelClass: 'custom-glass-dialog', // Nutze deine vorhandene Dialog-Klasse
+      autoFocus: false
+    });
   }
 }

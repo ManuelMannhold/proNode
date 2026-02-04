@@ -1,0 +1,79 @@
+.legal-content {
+    color: #ccd6f6;
+    line-height: 1.6;
+    max-height: 70vh;
+    padding-right: 8px;
+    overflow-y: hidden;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: rgba(0, 162, 255, 0.2);
+        border-radius: 10px;
+
+        &:hover {
+            background: rgba(0, 162, 255, 0.5);
+        }
+    }
+
+    scrollbar-width: thin;
+    scrollbar-color: rgba(0, 162, 255, 0.2) transparent;
+
+    section {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+
+        h3 {
+            color: #00a2ff;
+            font-size: 1.1rem;
+        }
+    }
+}
+
+.legal-link {
+    color: #00a2ff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-bottom: 1px solid transparent;
+    cursor: pointer;
+
+    &:hover {
+        color: #64ffda; 
+        border-bottom: 1px solid #64ffda;
+    }
+}
+
+:host {
+    display: block;
+    background: #112240;
+}
+
+.custom-snackbar {
+    background: #112240 !important;
+    color: #00a2ff !important;
+    border: 1px solid rgba(0, 162, 255, 0.3);
+    border-radius: 8px;
+
+    .mat-mdc-snack-bar-label {
+        font-family: 'Inter', sans-serif;
+    }
+}
+
+mat-dialog-content {
+    margin: 0;
+    padding: 8px 24px;
+    overflow-x: hidden;
+}
+
+.email-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}

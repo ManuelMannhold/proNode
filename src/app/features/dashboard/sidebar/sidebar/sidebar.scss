@@ -201,7 +201,7 @@
     }
 }
 
-   // --- Notizen-Struktur (Eingerückt) ---
+// --- Notizen-Struktur (Eingerückt) ---
 .notes-sub-list {
     margin-left: 24px;
     border-left: 1px solid rgba(0, 162, 255, 0.2);
@@ -220,7 +220,7 @@
         position: relative; // Wichtig für absolute Positionierung des Buttons
 
         .delete-btn {
-            opacity: 0; 
+            opacity: 0;
             position: absolute;
             right: 8px;
             top: 50%;
@@ -282,11 +282,14 @@
             background: rgba(0, 162, 255, 0.15);
             color: #00a2ff;
             font-weight: bold;
-            
+
             // Optional: Mülleimer auch bei aktiven Notizen zeigen
             .delete-btn {
                 opacity: 0.7;
-                &:hover { opacity: 1; }
+
+                &:hover {
+                    opacity: 1;
+                }
             }
         }
     }
@@ -517,6 +520,44 @@ input {
 
     &.active {
         color: #38bdf8;
+    }
+}
+
+.sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+
+    .legal-links {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        font-size: 0.7rem;
+        color: #8892b0;
+
+        a {
+            cursor: pointer;
+            transition: color 0.2s;
+
+            &:hover {
+                color: #00a2ff;
+            }
+        }
+
+        .separator {
+            opacity: 0.3;
+        }
+    }
+
+    .logout-button {
+        align-self: center;
+        color: #ff5252;
+
+        &:hover {
+            background: rgba(255, 82, 82, 0.1);
+        }
     }
 }
 
