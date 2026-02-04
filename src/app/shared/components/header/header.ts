@@ -13,7 +13,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class Header implements OnInit {
   public noteService = inject(NoteService);
-  public currentUser = { displayName: 'Gast-Recruiter' }; 
+  public currentUser = { displayName: 'Gast' }; 
 
   constructor() { }
 

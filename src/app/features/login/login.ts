@@ -32,16 +32,14 @@ export class Login {
 async loginAsGuest() {
   console.log("Simuliere Gast-Login (Bypass)...");
   
-  // Wir speichern ein einfaches Objekt im LocalStorage
   const fakeUser = {
     uid: 'guest-' + Math.random().toString(36).substr(2, 9),
-    displayName: 'Gast-Recruiter',
+    displayName: 'Gast',
     isAnonymous: true
   };
   
   localStorage.setItem('currentUser', JSON.stringify(fakeUser));
 
-  // Jetzt ab zum Dashboard
   this.router.navigate(['/dashboard']).then(success => {
     if (success) {
       console.log('Navigation zum Dashboard erfolgreich!');
@@ -62,7 +60,6 @@ async loginAsGuest() {
         enable: true,
         mode: "grab"
       },
-      // HIER DIE ÄNDERUNG: Ein Objekt statt nur 'true'
       resize: {
         enable: true 
       }
