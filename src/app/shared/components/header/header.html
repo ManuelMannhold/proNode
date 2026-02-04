@@ -4,13 +4,17 @@
         <span class="logo-text">ProNode</span>
         <span class="bracket">{{ '}' }}</span>
     </div>
-    <div class="user-section" *ngIf="currentUser">
+    
+    <div class="user-section" *ngIf="authService.user()">
         <div class="user-badge">
             <span class="status-indicator" 
                   [class.saving]="noteService.isSaving()"
                   [matTooltip]="noteService.isSaving() ? 'Synchronisiere...' : 'Gesichert'">
             </span>
-            <span class="username">{{ currentUser.displayName }}</span>
+            
+            <div class="avatar-circle">
+                {{ displayLetter() }}
+            </div>
         </div>
     </div>
 </header>

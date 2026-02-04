@@ -41,46 +41,61 @@ export class Login {
   }
 
   async loginWithGoogle() {
-  this.isLoading.set(true); // Spinner starten
-  try {
-    await this.authService.loginWithGoogle();
-    this.router.navigate(['/dashboard']);
-  } catch (error) {
-    this.errorMessage.set('Google Login abgebrochen oder fehlgeschlagen.');
-  } finally {
-    this.isLoading.set(false);
+    this.isLoading.set(true); // Spinner starten
+    try {
+      await this.authService.loginWithGoogle();
+      this.router.navigate(['/dashboard']);
+    } catch (error) {
+      this.errorMessage.set('Google Login abgebrochen oder fehlgeschlagen.');
+    } finally {
+      this.isLoading.set(false);
+    }
   }
-}
 
   async onLogin() {
-    if (!this.email() || !this.password()) return;
+    // 1. Validierung: Sind die Felder leer?
+    if (!this.email || !this.password) {
+      this.errorMessage.set('Bitte E-Mail und Passwort eingeben.');
+      return;
+    }
 
     this.isLoading.set(true);
     this.errorMessage.set('');
 
     try {
+      // 2. Den AuthService aufrufen (den wir vorhin angelegt haben)
       await this.authService.login(this.email(), this.password());
-      this.router.navigate(['/dashboard']); // Erfolg!
+
+      // 3. Wenn erfolgreich -> Ab ins Dashboard
+      this.router.navigate(['/dashboard']);
     } catch (error: any) {
-      console.error(error);
-      this.errorMessage.set('Login fehlgeschlagen. Daten prüfen.');
+      // 4. Fehlerbehandlung (Firebase gibt spezifische Codes zurück)
+      console.error('Login-Fehler:', error.code);
+
+      if (error.code === 'auth/invalid-credential') {
+        this.errorMessage.set('E-Mail oder Passwort ist falsch.');
+      } else if (error.code === 'auth/user-not-found') {
+        this.errorMessage.set('Kein Account mit dieser E-Mail gefunden.');
+      } else {
+        this.errorMessage.set('Ein Fehler ist aufgetreten. Bitte erneut versuchen.');
+      }
     } finally {
       this.isLoading.set(false);
     }
   }
 
   async loginAsGuest() {
-  this.isLoading.set(true);
-  try {
-    await this.authService.loginAsGuest();
-    // Wenn das klappt, hat der authGuard nun einen echten User im Stream
-    this.router.navigate(['/dashboard']);
-  } catch (error) {
-    this.errorMessage.set('Gast-Zugang konnte nicht aktiviert werden.');
-  } finally {
-    this.isLoading.set(false);
+    this.isLoading.set(true);
+    try {
+      await this.authService.loginAsGuest();
+      // Wenn das klappt, hat der authGuard nun einen echten User im Stream
+      this.router.navigate(['/dashboard']);
+    } catch (error) {
+      this.errorMessage.set('Gast-Zugang konnte nicht aktiviert werden.');
+    } finally {
+      this.isLoading.set(false);
+    }
   }
-}
 
   public particlesOptions: RecursivePartial<IOptions> = {
     background: {

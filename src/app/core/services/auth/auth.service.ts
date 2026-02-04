@@ -10,6 +10,7 @@ import {
   signInAnonymously
 } from '@angular/fire/auth';
 import { Router } from '@angular/router';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,7 @@ import { Router } from '@angular/router';
 export class AuthService {
   private auth = inject(Auth);
   private router = inject(Router);
+  user = toSignal(authState(this.auth));
 
   // Ein Observable, das uns immer den aktuellen Firebase-User liefert
   // Nützlich für Header-Anzeigen oder Profilbilder
@@ -35,17 +37,17 @@ export class AuthService {
   }
 
   async loginWithGoogle() {
-  const provider = new GoogleAuthProvider();
-  try {
-    const result = await signInWithPopup(this.auth, provider);
-    return result;
-  } catch (error) {
-    console.error("Google Login Fehler:", error);
-    throw error;
+    const provider = new GoogleAuthProvider();
+    try {
+      const result = await signInWithPopup(this.auth, provider);
+      return result;
+    } catch (error) {
+      console.error("Google Login Fehler:", error);
+      throw error;
+    }
   }
-}
 
-async loginAsGuest() {
+  async loginAsGuest() {
     try {
       return await signInAnonymously(this.auth);
     } catch (error) {
@@ -73,3 +75,4 @@ async loginAsGuest() {
     this.router.navigate(['/login']);
   }
 }
+
