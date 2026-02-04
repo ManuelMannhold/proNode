@@ -66,8 +66,9 @@
     }
 }
 
-// In legal-dialog.component.scss
 mat-dialog-content {
+    min-height: 200px;
+
     div.generated-text {
         box-sizing: border-box;
         width: 100%;
