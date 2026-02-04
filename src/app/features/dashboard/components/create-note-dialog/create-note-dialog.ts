@@ -27,7 +27,7 @@ import { NoteService } from '../../../../core/services/note/note.service';
 export class CreateNoteDialog {
   private noteService = inject(NoteService);
   private dialogRef = inject(MatDialogRef<CreateNoteDialog>);
-  folders = this.noteService.folders;
+  folders = this.noteService.foldersSignal;
 
   noteForm = new FormGroup({
     title: new FormControl('', { validators: [Validators.required], nonNullable: true }),

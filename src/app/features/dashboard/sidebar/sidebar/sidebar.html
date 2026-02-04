@@ -35,9 +35,13 @@
                 } @else {
                 <div class="folder-content" (click)="selectFolder(folder.id)">
                     <mat-icon>{{ isFolderExpanded(folder.id) ? 'folder_open' : 'folder' }}</mat-icon>
-                    <span class="folder-name" [matTooltip]="folder.name" matTooltipPosition="right"
-                        [matTooltipDisabled]="folder.name.length < 20"> {{ folder.name }}
+                    @if (folder && folder.name) {
+                    <span class="folder-name" [matTooltip]="folder.name" [matTooltipDisabled]="folder.name.length < 20">
+                        {{ folder.name }}
                     </span>
+                    } @else {
+                    <span class="folder-name">Neuer Ordner</span>
+                    }
                 </div>
 
                 <button mat-icon-button [matMenuTriggerFor]="folderMenu" class="more-btn">

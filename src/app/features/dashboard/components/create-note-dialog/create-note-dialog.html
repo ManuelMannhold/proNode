@@ -1,29 +1,33 @@
 <div class="dialog-container">
   <h2 mat-dialog-title>Neue Notiz erstellen</h2>
   
- <form [formGroup]="noteForm">
-  <mat-form-field appearance="outline" class="full-width" hideRequiredMarker>
-    <mat-label>Titel</mat-label>
-    <input matInput formControlName="title">
-  </mat-form-field>
+  <form [formGroup]="noteForm" (ngSubmit)="saveNote()">
+    
+    <mat-form-field appearance="outline" class="full-width" hideRequiredMarker>
+      <mat-label>Titel</mat-label>
+      <input matInput formControlName="title">
+    </mat-form-field>
 
-  <mat-form-field appearance="outline" class="full-width">
-  <mat-label>Ordner</mat-label>
-  <mat-select formControlName="parentFolder">
-    <mat-option [value]="'root'">Hauptverzeichnis</mat-option>
-    @for (folder of (folders() || []); track folder.id) {
-      <mat-option [value]="folder.id">{{ folder.name }}</mat-option>
-    }
-  </mat-select>
-</mat-form-field>
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Ordner</mat-label>
+      <mat-select formControlName="parentFolder">
+        @for (folder of (folders() || []); track folder.id) {
+          <mat-option [value]="folder.id">{{ folder.name }}</mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
 
-  <div class="button-row">
-    <button mat-button class="cancel-btn" (click)="closeDialog()">Abbrechen</button>
-    <button mat-flat-button class="save-btn" 
-            [disabled]="noteForm.invalid" 
-            (click)="saveNote()">
-      Speichern
-    </button>
-  </div>
-</form>
+    <div class="button-row">
+      <button type="button" mat-button class="cancel-btn" (click)="closeDialog()">
+        Abbrechen
+      </button>
+      
+      <button type="submit" 
+              mat-flat-button 
+              class="save-btn" 
+              [disabled]="noteForm.invalid">
+        Speichern
+      </button>
+    </div>
+  </form>
 </div>
