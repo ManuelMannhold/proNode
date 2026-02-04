@@ -1,17 +1,20 @@
+@if (selectedNote()) {
 <div class="editor-container">
     <header class="editor-header">
         <div class="header-left">
             <input type="text" [ngModel]="noteTitle()" (ngModelChange)="updateTitle($event)" (blur)="onTitleBlur()"
                 class="title-input" [class.invalid]="isTitleInvalid()" placeholder="Titel der Notiz...">
 
-            <span class="status-badge">{{ saveStatus() }}</span>
+            <span class="status-badge" [class.saving]="noteService.isSaving()">
+                {{ noteService.isSaving() ? 'Speichert...' : 'Gespeichert' }}
+            </span>
         </div>
 
         <div class="header-right">
             <button mat-icon-button class="action-btn">
                 <mat-icon>share</mat-icon>
             </button>
-            <button mat-icon-button class="action-btn delete">
+            <button mat-icon-button class="action-btn delete" (click)="deleteCurrentNote()">
                 <mat-icon>delete_outline</mat-icon>
             </button>
         </div>
@@ -20,6 +23,9 @@
     <div class="editor-body">
         <textarea [ngModel]="noteContent()" (ngModelChange)="onContentChange($event)"
             placeholder="Fang an zu schreiben...">
-        </textarea>
+            </textarea>
     </div>
 </div>
+} @else {
+<app-welcome></app-welcome>
+}

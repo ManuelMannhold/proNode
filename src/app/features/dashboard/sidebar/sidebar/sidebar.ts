@@ -20,18 +20,6 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   imports: [MatIconModule, CommonModule, CdkDropList, CdkDrag, MatMenuModule,
     MatIconModule,
     MatButtonModule, MatTooltipModule, MatRippleModule],
-  template: `
-    <h2 mat-dialog-title>Ordner löschen?</h2>
-    <mat-dialog-content>
-      Bist du sicher? Alle Notizen in diesem Ordner gehen verloren.
-    </mat-dialog-content>
-    <mat-dialog-actions align="end">
-      <button mat-button [mat-dialog-close]="false">Abbrechen</button>
-      <button mat-button [mat-dialog-close]="true" color="warn">Löschen</button>
-    </mat-dialog-actions>
-  `,
-  styles: [`mat-dialog-content { color: #ccd6f6; padding-bottom: 20px; }
-    h2 { color: #ff5252; }`],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
   animations: [
@@ -51,9 +39,9 @@ export class Sidebar {
   public noteService = inject(NoteService);
   private dialog = inject(MatDialog);
   private router = inject(Router);
-  expandedFolderIds = signal<Set<string>>(new Set());
   public selectedNote = this.noteService.selectedNote;
   private snackBar = inject(MatSnackBar);
+  expandedFolderIds = signal<Set<string>>(new Set());
 
   folders = this.noteService.folders;
   selectedFolderId = signal<string | null>(null);
@@ -179,28 +167,31 @@ export class Sidebar {
   }
 
   async onDeleteNote(event: MouseEvent, note: any) {
-  event.stopPropagation();
+    event.stopPropagation();
 
-  // 1. Notiz aus der UI "entfernen" (lokal speichern für Notfall)
-  const deletedNote = note;
-  await this.noteService.deleteNote(note.parentId, note.id);
+    // 1. Notiz aus der UI "entfernen" (lokal speichern für Notfall)
+    const deletedNote = note;
+    await this.noteService.deleteNote(note.parentId, note.id);
 
-  // 2. Schicke Snackbar anzeigen
-  const snack = this.snackBar.open(`Notiz "${note.title}" gelöscht`, 'RÜCKGÄNGIG', {
-    duration: 5000,
-    panelClass: ['dark-snackbar']
-  });
+    // 2. Schicke Snackbar anzeigen
+    const snack = this.snackBar.open(`Notiz "${note.title}" gelöscht`, 'RÜCKGÄNGIG', {
+      duration: 5000,
+      panelClass: ['dark-snackbar']
+    });
 
-  // 3. Logik für das Rückgängig machen
-  snack.onAction().subscribe(async () => {
-    // Hier würdest du die Notiz einfach wieder mit set() in Firebase schreiben
-    // await this.noteService.restoreNote(deletedNote);
-    console.log('Wiederherstellung angefordert');
-  });
-}
+    // 3. Logik für das Rückgängig machen
+    snack.onAction().subscribe(async () => {
+      // Hier würdest du die Notiz einfach wieder mit set() in Firebase schreiben
+      // await this.noteService.restoreNote(deletedNote);
+      console.log('Wiederherstellung angefordert');
+    });
+  }
 
   selectNote(note: any) {
-    this.noteService.selectedNote.set(note);
-    this.isExpanded.set(false);
+    this.noteService.selectedNote.set({ ...note });
+    this.router.navigate(['/dashboard/note', note.id]);
+    if (this.isExpanded()) {
+      this.isExpanded.set(false);
+    }
   }
 }

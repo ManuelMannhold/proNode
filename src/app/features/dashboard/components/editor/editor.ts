@@ -8,11 +8,12 @@ import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { NoteService } from '../../../../core/services/note/note.service';
 import { Database, ref, set } from '@angular/fire/database';
+import { Welcome } from '../welcome/welcome';
 
 @Component({
   selector: 'app-editor',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatButtonModule, FormsModule],
+  imports: [CommonModule, MatIconModule, MatButtonModule, FormsModule, Welcome],
   templateUrl: './editor.html',
   styleUrl: './editor.scss',
 })
@@ -26,6 +27,7 @@ export class Editor implements OnInit, OnDestroy {
 
   public isTitleInvalid = signal(false);
   public noteService = inject(NoteService);
+  public selectedNote = this.noteService.selectedNote;
   private route = inject(ActivatedRoute);
   private db = inject(Database);
 
@@ -38,6 +40,14 @@ export class Editor implements OnInit, OnDestroy {
   private autoSaveSubscription?: Subscription;
 
   constructor() {
+    effect(() => {
+      const current = this.selectedNote();
+      if (current) {
+        this.noteTitle.set(current.title || '');
+        this.noteContent.set(current.content || '');
+        this.isTitleInvalid.set(false);
+      }
+    });
     // 1. Auto-Save Setup
     this.autoSaveSubscription = this.contentUpdate$.pipe(
       debounceTime(700),
@@ -46,16 +56,21 @@ export class Editor implements OnInit, OnDestroy {
       this.performAutoSave(content);
     });
 
-    // 2. Effekt MUSS im Constructor stehen (Injection Context)
     effect(() => {
       const note = this.noteService.selectedNote();
       if (note) {
-        // Wir füllen den Editor, sobald sich im Service die Auswahl ändert
         this.noteTitle.set(note.title);
         this.noteContent.set(note.content || '');
         this.saveStatus.set('Bereit');
       }
     });
+  }
+
+  async deleteCurrentNote() {
+    const current = this.selectedNote();
+    if (current && confirm('Diese Notiz wirklich löschen?')) {
+      await this.noteService.deleteNote(current.parentId, current.id);
+    }
   }
 
   ngOnInit() {

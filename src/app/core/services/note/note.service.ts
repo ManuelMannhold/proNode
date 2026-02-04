@@ -1,4 +1,4 @@
-import { Injectable, signal, inject, computed } from '@angular/core';
+import { Injectable, signal, inject, computed, effect } from '@angular/core';
 import { Database, ref, onValue, set, remove, update, query, orderByChild } from '@angular/fire/database';
 import { Folder, Note } from '../../models/note/note.model';
 
@@ -10,7 +10,19 @@ export class NoteService {
   public selectedNote = signal<Note | null>(null);
   public isSaving = signal(false);
 
-  constructor() { this.initFirebaseSync(); }
+  constructor() {
+    this.initFirebaseSync();
+    effect(() => {
+      const currentNote = this.selectedNote();
+      if (currentNote) {
+        const updatedNote = this.getNoteById(currentNote.id);
+        // Wenn die Notiz noch existiert, aber das Objekt ein neues ist: Synchronisieren
+        if (updatedNote && updatedNote !== currentNote) {
+          this.selectedNote.set(updatedNote);
+        }
+      }
+    }, { allowSignalWrites: true });
+  }
 
   private initFirebaseSync() {
     const foldersQuery = query(ref(this.db, 'folders'), orderByChild('position'));
