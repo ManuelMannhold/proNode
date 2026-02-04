@@ -3,7 +3,7 @@
     line-height: 1.6;
     max-height: 70vh;
     padding-right: 8px;
-    overflow-y: hidden;
+    overflow-y: auto;
 
     &::-webkit-scrollbar {
         width: 6px;
@@ -45,7 +45,7 @@
     cursor: pointer;
 
     &:hover {
-        color: #64ffda; 
+        color: #64ffda;
         border-bottom: 1px solid #64ffda;
     }
 }
@@ -66,10 +66,26 @@
     }
 }
 
+// In legal-dialog.component.scss
 mat-dialog-content {
-    margin: 0;
-    padding: 8px 24px;
-    overflow-x: hidden;
+    div.generated-text {
+        box-sizing: border-box;
+        width: 100%;
+        overflow-x: hidden;
+        padding: 0 16px;
+
+        h3 {
+            color: #00a2ff;
+            font-size: 1.1rem;
+            margin-top: 1.5rem;
+        }
+
+        p {
+            color: #ccd6f6;
+            font-size: 0.9rem;
+            line-height: 1.4;
+        }
+    }
 }
 
 .email-wrapper {
