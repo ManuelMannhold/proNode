@@ -115,6 +115,7 @@ export class Editor implements OnInit, OnDestroy {
   private async performAutoSave(content: string) {
     const currentNote = this.noteService.selectedNote();
     if (currentNote) {
+      this.noteService.isSaving.set(true);
       this.saveStatus.set('Speichere...');
       try {
         await this.noteService.updateNoteContent(
@@ -123,6 +124,9 @@ export class Editor implements OnInit, OnDestroy {
           content
         );
         this.saveStatus.set('In Echtzeit gespeichert');
+        setTimeout(() => {
+          this.noteService.isSaving.set(false);
+        }, 1000);
       } catch (error) {
         console.error('Auto-Save fehlgeschlagen:', error);
         this.saveStatus.set('Fehler beim Speichern!');
@@ -133,13 +137,12 @@ export class Editor implements OnInit, OnDestroy {
   async updateTitle(newTitle: string) {
     this.noteTitle.set(newTitle);
 
-    // 1. Validierung: Ist der Titel leer oder nur Leerzeichen?
     if (!newTitle || newTitle.trim() === '') {
       this.isTitleInvalid.set(true);
-      return; // Abbrechen, nicht speichern
+      return;
     }
 
-    this.isTitleInvalid.set(false); // Validierung okay
+    this.isTitleInvalid.set(false);
     const currentNote = this.noteService.selectedNote();
 
     if (currentNote) {
@@ -148,7 +151,7 @@ export class Editor implements OnInit, OnDestroy {
 
       try {
         await set(titleRef, newTitle);
-        setTimeout(() => this.noteService.isSaving.set(false), 800);
+        setTimeout(() => this.noteService.isSaving.set(false), 1000);
       } catch (error) {
         console.error(error);
         this.noteService.isSaving.set(false);
