@@ -1,6 +1,6 @@
 <div class="login-page-wrapper">
     <ngx-particles id="tsparticles" [options]="particlesOptions"></ngx-particles>
-    
+
     <div class="login-card">
         <div class="logo-section">
             <mat-icon class="logo-icon">account_tree</mat-icon>
@@ -12,43 +12,59 @@
             <p class="subtitle">Structure Your Ideas</p>
         </div>
 
-        <h2>Welcome Back</h2>
+        <h2>{{ isRegisterMode ? 'Create Account' : 'Welcome Back' }}</h2>
 
-        <form class="login-form" (ngSubmit)="onLogin()" #loginForm="ngForm">
-            
+        <form class="login-form" [formGroup]="authForm" (ngSubmit)="onSubmit()">
+
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Email Address</mat-label>
-                <input matInput type="email" name="email"
-                       [(ngModel)]="email" 
-                       required email
-                       placeholder="email@example.com"
-                       autocapitalize="none" autocomplete="off">
+                <input matInput type="email" formControlName="email" required placeholder="email@example.com">
                 <mat-icon matSuffix>mail</mat-icon>
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
                 <mat-label>Password</mat-label>
-                <input matInput type="password" name="password"
-                       [(ngModel)]="password"
-                       required
-                       placeholder="••••••••">
+                <input matInput type="password" formControlName="password" required placeholder="••••••••">
                 <mat-icon matSuffix>lock</mat-icon>
             </mat-form-field>
 
-            <a href="#" class="forgot-link">Forgot password?</a>
+            @if (isRegisterMode) {
+            <mat-form-field appearance="outline" class="full-width">
+                <mat-label>Confirm Password</mat-label>
+                <input matInput type="password" formControlName="confirmPassword" required placeholder="••••••••">
+                <mat-icon matSuffix>verified_user</mat-icon>
 
-            <button mat-raised-button color="primary" class="login-btn" 
-                    type="submit"
-                    [disabled]="isLoading() || !loginForm.valid">
-                <span *ngIf="!isLoading()">Log In</span>
+                @if (authForm.get('confirmPassword')?.touched &&
+                authForm.get('password')?.value !== authForm.get('confirmPassword')?.value) {
+                <mat-error>Passwörter sind nicht identisch</mat-error>
+                }
+            </mat-form-field>
+            }
+
+            @if (isRegisterMode && authForm.get('confirmPassword')?.value !== authForm.get('password')?.value &&
+            authForm.get('confirmPassword')?.touched) {
+            <mat-error>Passwörter sind nicht identisch</mat-error>
+            }
+
+            <button mat-raised-button color="primary" class="login-btn" type="submit"
+                [disabled]="isLoading() || authForm.invalid">
+                <span *ngIf="!isLoading()">{{ isRegisterMode ? 'Sign Up' : 'Log In' }}</span>
                 <mat-spinner diameter="20" *ngIf="isLoading()"></mat-spinner>
             </button>
+
+            <div class="auth-toggle">
+                <span>
+                    {{ isRegisterMode ? 'Already have an account?' : "Don't have an account?" }}
+                    <a (click)="toggleRegisterMode()" class="toggle-link">
+                        {{ isRegisterMode ? 'Log In' : 'Register now' }}
+                    </a>
+                </span>
+            </div>
 
             <p class="error-text" *ngIf="errorMessage()">{{ errorMessage() }}</p>
 
             <div class="guest-section">
-                <button mat-button class="guest-btn" type="button" 
-                        (click)="loginAsGuest()" [disabled]="isLoading()">
+                <button mat-button class="guest-btn" type="button" (click)="loginAsGuest()" [disabled]="isLoading()">
                     <mat-icon>arrow_forward</mat-icon>
                     Continue as Guest
                 </button>
