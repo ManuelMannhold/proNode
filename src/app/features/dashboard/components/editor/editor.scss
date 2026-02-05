@@ -43,9 +43,8 @@
             }
 
             &.invalid {
-                border-bottom-color: #ff4757 !important; // Schönes "Error-Rot"
+                border-bottom-color: #ff4757 !important;
                 color: #ff4757;
-                // Optional: Ein leichtes Zittern (Shake-Animation)
                 animation: shake 0.4s;
             }
 
@@ -68,7 +67,7 @@
 
         .status-badge {
             font-size: 0.75rem;
-            color: #64ffda; // Deine Akzentfarbe nutzen (z.B. Smaragdgrün)
+            color: #64ffda; 
             opacity: 0.8;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -99,7 +98,6 @@
             border-radius: 8px;
             padding: 0 16px;
             font-weight: 600;
-            // Falls du Mat-Button nutzt, wird hier das Primary-Blue greifen
         }
     }
 }
@@ -142,7 +140,6 @@
     }
 }
 
-// S23 / Mobile Optimierung
 @media (max-width: 768px) {
     .editor-header {
         padding: 12px 16px;

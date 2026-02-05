@@ -20,22 +20,27 @@ export class AuthService {
   private router = inject(Router);
   user = toSignal(authState(this.auth));
 
-  // Ein Observable, das uns immer den aktuellen Firebase-User liefert
-  // Nützlich für Header-Anzeigen oder Profilbilder
   user$ = authState(this.auth);
 
   /**
-   * Meldet einen bestehenden User mit E-Mail und Passwort an
+   * Authenticates a user with email and password.
+   * @param {string} email - The user's email address.
+   * @param {string} pass - The user's password.
+   * @returns {Promise<UserCredential>}
    */
   async login(email: string, pass: string) {
     try {
       const credential = await signInWithEmailAndPassword(this.auth, email, pass);
       return credential;
     } catch (error) {
-      throw error; // Fehler an die Komponente weitergeben (z.B. für Fehlermeldungen)
+      throw error;
     }
   }
 
+  /**
+   * Performs authentication via Google OAuth popup.
+   * @returns {Promise<UserCredential>}
+   */
   async loginWithGoogle() {
     const provider = new GoogleAuthProvider();
     try {
@@ -47,6 +52,10 @@ export class AuthService {
     }
   }
 
+  /**
+   * Signs in a user anonymously as a guest.
+   * @returns {Promise<UserCredential>}
+   */
   async loginAsGuest() {
     try {
       return await signInAnonymously(this.auth);
@@ -57,7 +66,10 @@ export class AuthService {
   }
 
   /**
-   * Erstellt einen neuen Account
+   * Creates a new user account with email and password.
+   * @param {string} email - The user's email address.
+   * @param {string} pass - The user's password.
+   * @returns {Promise<UserCredential>}
    */
   async register(email: string, pass: string) {
     try {
@@ -68,7 +80,8 @@ export class AuthService {
   }
 
   /**
-   * Loggt den User aus und leitet ihn zum Login zurück
+   * Logs out the current user and navigates to the login route.
+   * @returns {Promise<void>}
    */
   async logout() {
     await signOut(this.auth);

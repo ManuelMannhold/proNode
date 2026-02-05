@@ -12,11 +12,10 @@ import { AuthService } from '../../../core/services/auth/auth.service';
   templateUrl: 'header.html',
   styleUrl: 'header.scss',
 })
-export class Header { // OnInit kannst du entfernen, wenn du kein localStorage mehr nutzt
+export class Header {
   public noteService = inject(NoteService);
   public authService = inject(AuthService);
 
-  // Das Signal berechnet alles automatisch basierend auf dem Firebase-Status
   displayLetter = computed(() => {
     const user = this.authService.user();
 
@@ -25,15 +24,11 @@ export class Header { // OnInit kannst du entfernen, wenn du kein localStorage m
     }
 
     if (user.email) {
-  const namePart = user.email.split('@')[0]; 
-  
-  // Optional: Den ersten Buchstaben groß machen
-  return namePart.charAt(0).toUpperCase() + namePart.slice(1);
-}
+      const namePart = user.email.split('@')[0];
+
+      return namePart.charAt(0).toUpperCase() + namePart.slice(1);
+    }
 
     return 'U';
   });
-
-  // ngOnInit und currentUser können komplett raus, 
-  // da wir jetzt nur noch mit dem authService.user() Signal arbeiten.
 }

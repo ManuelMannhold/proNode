@@ -31,7 +31,6 @@ export class Editor implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private db = inject(Database);
 
-  // UI States
   noteTitle = signal('');
   noteContent = signal('');
   saveStatus = signal('Alle Änderungen gespeichert');
@@ -41,14 +40,14 @@ export class Editor implements OnInit, OnDestroy {
 
   constructor() {
     effect(() => {
-    const current = this.selectedNote();
-    if (current) {
-      this.noteTitle.set(current.title || '');
-      this.noteContent.set(current.content || '');
-      this.isTitleInvalid.set(false);
-      this.saveStatus.set('Bereit');
-    }
-  });
+      const current = this.selectedNote();
+      if (current) {
+        this.noteTitle.set(current.title || '');
+        this.noteContent.set(current.content || '');
+        this.isTitleInvalid.set(false);
+        this.saveStatus.set('Bereit');
+      }
+    });
 
     this.autoSaveSubscription = this.contentUpdate$.pipe(
       debounceTime(700),
@@ -58,6 +57,10 @@ export class Editor implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Deletes the currently selected note after user confirmation.
+   * @returns {Promise<void>}
+   */
   async deleteCurrentNote() {
     const current = this.selectedNote();
     if (current && confirm('Diese Notiz wirklich löschen?')) {
@@ -65,6 +68,9 @@ export class Editor implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Initializes the component and subscribes to route parameters to load specific notes.
+   */
   ngOnInit() {
     this.route.paramMap.subscribe(params => {
       const id = params.get('id');
@@ -74,6 +80,12 @@ export class Editor implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Loads note data based on the provided ID or sets default welcome content.
+   * Includes a retry mechanism for late-loading data.
+   * @param {string} id - The unique ID of the note or 'welcome'.
+   * @private
+   */
   private loadNoteData(id: string) {
     if (id === 'welcome') {
       this.noteTitle.set('Willkommen bei ProNode');
@@ -90,8 +102,6 @@ export class Editor implements OnInit, OnDestroy {
       this.saveStatus.set('Bereit zum Schreiben');
     } else {
       this.saveStatus.set('Notiz wird geladen...');
-      // Kleiner Trick: Da Firebase asynchron ist, versuchen wir es kurz verzögert nochmal, 
-      // falls die Notiz beim ersten Mal noch nicht im Signal war
       setTimeout(() => {
         const retryNote = this.noteService.getNoteById(id);
         if (retryNote) this.noteService.selectNote(retryNote);
@@ -99,11 +109,21 @@ export class Editor implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Updates the local content state and triggers the auto-save stream.
+   * @param {string} newContent - The updated editor content.
+   */
   onContentChange(newContent: string) {
     this.noteContent.set(newContent);
     this.contentUpdate$.next(newContent);
   }
 
+  /**
+   * Persists the current content to the database and updates the save status indicator.
+   * @param {string} content - The content to be saved.
+   * @returns {Promise<void>}
+   * @private
+   */
   private async performAutoSave(content: string) {
     const currentNote = this.noteService.selectedNote();
     if (currentNote) {
@@ -126,6 +146,11 @@ export class Editor implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Updates the note title in the database and manages validation states.
+   * @param {string} newTitle - The new title string.
+   * @returns {Promise<void>}
+   */
   async updateTitle(newTitle: string) {
     this.noteTitle.set(newTitle);
 
@@ -151,6 +176,9 @@ export class Editor implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Validates the title on blur and applies a fallback if the field is empty.
+   */
   onTitleBlur() {
     const currentTitle = this.noteTitle();
 
@@ -163,10 +191,17 @@ export class Editor implements OnInit, OnDestroy {
     }
   }
 
+  /**
+   * Manually triggers a save operation for the current note.
+   * @returns {Promise<void>}
+   */
   async saveNote() {
     await this.performAutoSave(this.noteContent());
   }
 
+  /**
+   * Cleans up subscriptions to prevent memory leaks.
+   */
   ngOnDestroy() {
     this.autoSaveSubscription?.unsubscribe();
   }

@@ -11,14 +11,15 @@ import { AuthService } from './auth/auth.service';
 export class Services {
   private authService = inject(AuthService);
   private db = inject(Database);
-  
 
+  /**
+   * Retrieves the database reference for the current user's notes path.
+   * @returns {DatabaseReference | null} The Firebase reference or null if no user is authenticated.
+   */
   getNotes() {
-    const user = this.authService.user(); // Unser neues Signal!
+    const user = this.authService.user();
 
     if (user) {
-      // Wir speichern jetzt UNTER der UID des Users
-      // Vorher war es wahrscheinlich einfach nur 'notes'
       return ref(this.db, `users/${user.uid}/notes`);
     }
     return null;

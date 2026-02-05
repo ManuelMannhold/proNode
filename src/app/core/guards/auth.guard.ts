@@ -7,14 +7,12 @@ export const authGuard = () => {
   const auth = inject(Auth);
   const router = inject(Router);
 
-  // authState ist ein Observable von Firebase, das den aktuellen User liefert
   return authState(auth).pipe(
-    take(1), // Wir nehmen nur den aktuellen Status und schließen den Stream
+    take(1),
     map(user => {
       if (user) {
-        return true; // User ist eingeloggt -> Zutritt gewährt
+        return true; 
       } else {
-        // User ist nicht eingeloggt -> Umleitung zur Login-Seite
         return router.parseUrl('/login'); 
       }
     })

@@ -5,7 +5,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { Note } from '../../../../core/models/note/note.model'; // Nur das Interface
+import { Note } from '../../../../core/models/note/note.model';
 import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
 import { NoteService } from '../../../../core/services/note/note.service';
 
@@ -34,10 +34,18 @@ export class CreateNoteDialog {
     parentFolder: new FormControl('root', { nonNullable: true })
   });
 
+  /**
+   * Closes the current dialog without saving changes.
+   */
   closeDialog() {
     this.dialogRef.close();
   }
 
+  /**
+   * Validates the form and saves a new note to the database.
+   * Closes the dialog upon successful creation.
+   * @returns {void}
+   */
   saveNote() {
     if (this.noteForm.invalid) return;
     const { title, parentFolder } = this.noteForm.getRawValue();

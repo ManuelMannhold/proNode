@@ -14,17 +14,14 @@ export class NoteService {
 
   isSidebarExpanded = signal<boolean>(false);
 
-  // Der dynamische Basispfad basierend auf dem Login-Status
   private notesPath = computed(() => {
     const user = this.authService.user();
-    // Nutzt die UID für private Daten, sonst einen Fallback-Ordner
     return user ? `users/${user.uid}/folders` : 'public_folders';
   });
 
   constructor() {
     this.initFirebaseSync();
 
-    // Synchronisiert die ausgewählte Notiz, wenn sich die Daten im Hintergrund ändern
     effect(() => {
       const currentNote = this.selectedNote();
       if (currentNote) {
@@ -36,13 +33,15 @@ export class NoteService {
     }, { allowSignalWrites: true });
   }
 
+  /**
+   * Synchronizes folders and notes from Firebase Realtime Database using an effect.
+   * @private
+   */
   private initFirebaseSync() {
-    // Reagiert automatisch, wenn sich der notesPath (User-Login) ändert
     effect(() => {
       const currentPath = this.notesPath();
       const foldersQuery = query(ref(this.db, currentPath), orderByChild('position'));
 
-      // Bestehende Verbindung abhören
       onValue(foldersQuery, (snapshot) => {
         const data = snapshot.val();
         if (!data) {
@@ -77,18 +76,31 @@ export class NoteService {
     });
   }
 
+  /**
+   * Toggles the sidebar expansion state.
+   * @param {boolean} [value] - Optional specific state to set.
+   */
   toggleSidebar(value?: boolean) {
     this.isSidebarExpanded.set(value ?? !this.isSidebarExpanded());
   }
 
-  // --- Schreiboperationen mit dynamischem Pfad ---
-
+  /**
+   * Creates or updates a note in the database at the specified path.
+   * @param {Note} newNote - The note object to save.
+   * @returns {Promise<void>}
+   */
   addNote(newNote: Note) {
     const path = `${this.notesPath()}/${newNote.parentId}/notes/${newNote.id}`;
     console.log('📝 Speicher NOTIZ in Pfad:', path);
     return set(ref(this.db, path), newNote);
   }
 
+  /**
+   * Saves or updates a folder's name and position in the database.
+   * @param {string} id - The folder ID.
+   * @param {string} name - The new folder name.
+   * @returns {Promise<void>}
+   */
   saveFolder(id: string, name: string) {
     const folder = this.foldersSignal().find(f => f.id === id);
     const path = `${this.notesPath()}/${id}`;
@@ -100,6 +112,12 @@ export class NoteService {
     });
   }
 
+  /**
+   * Updates only the content field of a specific note.
+   * @param {string} folderId - ID of the parent folder.
+   * @param {string} noteId - ID of the note to update.
+   * @param {string} content - The new text content.
+   */
   async updateNoteContent(folderId: string, noteId: string, content: string) {
     const path = `${this.notesPath()}/${folderId}/notes/${noteId}/content`;
     try {
@@ -109,6 +127,11 @@ export class NoteService {
     }
   }
 
+  /**
+   * Deletes a note and clears it from the selection if active.
+   * @param {string} folderId - ID of the parent folder.
+   * @param {string} noteId - ID of the note to remove.
+   */
   async deleteNote(folderId: string, noteId: string) {
     const path = `${this.notesPath()}/${folderId}/notes/${noteId}`;
     try {
@@ -121,16 +144,24 @@ export class NoteService {
     }
   }
 
+  /**
+   * Deletes a folder and all its contents from the database.
+   * @param {string} id - The folder ID to remove.
+   * @returns {Promise<void>}
+   */
   deleteFolder(id: string) {
     return remove(ref(this.db, `${this.notesPath()}/${id}`));
   }
 
+  /**
+   * Batch updates the sorting positions of all folders in the database.
+   * @param {Folder[]} folders - Array of folders in their new order.
+   */
   async updateFolderPositions(folders: Folder[]) {
     const updates: any = {};
     const basePath = this.notesPath();
 
     folders.forEach((folder, index) => {
-      // Hier bauen wir den Pfad für das Multi-Update zusammen
       updates[`${basePath}/${folder.id}/position`] = index;
     });
 
@@ -141,8 +172,11 @@ export class NoteService {
     }
   }
 
-  // --- Hilfsmethoden ---
-
+  /**
+   * Searches the current local state for a note by its ID.
+   * @param {string} id - The note ID.
+   * @returns {Note | undefined}
+   */
   getNoteById(id: string): Note | undefined {
     for (const folder of this.foldersSignal()) {
       const note = folder.notes.find(n => n.id === id);
@@ -151,10 +185,18 @@ export class NoteService {
     return undefined;
   }
 
+  /**
+   * Returns a computed signal for a specific note's data.
+   * @param {string} id - The note ID.
+   */
   getNoteSignal(id: string) {
     return computed(() => this.getNoteById(id));
   }
 
+  /**
+   * Adds a temporary folder entry to the local signal for immediate UI feedback.
+   * @param {string} id - The temporary ID for the stub.
+   */
   addFolderStub(id: string) {
     const minPos = Math.min(...this.foldersSignal().map(f => f.position), 0) - 1;
     this.foldersSignal.update(all => [{
@@ -162,20 +204,37 @@ export class NoteService {
     }, ...all]);
   }
 
+  /**
+   * Removes a temporary folder entry from the local signal.
+   * @param {string} id - The ID of the stub to remove.
+   */
   removeFolderStub(id: string) {
     this.foldersSignal.update(all => all.filter(f => f.id !== id));
   }
 
+  /**
+   * Toggles the editing mode for a specific folder in the UI.
+   * @param {string} id - The folder ID.
+   * @param {boolean} isEditing - Whether the folder is being renamed.
+   */
   setEditing(id: string, isEditing: boolean) {
     this.foldersSignal.update(all =>
       all.map(f => f.id === id ? { ...f, isEditing } : f)
     );
   }
 
+  /**
+   * Updates the global selection state with the provided note.
+   * @param {Note} note - The note to select.
+   */
   selectNote(note: Note) {
     this.selectedNote.set(note);
   }
 
+  /**
+   * Synchronizes the local folder signal order without immediate database triggering.
+   * @param {Folder[]} newOrder - The reordered folder array.
+   */
   updateLocalOrder(newOrder: Folder[]) {
     this.foldersSignal.set(newOrder);
   }

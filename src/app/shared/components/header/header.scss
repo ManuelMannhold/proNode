@@ -51,11 +51,11 @@ mat-icon {
         width: 8px;
         height: 8px;
         border-radius: 50%;
-        background-color: #22c55e; // Online-Grün
+        background-color: #22c55e;
         transition: all 0.3s ease;
 
         &.saving {
-            background-color: #f59e0b; // Sync-Orange
+            background-color: #f59e0b;
             box-shadow: 0 0 8px #f59e0b;
             animation: sync-pulse 1s infinite ease-in-out;
         }

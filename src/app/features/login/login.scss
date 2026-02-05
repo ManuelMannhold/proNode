@@ -54,8 +54,6 @@ form {
       .subtitle {
         display: none;
       }
-
-      // Versteckt den Untertitel, um Platz zu sparen
     }
 
     h2 {
@@ -163,7 +161,7 @@ form {
 
     mat-spinner {
       ::ng-deep circle {
-        stroke: white; // Damit der Spinner auf blauem Grund sichtbar ist
+        stroke: white;
       }
     }
   }
@@ -261,7 +259,7 @@ form {
   font-size: 0.9rem;
 
   .toggle-link {
-    color: #00a2ff; // Dein Blau-Ton
+    color: #00a2ff;
     cursor: pointer;
     font-weight: 500;
     margin-left: 5px;

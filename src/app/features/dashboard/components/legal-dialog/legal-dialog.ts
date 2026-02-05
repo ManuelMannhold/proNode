@@ -17,10 +17,17 @@ export class LegalDialog {
   emailSignal = signal('contact@manuel-mannhold.de');
   data = inject(MAT_DIALOG_DATA);
 
+  /**
+   * Opens the default system mail client with the current email address.
+   */
   sendMail() {
     window.location.href = `mailto:${this.emailSignal()}`;
   }
 
+  /**
+   * Copies the current email address to the clipboard and shows a confirmation snackbar.
+   * @returns {Promise<void>}
+   */
   copyEmail() {
     navigator.clipboard.writeText(this.emailSignal());
     this.snackBar.open('E-Mail kopiert!', 'Check', {

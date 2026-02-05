@@ -70,12 +70,10 @@ mat-form-field {
     width: 100%;
 }
 
-// Das Styling für das geöffnete Dropdown-Panel
 ::ng-deep .mat-mdc-select-panel {
-    background-color: #112240 !important; // Dein dunkles Blau
+    background-color: #112240 !important;
     border: 1px solid rgba(0, 162, 255, 0.2);
     
-    // Die Scrollbar im Dropdown stylen (Anti-Augenkrebs)
     &::-webkit-scrollbar {
         width: 6px;
     }
@@ -85,7 +83,6 @@ mat-form-field {
     }
 }
 
-// Styling der einzelnen Optionen im Dropdown
 ::ng-deep .mat-mdc-option {
     color: #ccd6f6 !important;
     

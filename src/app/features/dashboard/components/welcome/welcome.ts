@@ -16,6 +16,11 @@ export class Welcome {
   private noteService = inject(NoteService);
   isSidebarExpanded = signal(false);
 
+  /**
+   * Opens the sidebar and creates a new note. 
+   * If no folders exist, it creates a folder stub first.
+   * @returns {Promise<void>}
+   */
   async openCreateNoteDialog() {
     const folders = this.noteService.folders();
 
@@ -46,14 +51,18 @@ export class Welcome {
     }
   }
 
-
+  /**
+     * Toggles the sidebar expansion state or sets it to a specific value.
+     * @param {boolean} [value] - Optional boolean to force a specific state.
+     */
   toggleSidebar(value?: boolean) {
     this.isSidebarExpanded.set(value ?? !this.isSidebarExpanded());
   }
 
-
+  /**
+     * Opens the sidebar and adds a temporary folder stub for immediate editing.
+     */
   addFolder() {
-    // Sidebar öffnen
     this.noteService.isSidebarExpanded.set(true);
 
     const tempId = 'folder-' + Date.now();

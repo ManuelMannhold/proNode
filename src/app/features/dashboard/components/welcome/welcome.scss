@@ -51,7 +51,7 @@
     margin: 0 auto;
 
     @media (max-width: 600px) {
-        grid-template-columns: 1fr; // Auf dem S23 untereinander stapeln
+        grid-template-columns: 1fr;
     }
 }
 

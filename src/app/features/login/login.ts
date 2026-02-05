@@ -54,10 +54,18 @@ export class Login {
     });
   }
 
+  /**
+   * Triggers change detection after the view has initialized to prevent layout inconsistencies.
+   */
   ngAfterViewInit() {
     this.cdr.detectChanges();
   }
 
+  /**
+   * Handles the primary form submission for both login and registration modes.
+   * Performs validation, Firebase authentication, and navigation.
+   * @returns {Promise<void>}
+   */
   async onSubmit() {
     if (this.authForm.invalid) return;
 
@@ -71,7 +79,7 @@ export class Login {
           this.snackBar.open('Passwörter stimmen nicht überein!', 'OK', {
             duration: 3000,
             verticalPosition: 'bottom',
-            panelClass: ['error-snackbar'] // Damit kannst du es im CSS rot färben
+            panelClass: ['error-snackbar']
           });
           return;
         }
@@ -93,6 +101,11 @@ export class Login {
     }
   }
 
+  /**
+   * Maps Firebase authentication error codes to user-friendly localized error messages.
+   * @param {any} error - The error object caught from Firebase.
+   * @private
+   */
   private handleAuthError(error: any) {
     console.error('Firebase Error Code:', error.code);
 
@@ -117,6 +130,9 @@ export class Login {
     }, 5000);
   }
 
+  /**
+   * Switches between login and registration modes, resetting the form and updating validators.
+   */
   toggleRegisterMode() {
     this.isRegisterMode = !this.isRegisterMode;
     this.errorMessage.set('');
@@ -134,11 +150,19 @@ export class Login {
     this.cdr.detectChanges();
   }
 
+  /**
+   * Callback executed once the background particles have successfully loaded.
+   * @returns {Promise<void>}
+   */
   async particlesLoaded(): Promise<void> {
   }
 
+  /**
+   * Initiates the Google OAuth login flow and redirects to the dashboard on success.
+   * @returns {Promise<void>}
+   */
   async loginWithGoogle() {
-    this.isLoading.set(true); // Spinner starten
+    this.isLoading.set(true);
     try {
       await this.authService.loginWithGoogle();
       this.router.navigate(['/dashboard']);
@@ -154,8 +178,11 @@ export class Login {
     }
   }
 
+  /**
+   * Handles manual login submission using email and password signals.
+   * @returns {Promise<void>}
+   */
   async onLogin() {
-    // 1. Validierung: Sind die Felder leer?
     if (!this.email || !this.password) {
       this.errorMessage.set('Bitte E-Mail und Passwort eingeben.');
       return;
@@ -165,13 +192,10 @@ export class Login {
     this.errorMessage.set('');
 
     try {
-      // 2. Den AuthService aufrufen (den wir vorhin angelegt haben)
       await this.authService.login(this.email(), this.password());
 
-      // 3. Wenn erfolgreich -> Ab ins Dashboard
       this.router.navigate(['/dashboard']);
     } catch (error: any) {
-      // 4. Fehlerbehandlung (Firebase gibt spezifische Codes zurück)
       console.error('Login-Fehler:', error.code);
 
       if (error.code === 'auth/invalid-credential') {
@@ -186,11 +210,14 @@ export class Login {
     }
   }
 
+  /**
+   * Signs the user in using a Firebase anonymous account.
+   * @returns {Promise<void>}
+   */
   async loginAsGuest() {
     this.isLoading.set(true);
     try {
       await this.authService.loginAsGuest();
-      // Wenn das klappt, hat der authGuard nun einen echten User im Stream
       this.router.navigate(['/dashboard']);
     } catch (error) {
       this.errorMessage.set('Gast-Zugang konnte nicht aktiviert werden.');
@@ -199,6 +226,10 @@ export class Login {
     }
   }
 
+  /**
+   * Configuration object for the tsparticles background effect.
+   * Defines colors, link distances, and interactivity modes like 'grab'.
+   */
   public particlesOptions: RecursivePartial<IOptions> = {
     background: {
       color: { value: "transparent" }
@@ -235,9 +266,9 @@ export class Login {
       move: {
         enable: true,
         speed: 1,
-        direction: "none", // Nutze den String direkt oder MoveDirection.none
+        direction: "none",
         outModes: {
-          default: "out" // Nutze den String direkt oder OutMode.out
+          default: "out"
         }
       },
       number: {

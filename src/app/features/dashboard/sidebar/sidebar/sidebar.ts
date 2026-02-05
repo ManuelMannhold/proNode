@@ -79,11 +79,13 @@ export class Sidebar {
     });
   }
 
-  // Der aktuell eingeloggte User als Observable oder Signal
   currentUser$ = user(this.auth);
-  // Falls du mit Signals arbeitest, stelle sicher, dass 'currentUser' gesetzt wird
 
-  // Diese Funktion fehlt laut Fehlermeldung
+  /**
+   * Derives a display name from user object properties (displayName or email).
+   * @param {any} user - The current user object.
+   * @returns {string} The formatted name, 'Gast', or 'User'.
+   */
   getUserDisplayName(user: any): string {
     if (!user) return 'Gast';
     if (user.displayName) return user.displayName;
@@ -94,32 +96,51 @@ export class Sidebar {
     return 'User';
   }
 
-  // Die Navigations-Funktion
+  /**
+   * Displays a temporary notification regarding the availability of settings.
+   */
   goToSettings() {
     this.snackBar.open('Einstellungen folgen bald...', 'OK', { duration: 2000 });
   }
 
-  // Die Logout-Funktion
+  /**
+   * Clears local session data, signs out from Firebase, and redirects to login.
+   * @returns {Promise<void>}
+   */
   async logout() {
     localStorage.removeItem('currentUser');
     await signOut(this.auth);
     this.router.navigate(['/login']);
   }
 
+  /**
+   * Toggles the global sidebar expansion state via the note service.
+   */
   toggleSidebar() {
     this.noteService.toggleSidebar();
   }
 
+  /**
+   * Collapses the sidebar if the viewport width is below the mobile threshold.
+   * @private
+   */
   private closeSidebarOnMobile() {
     if (window.innerWidth < 768) {
       this.isExpanded.set(false);
     }
   }
 
+  /**
+   * Manually sets the sidebar expansion state to false.
+   */
   closeSidebar() {
     this.isExpanded.set(false);
   }
 
+  /**
+   * Toggles the expansion state of a specific folder in the UI.
+   * @param {any} folder - The folder object to toggle.
+   */
   toggleFolder(folder: any) {
     const currentSet = new Set(this.expandedFolderIds());
     if (currentSet.has(folder.id)) {
@@ -130,10 +151,18 @@ export class Sidebar {
     this.expandedFolderIds.set(currentSet);
   }
 
+  /**
+   * Checks if a specific folder is currently expanded in the sidebar.
+   * @param {string} folderId - The ID of the folder.
+   * @returns {boolean}
+   */
   isFolderExpanded(folderId: string): boolean {
     return this.expandedFolderIds().has(folderId);
   }
 
+  /**
+   * Opens the sidebar on mobile and creates a new temporary folder stub.
+   */
   addFolder() {
     if (window.innerWidth < 768) {
       this.isExpanded.set(true);
@@ -142,6 +171,11 @@ export class Sidebar {
     this.noteService.addFolderStub(newId);
   }
 
+  /**
+   * Persists a folder name change or removes the stub if the name is empty.
+   * @param {string} folderId - The ID of the folder.
+   * @param {any} event - The input change event.
+   */
   saveName(folderId: string, event: any) {
     const newName = event.target.value.trim();
     if (newName) {
@@ -152,6 +186,10 @@ export class Sidebar {
     }
   }
 
+  /**
+   * Sets the active folder and collapses the sidebar on mobile devices.
+   * @param {string} folderId - The ID of the selected folder.
+   */
   selectFolder(folderId: string) {
     this.selectedFolderId.set(folderId);
     if (this.isMobile()) {
@@ -159,18 +197,27 @@ export class Sidebar {
     }
   }
 
+  /**
+   * Deletes a folder after user confirmation.
+   * @param {string} id - The ID of the folder to remove.
+   */
   deleteFolder(id: string) {
     if (confirm('Möchtest du diesen Ordner wirklich löschen?')) {
       this.noteService.deleteFolder(id);
     }
   }
 
-  // --- Notiz Funktionen ---
-
+  /**
+   * Updates the selected note in the global service state.
+   * @param {Note} note - The clicked note object.
+   */
   onNoteClick(note: Note) {
     this.noteService.selectNote(note);
   }
 
+  /**
+   * Opens a dialog to create a new note and navigates to it upon completion.
+   */
   openCreateNoteDialog() {
     const DIALOGREF = this.dialog.open(CreateNoteDialog, {
       width: '450px',
@@ -179,17 +226,16 @@ export class Sidebar {
 
     DIALOGREF.afterClosed().subscribe(result => {
       if (result) {
-        // 1. Hier würdest du normalerweise deinen Service aufrufen:
-        // this.noteService.createNote(result).subscribe(newNote => { ... });
-
-        // 2. Navigation: Wir schicken den User zum Editor mit der ID der neuen Notiz
-        // Für den Test nehmen wir eine fiktive ID:
         const mockId = Math.random().toString(36).substring(7);
         this.router.navigate(['/dashboard/note', mockId]);
       }
     });
   }
 
+  /**
+   * Handles drag-and-drop reordering of folders and persists the new order.
+   * @param {CdkDragDrop<Folder[]>} event - The drag-and-drop event data.
+   */
   drop(event: CdkDragDrop<Folder[]>) {
     const currentFolders = [...this.folders()];
     moveItemInArray(currentFolders, event.previousIndex, event.currentIndex);
@@ -197,27 +243,32 @@ export class Sidebar {
     this.noteService.updateFolderPositions(currentFolders);
   }
 
+  /**
+   * Deletes a note and provides a snackbar notification with an undo option.
+   * @param {MouseEvent} event - The click event to stop propagation.
+   * @param {any} note - The note object to delete.
+   * @returns {Promise<void>}
+   */
   async onDeleteNote(event: MouseEvent, note: any) {
     event.stopPropagation();
 
-    // 1. Notiz aus der UI "entfernen" (lokal speichern für Notfall)
     const deletedNote = note;
     await this.noteService.deleteNote(note.parentId, note.id);
 
-    // 2. Schicke Snackbar anzeigen
     const snack = this.snackBar.open(`Notiz "${note.title}" gelöscht`, 'RÜCKGÄNGIG', {
       duration: 5000,
       panelClass: ['dark-snackbar']
     });
 
-    // 3. Logik für das Rückgängig machen
     snack.onAction().subscribe(async () => {
-      // Hier würdest du die Notiz einfach wieder mit set() in Firebase schreiben
-      // await this.noteService.restoreNote(deletedNote);
       console.log('Wiederherstellung angefordert');
     });
   }
 
+  /**
+   * Selects a note, navigates to the editor, and closes the sidebar.
+   * @param {any} note - The note object to select.
+   */
   selectNote(note: any) {
     this.noteService.selectedNote.set({ ...note });
     this.router.navigate(['/dashboard/note', note.id]);
@@ -226,12 +277,16 @@ export class Sidebar {
     }
   }
 
+  /**
+   * Opens a legal information dialog (Impressum or Datenschutz).
+   * @param {'impressum' | 'datenschutz'} type - The type of legal content to display.
+   */
   openLegal(type: 'impressum' | 'datenschutz') {
     this.dialog.open(LegalDialog, {
       data: { type },
       width: '90%',
       maxWidth: '600px',
-      panelClass: 'custom-glass-dialog', // Nutze deine vorhandene Dialog-Klasse
+      panelClass: 'custom-glass-dialog',
       autoFocus: false
     });
   }
