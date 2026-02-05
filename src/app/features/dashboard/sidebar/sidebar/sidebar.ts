@@ -15,7 +15,7 @@ import { filter } from 'rxjs/operators';
 import { MatRippleModule } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LegalDialog } from '../../components/legal-dialog/legal-dialog';
-import { DragDropModule, CdkDragHandle } from '@angular/cdk/drag-drop'; // WICHTIG: CdkDragHandle dabei?
+import { DragDropModule, CdkDragHandle } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-sidebar',
