@@ -315,35 +315,40 @@ input {
 
 // --- Hilfselemente ---
 .drag-handle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 24px;   /* Feste Breite für Stabilität */
-  height: 24px;
-  cursor: grab;
-  margin-right: 4px; /* Abstand zum Chevron/Ordnernamen */
-  
-  mat-icon {
-    width: 24px;
-    height: 24px;
-    font-size: 24px;    /* Stellt sicher, dass das Icon die volle Größe nutzt */
-    overflow: visible;  /* Verhindert das Abschneiden der Ränder */
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgba(255, 255, 255, 0.5); /* Dezentere Farbe */
-  }
+    width: 24px;
+    /* Feste Breite für Stabilität */
+    height: 24px;
+    cursor: grab;
+    margin-right: 4px;
+    /* Abstand zum Chevron/Ordnernamen */
 
-  &:active {
-    cursor: grabbing;
-  }
+    mat-icon {
+        width: 24px;
+        height: 24px;
+        font-size: 24px;
+        /* Stellt sicher, dass das Icon die volle Größe nutzt */
+        overflow: visible;
+        /* Verhindert das Abschneiden der Ränder */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.5);
+        /* Dezentere Farbe */
+    }
+
+    &:active {
+        cursor: grabbing;
+    }
 }
 
 /* Auf dem Handy das Icon etwas größer machen für bessere Bedienung */
 @media (max-width: 600px) {
-  .drag-handle {
-    padding: 10px; // Größere Trefferfläche
-  }
+    .drag-handle {
+        padding: 10px; // Größere Trefferfläche
+    }
 }
 
 .more-btn {
@@ -649,6 +654,130 @@ input {
     &.secondary {
         ::ng-deep .mat-ripple-element {
             background-color: rgba(0, 162, 255, 0.1);
+        }
+    }
+}
+
+/* Globale Anpassung für das Profil-Menü */
+.custom-profile-menu {
+    background: rgba(20, 25, 35, 0.8) !important;
+    /* Dunkler, transparenter Hintergrund */
+    backdrop-filter: blur(15px) saturate(150%);
+    /* Glass-Effekt */
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
+    margin-bottom: 8px;
+    /* Schwebt über dem Footer */
+
+    .mat-mdc-menu-item {
+        color: rgba(255, 255, 255, 0.9) !important;
+        font-size: 0.9rem;
+
+        &:hover {
+            background: rgba(255, 255, 255, 0.05) !important;
+        }
+
+        mat-icon {
+            color: #00a2ff !important;
+            /* Dein blaues Akzent-Icon */
+            margin-right: 8px;
+        }
+    }
+
+    .logout-button {
+        color: #ff4d4d !important;
+
+        mat-icon {
+            color: #ff4d4d !important;
+        }
+    }
+}
+
+/* Trennlinie im Menü dezent halten */
+.mat-divider {
+    border-top-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.user-email {
+    display: block;
+    font-size: 0.7rem;
+    color: rgba(255, 255, 255, 0.5);
+    /* Etwas dunkler/transparenter als der Name */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    /* Je nach Breite deiner Sidebar */
+}
+
+.user-profile-footer {
+    margin-top: auto;
+    display: flex;
+    align-items: center;
+    padding: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+
+    &:hover {
+        background: rgba(255, 255, 255, 0.05);
+    }
+
+    .user-avatar {
+        width: 32px;
+        height: 32px;
+        background: #00a2ff;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    .user-info {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        .user-name { font-size: 0.85rem; font-weight: 500; white-space: nowrap; }
+        .user-email { font-size: 0.7rem; opacity: 0.5; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+    }
+
+    .more-icon {
+        margin-left: auto;
+        opacity: 0.5;
+        font-size: 18px;
+    }
+}
+
+/* In styles.scss für globale Menü-Anpassung */
+.custom-profile-menu {
+    margin-bottom: 10px;
+    /* Abstand zur Sidebar-Unterkante */
+
+    .menu-info {
+        padding: 12px 16px;
+        display: flex;
+        flex-direction: column;
+
+        .full-name {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .email-sub {
+            font-size: 0.75rem;
+            color: gray;
+        }
+    }
+
+    .logout-button {
+        color: #ff4d4d;
+
+        mat-icon {
+            color: #ff4d4d;
         }
     }
 }

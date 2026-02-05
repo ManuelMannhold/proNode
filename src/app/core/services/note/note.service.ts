@@ -12,6 +12,8 @@ export class NoteService {
   public selectedNote = signal<Note | null>(null);
   public isSaving = signal(false);
 
+  isSidebarExpanded = signal<boolean>(false);
+
   // Der dynamische Basispfad basierend auf dem Login-Status
   private notesPath = computed(() => {
     const user = this.authService.user();
@@ -21,7 +23,7 @@ export class NoteService {
 
   constructor() {
     this.initFirebaseSync();
-    
+
     // Synchronisiert die ausgewählte Notiz, wenn sich die Daten im Hintergrund ändern
     effect(() => {
       const currentNote = this.selectedNote();
@@ -55,11 +57,11 @@ export class NoteService {
 
           const notesArray: Note[] = val.notes
             ? Object.entries(val.notes).map(([noteId, noteData]: [string, any]) => ({
-                ...noteData,
-                id: noteId,
-                parentId: folderId,
-                content: noteData.content || ''
-              }))
+              ...noteData,
+              id: noteId,
+              parentId: folderId,
+              content: noteData.content || ''
+            }))
             : [];
 
           list.push({
@@ -73,6 +75,10 @@ export class NoteService {
         this.foldersSignal.set(list);
       });
     });
+  }
+
+  toggleSidebar(value?: boolean) {
+    this.isSidebarExpanded.set(value ?? !this.isSidebarExpanded());
   }
 
   // --- Schreiboperationen mit dynamischem Pfad ---

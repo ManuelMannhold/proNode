@@ -88,3 +88,49 @@ input {
   border: 1px solid rgba(255, 255, 255, 0.2);
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
+
+/* Entfernt das weiße Standard-Feld und macht es zum Dark-Glass */
+.custom-profile-menu.mat-mdc-menu-panel {
+    background-color: rgba(30, 35, 45, 0.9) !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5) !important;
+    min-width: 220px !important;
+
+    .mat-mdc-menu-content {
+        padding: 0 !important;
+    }
+
+    .menu-header-info {
+        padding: 16px;
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        color: white;
+
+        .avatar-large {
+            width: 35px; height: 35px;
+            background: #00a2ff;
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: bold;
+        }
+
+        .text-info {
+            display: flex; flex-direction: column;
+            span { font-size: 0.7rem; opacity: 0.6; }
+        }
+    }
+
+    .mat-mdc-menu-item {
+        color: rgba(255,255,255,0.8) !important;
+        mat-icon { color: #00a2ff !important; }
+        &:hover { background: rgba(255,255,255,0.05) !important; }
+    }
+
+    .logout-item {
+        color: #ff5252 !important;
+        mat-icon { color: #ff5252 !important; }
+    }
+}

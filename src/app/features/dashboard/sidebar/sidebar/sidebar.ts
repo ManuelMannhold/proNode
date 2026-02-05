@@ -16,12 +16,17 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LegalDialog } from '../../components/legal-dialog/legal-dialog';
 import { DragDropModule, CdkDragHandle } from '@angular/cdk/drag-drop';
+import { Auth, signOut, user } from '@angular/fire/auth';
+import { MatDividerModule } from '@angular/material/divider';
+import { toSignal } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-sidebar',
   imports: [MatIconModule, CommonModule, CdkDropList, CdkDrag, CdkDragHandle, MatMenuModule, DragDropModule,
     MatIconModule,
-    MatButtonModule, MatTooltipModule, MatRippleModule],
+    MatButtonModule, MatTooltipModule, MatRippleModule, MatMenuModule,
+    MatDividerModule,
+    MatButtonModule],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
   animations: [
@@ -43,12 +48,14 @@ export class Sidebar {
   private router = inject(Router);
   public selectedNote = this.noteService.selectedNote;
   private snackBar = inject(MatSnackBar);
-  expandedFolderIds = signal<Set<string>>(new Set());
+  private auth = inject(Auth);
 
+  expandedFolderIds = signal<Set<string>>(new Set());
   folders = this.noteService.folders;
   selectedFolderId = signal<string | null>(null);
-  isExpanded = signal(false);
+  isExpanded = this.noteService.isSidebarExpanded;
   isMobile = signal(window.innerWidth < 768);
+  currentUser = toSignal(user(this.auth));
 
   @HostListener('window:resize', ['$event'])
   onResize(event: UIEvent) {
@@ -72,8 +79,35 @@ export class Sidebar {
     });
   }
 
+  // Der aktuell eingeloggte User als Observable oder Signal
+  currentUser$ = user(this.auth);
+  // Falls du mit Signals arbeitest, stelle sicher, dass 'currentUser' gesetzt wird
+
+  // Diese Funktion fehlt laut Fehlermeldung
+  getUserDisplayName(user: any): string {
+    if (!user) return 'Gast';
+    if (user.displayName) return user.displayName;
+    if (user.email) {
+      const name = user.email.split('@')[0];
+      return name.charAt(0).toUpperCase() + name.slice(1).replace(/[._]/g, ' ');
+    }
+    return 'User';
+  }
+
+  // Die Navigations-Funktion
+  goToSettings() {
+    this.snackBar.open('Einstellungen folgen bald...', 'OK', { duration: 2000 });
+  }
+
+  // Die Logout-Funktion
+  async logout() {
+    localStorage.removeItem('currentUser');
+    await signOut(this.auth);
+    this.router.navigate(['/login']);
+  }
+
   toggleSidebar() {
-    this.isExpanded.update(v => !v);
+    this.noteService.toggleSidebar();
   }
 
   private closeSidebarOnMobile() {
@@ -161,11 +195,6 @@ export class Sidebar {
     moveItemInArray(currentFolders, event.previousIndex, event.currentIndex);
     this.noteService.updateLocalOrder(currentFolders);
     this.noteService.updateFolderPositions(currentFolders);
-  }
-
-  logout() {
-    localStorage.removeItem('currentUser');
-    this.router.navigate(['/login']);
   }
 
   async onDeleteNote(event: MouseEvent, note: any) {

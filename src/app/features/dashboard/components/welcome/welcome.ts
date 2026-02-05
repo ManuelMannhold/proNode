@@ -1,9 +1,8 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { NoteService } from '../../../../core/services/note/note.service';
 import { Note } from '../../../../core/models/note/note.model';
-
 
 @Component({
   selector: 'app-welcome',
@@ -15,10 +14,13 @@ import { Note } from '../../../../core/models/note/note.model';
 export class Welcome {
   private router = inject(Router);
   private noteService = inject(NoteService);
+  isSidebarExpanded = signal(false);
 
   async openCreateNoteDialog() {
     const folders = this.noteService.folders();
-    
+
+    this.noteService.isSidebarExpanded.set(true);
+
     if (folders.length === 0) {
       const folderId = 'folder-' + Date.now();
       this.noteService.addFolderStub(folderId);
@@ -44,10 +46,17 @@ export class Welcome {
     }
   }
 
+
+  toggleSidebar(value?: boolean) {
+    this.isSidebarExpanded.set(value ?? !this.isSidebarExpanded());
+  }
+
+
   addFolder() {
+    // Sidebar öffnen
+    this.noteService.isSidebarExpanded.set(true);
+
     const tempId = 'folder-' + Date.now();
     this.noteService.addFolderStub(tempId);
-    // Da isEditing im Service auf true gesetzt wird, 
-    // kann der User direkt in der Sidebar den Namen tippen.
   }
 }
