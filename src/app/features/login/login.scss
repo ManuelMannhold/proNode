@@ -38,18 +38,32 @@ form {
   border-radius: 20px;
   padding: 25px;
   margin: auto;
-  height: auto; 
-  max-height: none; 
+  height: auto;
+  max-height: none;
 
   @media (max-height: 780px) {
     .logo-section {
-        margin-bottom: 10px;
-        .logo-icon { font-size: 32px; width: 32px; height: 32px; }
-        .subtitle { display: none; } // Versteckt den Untertitel, um Platz zu sparen
-    }
-    h2 { font-size: 1.2rem; margin-bottom: 15px; }
+      margin-bottom: 10px;
 
-      padding: 25px !important;
+      .logo-icon {
+        font-size: 32px;
+        width: 32px;
+        height: 32px;
+      }
+
+      .subtitle {
+        display: none;
+      }
+
+      // Versteckt den Untertitel, um Platz zu sparen
+    }
+
+    h2 {
+      font-size: 1.2rem;
+      margin-bottom: 15px;
+    }
+
+    padding: 25px !important;
   }
 }
 
@@ -277,6 +291,41 @@ form {
   }
 }
 
+::ng-deep {
+
+  /* 1. Den Standard-Rahmen ausblenden oder dezent färben */
+  .mat-mdc-text-field-wrapper .mdc-notched-outline__leading {
+    border-color: rgba(255, 255, 255, 0.2) !important;
+  }
+
+  .mat-mdc-form-field-flex {
+    padding-left: unset !important;
+  }
+
+  .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading {
+    width: unset !important;
+  }
+
+  .mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
+    padding-left: 10px;
+  }
+
+  /* 2. Den Rahmen beim Fokus (Anklicken) anpassen */
+  .mat-mdc-form-field.mat-focused {
+
+    .mdc-notched-outline__leading,
+    .mdc-notched-outline__notch,
+    .mdc-notched-outline__trailing {
+      border-color: #00a2ff !important;
+    }
+  }
+
+  /* 3. Den Hintergrund des Inputs anpassen (Glassmorphism Effekt) */
+  .mat-mdc-text-field-wrapper {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+  }
+}
+
 :ng-deep .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading {
   width: unset;
   padding-left: 10px;
@@ -307,7 +356,6 @@ form {
 ::ng-deep .mdc-notched-outline__notch,
 ::ng-deep .mdc-notched-outline__trailing {
   border-color: rgba(255, 255, 255, 0.5) !important;
-  border-width: 1.5px !important;
 }
 
 /* 5. Rahmen bei Fokus (Klick ins Feld) */
@@ -315,7 +363,6 @@ form {
 ::ng-deep .mat-focused .mdc-notched-outline__notch,
 ::ng-deep .mat-focused .mdc-notched-outline__trailing {
   border-color: #00a2ff !important;
-  border-width: 2px !important;
 }
 
 /* 6. Die Icons (Mail/Lock) aufhellen */
