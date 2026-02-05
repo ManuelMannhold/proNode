@@ -14,6 +14,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from '@angular/fire/auth';
 import { ChangeDetectorRef, AfterViewInit } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -26,7 +27,7 @@ export class Login {
   private cdr = inject(ChangeDetectorRef);
   private authService = inject(AuthService);
   private router = inject(Router);
-
+  private snackBar = inject(MatSnackBar);
 
   authForm!: FormGroup
   email = signal('');
@@ -67,11 +68,19 @@ export class Login {
     try {
       if (this.isRegisterMode) {
         if (password !== confirmPassword) {
-          this.errorMessage.set('Passwörter stimmen nicht überein!');
-          this.isLoading.set(false);
+          this.snackBar.open('Passwörter stimmen nicht überein!', 'OK', {
+            duration: 3000,
+            verticalPosition: 'bottom',
+            panelClass: ['error-snackbar'] // Damit kannst du es im CSS rot färben
+          });
           return;
         }
         await createUserWithEmailAndPassword(this.auth, email, password);
+        this.snackBar.open('Konto erfolgreich erstellt! Willkommen.', 'Super', {
+          duration: 4000,
+          panelClass: ['success-snackbar'],
+          verticalPosition: 'bottom'
+        });
         this.router.navigate(['/dashboard']);
       } else {
         await signInWithEmailAndPassword(this.auth, email, password);
@@ -134,7 +143,12 @@ export class Login {
       await this.authService.loginWithGoogle();
       this.router.navigate(['/dashboard']);
     } catch (error) {
-      this.errorMessage.set('Google Login abgebrochen oder fehlgeschlagen.');
+      this.snackBar.open('Google Login abgebrochen!', 'OK', {
+        duration: 3000,
+        verticalPosition: 'bottom',
+        panelClass: ['error-snackbar']
+      });
+      return;
     } finally {
       this.isLoading.set(false);
     }

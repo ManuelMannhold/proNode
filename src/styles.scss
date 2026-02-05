@@ -1,4 +1,3 @@
-
 // Include theming for Angular Material with `mat.theme()`.
 // This Sass mixin will define CSS variables that are used for styling Angular Material
 // components according to the Material 3 design spec.
@@ -8,14 +7,12 @@
 
 html {
   height: 100%;
-  @include mat.theme((
-    color: (
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme((color: (primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    ));
 }
 
 body {
@@ -35,6 +32,7 @@ body {
   margin: 0;
   height: 100%;
 }
+
 /* You can add global styles to this file, and also import other style files */
 
 * {
@@ -49,14 +47,44 @@ body {
 }
 
 textarea,
-input
-{
+input {
   color: white !important;
 }
 
 .mat-mdc-tooltip .mdc-tooltip__surface {
   background-color: #1d3557 !important;
-  color: #64ffda !important;        
+  color: #64ffda !important;
   font-size: 12px;
   border: 1px solid rgba(100, 255, 218, 0.2);
+}
+
+.error-snackbar {
+  /* Hintergrund auf ein schönes dunkles Rot setzen */
+  --mdc-snackbar-container-color: #f44336;
+
+  /* Textfarbe auf Weiß setzen */
+  --mdc-snackbar-label-text-color: white;
+
+  /* Falls du den Button (Aktion) auch stylen willst */
+  --mat-snack-bar-button-color: white;
+
+  /* Glassmorphism Effekt passend zu deinem Design */
+  background: rgba(244, 67, 54, 0.9) !important;
+  backdrop-filter: blur(8px);
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+.success-snackbar {
+  /* Ein schönes, sattes Smaragdgrün */
+  --mdc-snackbar-container-color: #2e7d32; 
+  --mdc-snackbar-label-text-color: white;
+  --mat-snack-bar-button-color: #a5d6a7;
+
+  background: rgba(46, 125, 50, 0.9) !important;
+  backdrop-filter: blur(8px);
+  border-radius: 8px !important;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }

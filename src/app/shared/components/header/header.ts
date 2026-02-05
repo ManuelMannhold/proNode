@@ -27,8 +27,12 @@ export class Header { // OnInit kannst du entfernen, wenn du kein localStorage m
 
     // Fall 2: Eingeloggter User -> Erster Buchstabe der Mail
     if (user.email) {
-      return user.email.charAt(0).toUpperCase();
-    }
+  // Trennt die Mail am @ und nimmt den ersten Teil
+  const namePart = user.email.split('@')[0]; 
+  
+  // Optional: Den ersten Buchstaben groß machen
+  return namePart.charAt(0).toUpperCase() + namePart.slice(1);
+}
 
     return 'U';
   });
