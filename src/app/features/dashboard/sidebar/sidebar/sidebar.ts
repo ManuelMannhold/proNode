@@ -198,14 +198,32 @@ export class Sidebar {
   }
 
   /**
-   * Deletes a folder after user confirmation.
-   * @param {string} id - The ID of the folder to remove.
+   * Performs an optimistic deletion of a folder with an undo option via Snackbar.
+   * If the undo action is not triggered within 5 seconds, the folder is permanently removed from the database.
+   * @param {string} id - The ID of the folder to delete.
    */
   deleteFolder(id: string) {
-    if (confirm('Möchtest du diesen Ordner wirklich löschen?')) {
+  const folderToDelete = this.folders().find(f => f.id === id);
+  if (!folderToDelete) return;
+  const previousFolders = [...this.folders()];
+  this.noteService.updateLocalOrder(previousFolders.filter(f => f.id !== id));
+
+  const snackBarRef = this.snackBar.open(
+    `Ordner "${folderToDelete.name}" gelöscht`, 
+    'RÜCKGÄNGIG', 
+    { duration: 5000, panelClass: ['dark-snackbar'] }
+  );
+
+  snackBarRef.onAction().subscribe(() => {
+    this.noteService.updateLocalOrder(previousFolders);
+  });
+
+  snackBarRef.afterDismissed().subscribe((info) => {
+    if (!info.dismissedByAction) {
       this.noteService.deleteFolder(id);
     }
-  }
+  });
+}
 
   /**
    * Updates the selected note in the global service state.
@@ -251,7 +269,6 @@ export class Sidebar {
    */
   async onDeleteNote(event: MouseEvent, note: any) {
     event.stopPropagation();
-
     const deletedNote = note;
     await this.noteService.deleteNote(note.parentId, note.id);
 
@@ -261,7 +278,6 @@ export class Sidebar {
     });
 
     snack.onAction().subscribe(async () => {
-      console.log('Wiederherstellung angefordert');
     });
   }
 

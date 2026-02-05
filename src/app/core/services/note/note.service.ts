@@ -91,7 +91,6 @@ export class NoteService {
    */
   addNote(newNote: Note) {
     const path = `${this.notesPath()}/${newNote.parentId}/notes/${newNote.id}`;
-    console.log('📝 Speicher NOTIZ in Pfad:', path);
     return set(ref(this.db, path), newNote);
   }
 
@@ -104,7 +103,6 @@ export class NoteService {
   saveFolder(id: string, name: string) {
     const folder = this.foldersSignal().find(f => f.id === id);
     const path = `${this.notesPath()}/${id}`;
-    console.log('📂 Speicher ORDNER in Pfad:', path);
     return set(ref(this.db, path), {
       name,
       notes: {},

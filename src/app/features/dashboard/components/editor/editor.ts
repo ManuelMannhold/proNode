@@ -3,12 +3,13 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subject, Subscription } from 'rxjs';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { NoteService } from '../../../../core/services/note/note.service';
 import { Database, ref, set } from '@angular/fire/database';
 import { Welcome } from '../welcome/welcome';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-editor',
@@ -18,18 +19,12 @@ import { Welcome } from '../welcome/welcome';
   styleUrl: './editor.scss',
 })
 export class Editor implements OnInit, OnDestroy {
-  deleteNote() {
-    throw new Error('Method not implemented.');
-  }
-  shareNote() {
-    throw new Error('Method not implemented.');
-  }
-
   public isTitleInvalid = signal(false);
   public noteService = inject(NoteService);
   public selectedNote = this.noteService.selectedNote;
   private route = inject(ActivatedRoute);
   private db = inject(Database);
+  private snackBar = inject(MatSnackBar);
 
   noteTitle = signal('');
   noteContent = signal('');
@@ -38,7 +33,7 @@ export class Editor implements OnInit, OnDestroy {
   private contentUpdate$ = new Subject<string>();
   private autoSaveSubscription?: Subscription;
 
-  constructor() {
+  constructor(private router: Router) {
     effect(() => {
       const current = this.selectedNote();
       if (current) {
@@ -58,14 +53,41 @@ export class Editor implements OnInit, OnDestroy {
   }
 
   /**
-   * Deletes the currently selected note after user confirmation.
+   * Deletes the currently selected note with an optimistic UI update.
+   * Provides a 5-second window to undo the operation via Snackbar before 
+   * permanently removing the data from the database.
    * @returns {Promise<void>}
    */
   async deleteCurrentNote() {
     const current = this.selectedNote();
-    if (current && confirm('Diese Notiz wirklich löschen?')) {
-      await this.noteService.deleteNote(current.parentId, current.id);
-    }
+    if (!current) return;
+    const noteBackup = { ...current };
+    this.noteService.selectedNote.set(null);
+    this.router.navigate(['/dashboard/note/welcome']);
+
+    const snackBarRef = this.snackBar.open(
+      `Notiz "${noteBackup.title}" gelöscht`,
+      'RÜCKGÄNGIG',
+      {
+        duration: 5000,
+        panelClass: ['dark-snackbar']
+      }
+    );
+
+    snackBarRef.onAction().subscribe(() => {
+      this.noteService.selectedNote.set(noteBackup);
+      this.router.navigate(['/dashboard/note', noteBackup.id]);
+    });
+
+    snackBarRef.afterDismissed().subscribe(async (info) => {
+      if (!info.dismissedByAction) {
+        try {
+          await this.noteService.deleteNote(noteBackup.parentId, noteBackup.id);
+        } catch (error) {
+          console.error('Fehler beim endgültigen Löschen:', error);
+        }
+      }
+    });
   }
 
   /**
@@ -144,6 +166,28 @@ export class Editor implements OnInit, OnDestroy {
         this.saveStatus.set('Fehler beim Speichern!');
       }
     }
+  }
+
+  /**
+   * Displays a notification that the sharing feature is under development.
+   * @returns {void}
+   */
+  shareNote() {
+    const currentNote = this.selectedNote();
+
+    if (!currentNote) return;
+
+    // Wir zeigen direkt die Info, dass das Feature in Arbeit ist
+    this.snackBar.open(
+      `Sharing für "${currentNote.title}" wird bald verfügbar sein!`,
+      'Cool',
+      {
+        duration: 3500,
+        panelClass: ['info-snackbar'], // Du kannst hier eine eigene CSS Klasse für Blau/Info nutzen
+        horizontalPosition: 'center',
+        verticalPosition: 'bottom'
+      }
+    );
   }
 
   /**
