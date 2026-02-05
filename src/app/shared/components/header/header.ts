@@ -20,14 +20,11 @@ export class Header { // OnInit kannst du entfernen, wenn du kein localStorage m
   displayLetter = computed(() => {
     const user = this.authService.user();
 
-    // Fall 1: Kein User oder Anonym -> Immer großes G
     if (!user || user.isAnonymous) {
       return 'Gast';
     }
 
-    // Fall 2: Eingeloggter User -> Erster Buchstabe der Mail
     if (user.email) {
-  // Trennt die Mail am @ und nimmt den ersten Teil
   const namePart = user.email.split('@')[0]; 
   
   // Optional: Den ersten Buchstaben groß machen

@@ -315,11 +315,24 @@ input {
 
 // --- Hilfselemente ---
 .drag-handle {
-  cursor: grab;
-  color: rgba(255, 255, 255, 0.3);
-  margin-right: 8px;
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 24px;   /* Feste Breite für Stabilität */
+  height: 24px;
+  cursor: grab;
+  margin-right: 4px; /* Abstand zum Chevron/Ordnernamen */
+  
+  mat-icon {
+    width: 24px;
+    height: 24px;
+    font-size: 24px;    /* Stellt sicher, dass das Icon die volle Größe nutzt */
+    overflow: visible;  /* Verhindert das Abschneiden der Ränder */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255, 255, 255, 0.5); /* Dezentere Farbe */
+  }
 
   &:active {
     cursor: grabbing;
