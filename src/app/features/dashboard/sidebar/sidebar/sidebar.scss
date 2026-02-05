@@ -315,12 +315,22 @@ input {
 
 // --- Hilfselemente ---
 .drag-handle {
-    opacity: 0;
-    cursor: grab;
-    font-size: 18px;
-    color: rgba(255, 255, 255, 0.3);
-    transition: opacity 0.2s;
-    flex-shrink: 0;
+  cursor: grab;
+  color: rgba(255, 255, 255, 0.3);
+  margin-right: 8px;
+  display: flex;
+  align-items: center;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+/* Auf dem Handy das Icon etwas größer machen für bessere Bedienung */
+@media (max-width: 600px) {
+  .drag-handle {
+    padding: 10px; // Größere Trefferfläche
+  }
 }
 
 .more-btn {
