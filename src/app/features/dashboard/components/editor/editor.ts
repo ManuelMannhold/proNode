@@ -109,13 +109,13 @@ export class Editor implements OnInit, OnDestroy {
    * @private
    */
   private loadNoteData(id: string) {
+    const note = this.noteService.getNoteById(id);
+
     if (id === 'welcome') {
       this.noteTitle.set('Willkommen bei ProNode');
       this.noteContent.set('Wähle eine Notiz aus der Sidebar aus oder erstelle eine neue.');
       return;
     }
-
-    const note = this.noteService.getNoteById(id);
 
     if (note) {
       this.noteService.selectNote(note);
@@ -176,14 +176,12 @@ export class Editor implements OnInit, OnDestroy {
     const currentNote = this.selectedNote();
 
     if (!currentNote) return;
-
-    // Wir zeigen direkt die Info, dass das Feature in Arbeit ist
     this.snackBar.open(
       `Sharing für "${currentNote.title}" wird bald verfügbar sein!`,
       'Cool',
       {
         duration: 3500,
-        panelClass: ['info-snackbar'], // Du kannst hier eine eigene CSS Klasse für Blau/Info nutzen
+        panelClass: ['info-snackbar'],
         horizontalPosition: 'center',
         verticalPosition: 'bottom'
       }

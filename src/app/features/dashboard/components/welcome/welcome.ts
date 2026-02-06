@@ -32,7 +32,6 @@ export class Welcome {
       const defaultFolderId = 'folder-' + Date.now();
       await this.noteService.addFolderStub(defaultFolderId);
       await this.noteService.saveFolder(defaultFolderId, 'Meine Notizen');
-
       folders = this.noteService.folders();
     }
 

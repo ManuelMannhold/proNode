@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, Inject, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -6,7 +6,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { Note } from '../../../../core/models/note/note.model';
-import { MatDialogRef, MatDialogModule } from '@angular/material/dialog';
+import { MatDialogRef, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { NoteService } from '../../../../core/services/note/note.service';
 
 @Component({
@@ -29,10 +29,28 @@ export class CreateNoteDialog {
   private dialogRef = inject(MatDialogRef<CreateNoteDialog>);
   folders = this.noteService.foldersSignal;
 
+  constructor(
+    @Inject(MAT_DIALOG_DATA) public data: { defaultFolder: string }
+  ) { }
+
+
+
   noteForm = new FormGroup({
     title: new FormControl('', { validators: [Validators.required], nonNullable: true }),
     parentFolder: new FormControl('root', { nonNullable: true })
   });
+
+  /**
+   * Initializes the component by patching the form with a default folder ID
+   * if provided through the dialog data.
+   */
+  ngOnInit() {
+    if (this.data?.defaultFolder) {
+      this.noteForm.patchValue({
+        parentFolder: this.data.defaultFolder
+      });
+    }
+  }
 
   /**
    * Closes the current dialog without saving changes.
