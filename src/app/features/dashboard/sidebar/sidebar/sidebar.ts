@@ -211,7 +211,7 @@ export class Sidebar {
   const snackBarRef = this.snackBar.open(
     `Ordner "${folderToDelete.name}" gelöscht`, 
     'RÜCKGÄNGIG', 
-    { duration: 5000, panelClass: ['dark-snackbar'] }
+    { duration: 2500, panelClass: ['dark-snackbar', 'fast-snackbar'] }
   );
 
   snackBarRef.onAction().subscribe(() => {
@@ -273,7 +273,7 @@ export class Sidebar {
     await this.noteService.deleteNote(note.parentId, note.id);
 
     const snack = this.snackBar.open(`Notiz "${note.title}" gelöscht`, 'RÜCKGÄNGIG', {
-      duration: 5000,
+      duration: 2500,
       panelClass: ['dark-snackbar']
     });
 

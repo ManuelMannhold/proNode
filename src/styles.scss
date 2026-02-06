@@ -42,6 +42,12 @@ input {
   border: 1px solid rgba(100, 255, 218, 0.2);
 }
 
+.fast-snackbar {
+  --mat-snack-bar-container-enter-duration: 150ms;
+  --mat-snack-bar-container-exit-duration: 100ms;
+  margin-bottom: 80px !important;
+}
+
 .error-snackbar {
   --mdc-snackbar-container-color: #f44336;
   --mdc-snackbar-label-text-color: white;

@@ -33,13 +33,6 @@ export class CreateNoteDialog {
     @Inject(MAT_DIALOG_DATA) public data: { defaultFolder: string }
   ) { }
 
-
-
-  noteForm = new FormGroup({
-    title: new FormControl('', { validators: [Validators.required], nonNullable: true }),
-    parentFolder: new FormControl('root', { nonNullable: true })
-  });
-
   /**
    * Initializes the component by patching the form with a default folder ID
    * if provided through the dialog data.
@@ -51,6 +44,11 @@ export class CreateNoteDialog {
       });
     }
   }
+
+  noteForm = new FormGroup({
+    title: new FormControl('', { validators: [Validators.required], nonNullable: true }),
+    parentFolder: new FormControl('root', { nonNullable: true })
+  });
 
   /**
    * Closes the current dialog without saving changes.
