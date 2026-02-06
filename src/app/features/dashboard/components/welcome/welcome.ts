@@ -3,6 +3,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { Router } from '@angular/router';
 import { NoteService } from '../../../../core/services/note/note.service';
 import { Note } from '../../../../core/models/note/note.model';
+import { MatDialog } from '@angular/material/dialog';
+import { CreateNoteDialog } from '../create-note-dialog/create-note-dialog';
 
 @Component({
   selector: 'app-welcome',
@@ -14,41 +16,38 @@ import { Note } from '../../../../core/models/note/note.model';
 export class Welcome {
   private router = inject(Router);
   private noteService = inject(NoteService);
+  private dialog = inject(MatDialog);
   isSidebarExpanded = signal(false);
 
+
   /**
-   * Opens the sidebar and creates a new note. 
-   * If no folders exist, it creates a folder stub first.
+   * Opens the creation dialog, ensuring at least one default folder exists.
+   * Passes the first available folder ID as the default selection.
    * @returns {Promise<void>}
    */
   async openCreateNoteDialog() {
-    const folders = this.noteService.folders();
-
-    this.noteService.isSidebarExpanded.set(true);
+    let folders = this.noteService.folders();
 
     if (folders.length === 0) {
-      const folderId = 'folder-' + Date.now();
-      this.noteService.addFolderStub(folderId);
-      return;
+      const defaultFolderId = 'folder-' + Date.now();
+      await this.noteService.addFolderStub(defaultFolderId);
+      await this.noteService.saveFolder(defaultFolderId, 'Meine Notizen');
+
+      folders = this.noteService.folders();
     }
 
-    const firstFolderId = folders[0].id;
-    const newId = crypto.randomUUID();
+    const DIALOGREF = this.dialog.open(CreateNoteDialog, {
+      width: '450px',
+      panelClass: 'custom-glass-dialog',
+      data: { defaultFolder: folders[0].id }
+    });
 
-    const newNote: Note = {
-      id: newId,
-      title: 'Neue Notiz',
-      parentId: firstFolderId,
-      content: '',
-      createdAt: new Date().toISOString()
-    };
-
-    try {
-      await this.noteService.addNote(newNote);
-      this.router.navigate(['/dashboard/note', newId]);
-    } catch (error) {
-      console.error('Fehler beim Erstellen der Notiz:', error);
-    }
+    DIALOGREF.afterClosed().subscribe(result => {
+      if (result) {
+        const mockId = Math.random().toString(36).substring(7);
+        this.router.navigate(['/dashboard/note', mockId]);
+      }
+    });
   }
 
   /**

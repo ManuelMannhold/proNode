@@ -150,7 +150,7 @@
 
     .folder-content {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: 10px;
         flex: 1;
         min-width: 0;
@@ -333,7 +333,7 @@ input {
 }
 
 .more-btn {
-    opacity: 0;
+    opacity: 1;
     transition: opacity 0.2s;
     flex-shrink: 0;
 }
