@@ -14,7 +14,6 @@
 
 .content-area {
   flex: 1;
-  padding: 20px;
   background-color: #0a192f;
   color: white;
   overflow-y: auto;
@@ -44,7 +43,6 @@
   scrollbar-color: rgba(0, 162, 255, 0.2) transparent;
 
   @media (max-width: 768px) {
-    padding: 20px;
 
     &::-webkit-scrollbar {
       display: none;
