@@ -45,6 +45,7 @@ export class CreateNoteDialog {
     }
   }
 
+
   noteForm = new FormGroup({
     title: new FormControl('', { validators: [Validators.required], nonNullable: true }),
     parentFolder: new FormControl('root', { nonNullable: true })
