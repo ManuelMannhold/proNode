@@ -11,7 +11,6 @@ export class NoteService {
   public folders = computed(() => this.foldersSignal());
   public selectedNote = signal<Note | null>(null);
   public isSaving = signal(false);
-
   isSidebarExpanded = signal<boolean>(false);
 
   private notesPath = computed(() => {

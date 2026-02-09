@@ -167,7 +167,7 @@ export class Login {
       await this.authService.loginWithGoogle();
       this.router.navigate(['/dashboard']);
     } catch (error) {
-      this.snackBar.open('Google Login abgebrochen!', 'OK', {
+      this.snackBar.open('Google Login Fehlgeschlagen!', 'OK', {
         duration: 3000,
         verticalPosition: 'bottom',
         panelClass: ['error-snackbar']
@@ -183,14 +183,13 @@ export class Login {
    * @returns {Promise<void>}
    */
   async onLogin() {
+    this.isLoading.set(true);
+    this.errorMessage.set('');
+
     if (!this.email || !this.password) {
       this.errorMessage.set('Bitte E-Mail und Passwort eingeben.');
       return;
     }
-
-    this.isLoading.set(true);
-    this.errorMessage.set('');
-
     try {
       await this.authService.login(this.email(), this.password());
 

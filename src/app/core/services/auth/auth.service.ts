@@ -19,7 +19,6 @@ export class AuthService {
   private auth = inject(Auth);
   private router = inject(Router);
   user = toSignal(authState(this.auth));
-
   user$ = authState(this.auth);
 
   /**

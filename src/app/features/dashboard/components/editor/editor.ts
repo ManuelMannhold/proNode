@@ -10,6 +10,7 @@ import { NoteService } from '../../../../core/services/note/note.service';
 import { Database, ref, set } from '@angular/fire/database';
 import { Welcome } from '../welcome/welcome';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-editor',
@@ -21,17 +22,18 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class Editor implements OnInit, OnDestroy {
   public isTitleInvalid = signal(false);
   public noteService = inject(NoteService);
+  public authService = inject(AuthService);
   public selectedNote = this.noteService.selectedNote;
   private route = inject(ActivatedRoute);
   private db = inject(Database);
   private snackBar = inject(MatSnackBar);
+  private contentUpdate$ = new Subject<string>();
+  private autoSaveSubscription?: Subscription;
 
   noteTitle = signal('');
   noteContent = signal('');
   saveStatus = signal('Alle Änderungen gespeichert');
 
-  private contentUpdate$ = new Subject<string>();
-  private autoSaveSubscription?: Subscription;
 
   constructor(private router: Router) {
     effect(() => {
@@ -203,11 +205,12 @@ export class Editor implements OnInit, OnDestroy {
 
     this.isTitleInvalid.set(false);
     const currentNote = this.noteService.selectedNote();
+    const currentUser = this.authService.user();
+    const userId = currentUser?.uid;
 
-    if (currentNote) {
+    if (currentNote && userId) {
       this.noteService.isSaving.set(true);
-      const titleRef = ref(this.db, `folders/${currentNote.parentId}/notes/${currentNote.id}/title`);
-
+      const titleRef = ref(this.db, `users/${userId}/folders/${currentNote.parentId}/notes/${currentNote.id}/title`);
       try {
         await set(titleRef, newTitle);
         setTimeout(() => this.noteService.isSaving.set(false), 1000);
