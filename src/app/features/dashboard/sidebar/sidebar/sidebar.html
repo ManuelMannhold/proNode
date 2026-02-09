@@ -28,23 +28,25 @@
                     chevron_right
                 </mat-icon>
 
-                @if (folder.isEditing) {
-                <input #nameInput [value]="folder.name" (keyup.enter)="saveName(folder.id, $event)"
-                    (keyup.esc)="noteService.removeFolderStub(folder.id)" (blur)="saveName(folder.id, $event)"
-                    placeholder="Ordnername..." autofocus>
-                } @else {
-                <div class="folder-content" (click)="selectFolder(folder.id)">
-                    <mat-icon>{{ isFolderExpanded(folder.id) ? 'folder_open' : 'folder' }}</mat-icon>
-                    @if (folder && folder.name) {
-                    <span class="folder-name" [matTooltip]="folder.name" [matTooltipDisabled]="folder.name.length < 20">
-                        {{ folder.name }}
-                    </span>
+                <div class="folder-content">
+                    @if (folder.isEditing) {
+                    <input #nameInput class="folder-edit-input" [value]="folder.name"
+                        (keyup.enter)="saveName(folder.id, $event)"
+                        (keyup.esc)="noteService.removeFolderStub(folder.id)" (blur)="saveName(folder.id, $event)"
+                        placeholder="Ordnername..." autofocus>
                     } @else {
-                    <span class="folder-name">Neuer Ordner</span>
+                    <div class="folder-info-wrapper" (click)="selectFolder(folder.id)">
+                        <mat-icon>{{ isFolderExpanded(folder.id) ? 'folder_open' : 'folder' }}</mat-icon>
+                        <span class="folder-name" [matTooltip]="folder.name"
+                            [matTooltipDisabled]="folder.name.length < 20">
+                            {{ folder.name || 'Neuer Ordner' }}
+                        </span>
+                    </div>
                     }
                 </div>
 
-                <button mat-icon-button [matMenuTriggerFor]="folderMenu" class="more-btn">
+                <button mat-icon-button [matMenuTriggerFor]="folderMenu" class="more-btn"
+                    (click)="$event.stopPropagation()">
                     <mat-icon>more_vert</mat-icon>
                 </button>
 
@@ -58,7 +60,6 @@
                         <span>Löschen</span>
                     </button>
                 </mat-menu>
-                }
             </div>
 
             @if (isFolderExpanded(folder.id) && folder.notes && folder.notes.length > 0) {
@@ -68,9 +69,33 @@
                     <mat-icon class="note-icon">description</mat-icon>
                     <span class="note-title">{{ note.title }}</span>
 
-                    <button class="delete-btn" (click)="onDeleteNote($event, note)">
-                        <mat-icon>delete_outline</mat-icon>
+                    <button mat-icon-button [matMenuTriggerFor]="noteActionsMenu" (click)="$event.stopPropagation()"
+                        class="more-btn">
+                        <mat-icon>more_vert</mat-icon>
                     </button>
+
+                    <mat-menu #noteActionsMenu="matMenu" class="custom-folder-menu">
+                        <button mat-menu-item [matMenuTriggerFor]="moveSubMenu">
+                            <mat-icon>drive_file_move</mat-icon>
+                            <span>Verschieben nach...</span>
+                        </button>
+                        <mat-divider></mat-divider>
+                        <button mat-menu-item (click)="onDeleteNote($event, note)" style="color: #ff5252;">
+                            <mat-icon style="color: #ff5252;">delete_outline</mat-icon>
+                            <span>Löschen</span>
+                        </button>
+                    </mat-menu>
+
+                    <mat-menu #moveSubMenu="matMenu" class="custom-folder-menu">
+                        @for (targetFolder of noteService.folders(); track targetFolder.id) {
+                        @if (targetFolder.id !== folder.id) {
+                        <button mat-menu-item (click)="noteService.moveNote(note.id, targetFolder.id)">
+                            <mat-icon>folder</mat-icon>
+                            <span>{{ targetFolder.name }}</span>
+                        </button>
+                        }
+                        }
+                    </mat-menu>
                 </div>
                 }
             </div>
@@ -90,6 +115,7 @@
         </div>
     </div>
 </div>
+
 <mat-menu #profileMenu="matMenu" xPosition="after" yPosition="above" class="custom-profile-menu">
     <div class="menu-header-info">
         <div class="avatar-large">{{ getUserDisplayName(currentUser()).charAt(0) }}</div>
@@ -98,14 +124,11 @@
             <span>{{ currentUser()?.email }}</span>
         </div>
     </div>
-    
     <mat-divider></mat-divider>
-
     <button mat-menu-item (click)="goToSettings()">
         <mat-icon>settings</mat-icon>
         <span>Einstellungen</span>
     </button>
-
     <button mat-menu-item (click)="logout()" class="logout-item">
         <mat-icon>logout</mat-icon>
         <span>Abmelden</span>
@@ -117,11 +140,9 @@
         <mat-icon>folder</mat-icon>
         <span>Ordner</span>
     </button>
-
     <button class="nav-item action-button" (click)="openCreateNoteDialog()">
         <mat-icon>add</mat-icon>
     </button>
-
     <button class="nav-item" [matMenuTriggerFor]="profileMenu">
         <mat-icon>person</mat-icon>
         <span>Profil</span>

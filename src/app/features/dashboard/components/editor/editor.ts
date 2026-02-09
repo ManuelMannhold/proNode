@@ -84,7 +84,7 @@ export class Editor implements OnInit, OnDestroy {
     snackBarRef.afterDismissed().subscribe(async (info) => {
       if (!info.dismissedByAction) {
         try {
-          await this.noteService.deleteNote(noteBackup.parentId, noteBackup.id);
+          await this.noteService.deleteNote(noteBackup.id);
         } catch (error) {
           console.error('Fehler beim endgültigen Löschen:', error);
         }
@@ -156,8 +156,7 @@ export class Editor implements OnInit, OnDestroy {
       try {
         await this.noteService.updateNoteContent(
           currentNote.parentId,
-          currentNote.id,
-          content
+          currentNote.id
         );
         this.saveStatus.set('In Echtzeit gespeichert');
         setTimeout(() => {

@@ -13,7 +13,7 @@
     padding: 20px 15px;
     display: flex;
     flex-direction: column;
-    gap: 12px; 
+    gap: 12px;
 
     .action-btn {
         display: flex;
@@ -27,58 +27,24 @@
         font-size: 0.9rem;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         width: 100%;
+        position: relative;
+        overflow: hidden;
 
-        mat-icon {
-            font-size: 20px;
-            width: 20px;
-            height: 20px;
-        }
+        mat-icon { font-size: 20px; width: 20px; height: 20px; }
 
         &.primary {
             background: linear-gradient(135deg, #00a2ff 0%, #0076ba 100%);
             color: white;
             box-shadow: 0 4px 15px rgba(0, 162, 255, 0.2);
-
-            &:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 6px 20px rgba(0, 162, 255, 0.3);
-                filter: brightness(1.1);
-            }
+            &:hover { transform: translateY(-2px); filter: brightness(1.1); }
         }
 
         &.secondary {
             background: rgba(255, 255, 255, 0.05);
             color: #ccd6f6;
             border: 1px solid rgba(255, 255, 255, 0.1);
-
-            &:hover {
-                background: rgba(255, 255, 255, 0.1);
-                color: #00a2ff;
-                border-color: rgba(0, 162, 255, 0.4);
-            }
+            &:hover { background: rgba(255, 255, 255, 0.1); color: #00a2ff; }
         }
-    }
-}
-
-.project-main-directory-header {
-    display: flex;
-    width: 100%;
-    align-items: center;
-    gap: 10px;
-    padding: 15px 20px;
-    background-color: rgba(0, 0, 0, 0.2);
-    transition: all 0.2s ease;
-
-    h4 {
-        margin: 0;
-        font-size: 0.9rem;
-        font-weight: 500;
-    }
-
-    &:hover {
-        background-color: rgba(0, 162, 255, 0.1);
-        color: #00a2ff;
-        cursor: pointer;
     }
 }
 
@@ -91,197 +57,184 @@
     flex-direction: column;
     gap: 4px;
 
-    &::-webkit-scrollbar {
-        width: 6px;
-    }
-
-    &::-webkit-scrollbar-track {
-        background: transparent;
-    }
-
+    &::-webkit-scrollbar { width: 6px; }
     &::-webkit-scrollbar-thumb {
         background: rgba(255, 255, 255, 0.1);
         border-radius: 10px;
-
-        &:hover {
-            background: rgba(0, 162, 255, 0.3);
-        }
+        &:hover { background: rgba(0, 162, 255, 0.3); }
     }
-}
-
-.folder-group {
-    display: flex;
-    flex-direction: column;
 }
 
 .folder-item {
-    .chevron {
-        font-size: 18px;
-        width: 18px;
-        height: 18px;
-        transition: transform 0.2s ease;
-        color: rgba(255, 255, 255, 0.5);
-
-        &.rotated {
-            transform: rotate(90deg);
-            color: #00a2ff;
-        }
-    }
-
     display: flex;
     align-items: center;
-    padding: 8px 12px;
+    min-height: 48px;
+    padding: 4px 12px;
+    gap: 4px;
     border-radius: 4px;
     transition: background 0.2s;
-    position: relative;
     cursor: pointer;
-    gap: 10px;
 
     &:hover {
         background: rgba(255, 255, 255, 0.05);
-        color: #00a2ff;
+        .drag-handle, .more-btn { opacity: 1; }
+    }
 
-        .delete-btn,
-        .drag-handle,
-        .more-btn {
-            opacity: 1;
-        }
+    .drag-handle, .chevron {
+        width: 24px;
+        flex-shrink: 0;
+        display: flex;
+        justify-content: center;
+        color: rgba(255, 255, 255, 0.5);
+    }
+
+    .chevron {
+        transition: transform 0.2s ease;
+        &.rotated { transform: rotate(90deg); color: #00a2ff; }
     }
 
     .folder-content {
         display: flex;
         align-items: center;
-        gap: 10px;
         flex: 1;
         min-width: 0;
+        gap: 8px;
 
-        mat-icon {
-            flex-shrink: 0;
-            font-size: 20px;
-            width: 20px;
-            height: 20px;
-            margin-top: 2px;
-        }
-
+        mat-icon { flex-shrink: 0; font-size: 20px; }
         .folder-name {
-            font-size: 0.9rem;
-            line-height: 1.4;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+            font-size: 0.95rem;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: normal;
-            word-break: break-word;
-            flex: 1;
+            white-space: nowrap;
         }
     }
-}
 
-.notes-sub-list {
-    animation: fadeIn 0.2s ease-out;
-}
-
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-5px);
+    .folder-edit-input {
+        width: 100%;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid #00a2ff;
+        color: white;
+        border-radius: 4px;
+        padding: 4px 8px;
+        font-size: 0.9rem;
+        outline: none;
     }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
+    .more-btn {
+        opacity: 0;
+        transition: opacity 0.2s;
+        flex-shrink: 0;
+        color: #ccd6f6;
     }
 }
 
 .notes-sub-list {
     margin-left: 24px;
     border-left: 1px solid rgba(0, 162, 255, 0.2);
-    padding-left: 8px;
+    padding-left: 4px;
     margin-bottom: 8px;
+    animation: fadeIn 0.2s ease-out;
 
     .note-item {
         display: flex;
-        align-items: flex-start;
+        align-items: center;
         gap: 8px;
-        padding: 6px 35px 6px 10px;
+        padding: 6px 10px;
+        min-height: 40px;
         border-radius: 4px;
         cursor: pointer;
         transition: all 0.2s ease;
         color: #8892b0;
-        position: relative;
 
-        .delete-btn {
-            opacity: 0;
-            position: absolute;
-            right: 8px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: transparent;
-            border: none;
-            color: #8892b0;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-
-            &:hover {
-                color: #ff4757;
-                transform: translateY(-50%) scale(1.1);
-            }
-
-            mat-icon {
-                font-size: 18px;
-                width: 18px;
-                height: 18px;
-                margin-top: 0;
-            }
-        }
-
-        mat-icon {
+        mat-icon.note-icon {
             flex-shrink: 0;
-            font-size: 16px;
-            width: 16px;
-            height: 16px;
-            margin-top: 2px;
+            font-size: 18px;
+            width: 18px;
+            height: 18px;
         }
 
-        span {
-            font-size: 0.8rem;
-            line-height: 1.3;
-            display: -webkit-box;
-            -webkit-line-clamp: 2;
-            -webkit-box-orient: vertical;
+        .note-title {
+            font-size: 0.85rem;
+            flex: 1;
+            white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            white-space: normal;
-            word-break: break-word;
-            flex: 1;
-            min-width: 0;
+            line-height: 1.2;
+        }
+
+        .more-btn {
+            opacity: 1;
+            transition: opacity 0.2s;
+            color: #8892b0;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &:hover { color: white; }
         }
 
         &:hover {
             background: rgba(0, 162, 255, 0.1);
             color: #00a2ff;
-
-            .delete-btn {
-                opacity: 1;
-            }
+            .more-btn { opacity: 1; }
         }
 
         &.active {
             background: rgba(0, 162, 255, 0.15);
             color: #00a2ff;
-            font-weight: bold;
-
-            .delete-btn {
-                opacity: 0.7;
-
-                &:hover {
-                    opacity: 1;
-                }
-            }
+            font-weight: 600;
         }
+    }
+}
+
+::ng-deep {
+    .mat-mdc-menu-panel.custom-folder-menu, 
+    .mat-mdc-menu-panel.custom-profile-menu {
+        background-color: rgba(17, 34, 64, 0.95) !important;
+        backdrop-filter: blur(10px) !important;
+        border: 1px solid rgba(0, 162, 255, 0.2) !important;
+        border-radius: 8px !important;
+
+        .mat-mdc-menu-item {
+            color: #ccd6f6 !important;
+            font-size: 13px !important;
+            .mat-icon { color: #8892b0 !important; font-size: 18px !important; }
+            &:hover { background-color: rgba(0, 162, 255, 0.1) !important; color: #00a2ff !important; }
+        }
+    }
+}
+
+.sidebar-footer {
+    padding: 16px;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    .legal-links {
+        display: flex;
+        justify-content: center;
+        gap: 8px;
+        font-size: 0.7rem;
+        color: #8892b0;
+        a:hover { color: #00a2ff; cursor: pointer; }
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-5px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 768px) {
+    .sidebar-layout {
+        position: fixed;
+        bottom: 0; left: 0;
+        width: 100% !important;
+        height: 75vh;
+        z-index: 1500;
+        border-radius: 24px 24px 0 0;
+        transform: translateY(100%);
+        transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1);
+        &.is-expanded { transform: translateY(0); }
     }
 }
 
@@ -310,6 +263,7 @@ input {
     height: 24px;
     cursor: grab;
     margin-right: 4px;
+
     mat-icon {
         width: 24px;
         height: 24px;
@@ -579,9 +533,9 @@ input {
         bottom: 0;
         left: 0;
         width: 100%;
-        height: 80vh; 
+        height: 80vh;
         background: #0f172a;
-        z-index: 2000; 
+        z-index: 2000;
         border-radius: 24px 24px 0 0;
         transform: translateY(100%);
         transition: transform 0.4s cubic-bezier(0.33, 1, 0.68, 1);
@@ -608,6 +562,7 @@ input {
 .action-btn {
     position: relative;
     overflow: hidden;
+
     &.primary {
         ::ng-deep .mat-ripple-element {
             background-color: rgba(255, 255, 255, 0.2);
@@ -621,17 +576,13 @@ input {
     }
 }
 
-/* Globale Anpassung für das Profil-Menü */
 .custom-profile-menu {
     background: rgba(20, 25, 35, 0.8) !important;
-    /* Dunkler, transparenter Hintergrund */
     backdrop-filter: blur(15px) saturate(150%);
-    /* Glass-Effekt */
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px !important;
     box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5) !important;
     margin-bottom: 8px;
-    /* Schwebt über dem Footer */
 
     .mat-mdc-menu-item {
         color: rgba(255, 255, 255, 0.9) !important;
@@ -666,12 +617,10 @@ input {
     display: block;
     font-size: 0.7rem;
     color: rgba(255, 255, 255, 0.5);
-    /* Etwas dunkler/transparenter als der Name */
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 150px;
-    /* Je nach Breite deiner Sidebar */
 }
 
 .user-profile-footer {
@@ -704,8 +653,20 @@ input {
         display: flex;
         flex-direction: column;
         overflow: hidden;
-        .user-name { font-size: 0.85rem; font-weight: 500; white-space: nowrap; }
-        .user-email { font-size: 0.7rem; opacity: 0.5; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+
+        .user-name {
+            font-size: 0.85rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        .user-email {
+            font-size: 0.7rem;
+            opacity: 0.5;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            overflow: hidden;
+        }
     }
 
     .more-icon {
@@ -715,10 +676,8 @@ input {
     }
 }
 
-/* In styles.scss für globale Menü-Anpassung */
 .custom-profile-menu {
     margin-bottom: 10px;
-    /* Abstand zur Sidebar-Unterkante */
 
     .menu-info {
         padding: 12px 16px;

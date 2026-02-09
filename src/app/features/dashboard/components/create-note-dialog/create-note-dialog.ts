@@ -27,7 +27,7 @@ import { NoteService } from '../../../../core/services/note/note.service';
 export class CreateNoteDialog {
   private noteService = inject(NoteService);
   private dialogRef = inject(MatDialogRef<CreateNoteDialog>);
-  folders = this.noteService.foldersSignal;
+  folders = this.noteService.folders;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: { defaultFolder: string }

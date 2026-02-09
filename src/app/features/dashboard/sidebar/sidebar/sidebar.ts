@@ -81,6 +81,15 @@ export class Sidebar {
 
   currentUser$ = user(this.auth);
 
+  moveNoteTo(noteId: string, event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const newFolderId = selectElement.value;
+
+    if (newFolderId) {
+      this.noteService.moveNote(noteId, newFolderId);
+    }
+  }
+
   /**
    * Derives a display name from user object properties (displayName or email).
    * @param {any} user - The current user object.
@@ -203,27 +212,27 @@ export class Sidebar {
    * @param {string} id - The ID of the folder to delete.
    */
   deleteFolder(id: string) {
-  const folderToDelete = this.folders().find(f => f.id === id);
-  if (!folderToDelete) return;
-  const previousFolders = [...this.folders()];
-  this.noteService.updateLocalOrder(previousFolders.filter(f => f.id !== id));
+    const folderToDelete = this.folders().find(f => f.id === id);
+    if (!folderToDelete) return;
+    const previousFolders = [...this.folders()];
+    this.noteService.updateLocalOrder(previousFolders.filter(f => f.id !== id));
 
-  const snackBarRef = this.snackBar.open(
-    `Ordner "${folderToDelete.name}" gelöscht`, 
-    'RÜCKGÄNGIG', 
-    { duration: 2500, panelClass: ['dark-snackbar', 'fast-snackbar'] }
-  );
+    const snackBarRef = this.snackBar.open(
+      `Ordner "${folderToDelete.name}" gelöscht`,
+      'RÜCKGÄNGIG',
+      { duration: 2500, panelClass: ['dark-snackbar', 'fast-snackbar'] }
+    );
 
-  snackBarRef.onAction().subscribe(() => {
-    this.noteService.updateLocalOrder(previousFolders);
-  });
+    snackBarRef.onAction().subscribe(() => {
+      this.noteService.updateLocalOrder(previousFolders);
+    });
 
-  snackBarRef.afterDismissed().subscribe((info) => {
-    if (!info.dismissedByAction) {
-      this.noteService.deleteFolder(id);
-    }
-  });
-}
+    snackBarRef.afterDismissed().subscribe((info) => {
+      if (!info.dismissedByAction) {
+        this.noteService.deleteFolder(id);
+      }
+    });
+  }
 
   /**
    * Updates the selected note in the global service state.
@@ -270,7 +279,7 @@ export class Sidebar {
   async onDeleteNote(event: MouseEvent, note: any) {
     event.stopPropagation();
     const deletedNote = note;
-    await this.noteService.deleteNote(note.parentId, note.id);
+    await this.noteService.deleteNote(note.id);
 
     const snack = this.snackBar.open(`Notiz "${note.title}" gelöscht`, 'RÜCKGÄNGIG', {
       duration: 2500,
