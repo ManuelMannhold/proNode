@@ -216,20 +216,24 @@ export class Sidebar {
   }
 
   /**
-   * Updates the selected note in the global service state.
-   * @param {Note} note - The clicked note object.
+   * Opens the creation dialog, ensuring at least one default folder exists.
+   * Passes the first available folder ID as the default selection.
+   * @returns {Promise<void>}
    */
-  onNoteClick(note: Note) {
-    this.noteService.selectNote(note);
-  }
+  async openCreateNoteDialog() {
+    let folders = this.noteService.folders();
 
-  /**
-   * Opens a dialog to create a new note and navigates to it upon completion.
-   */
-  openCreateNoteDialog() {
+    if (folders.length === 0) {
+      const defaultFolderId = 'folder-' + Date.now();
+      await this.noteService.addFolderStub(defaultFolderId);
+      await this.noteService.saveFolder(defaultFolderId, 'Meine Notizen');
+      folders = this.noteService.folders();
+    }
+
     const DIALOGREF = this.dialog.open(CreateNoteDialog, {
       width: '450px',
-      panelClass: 'custom-glass-dialog'
+      panelClass: 'custom-glass-dialog',
+      data: { defaultFolder: folders[0].id }
     });
 
     DIALOGREF.afterClosed().subscribe(result => {

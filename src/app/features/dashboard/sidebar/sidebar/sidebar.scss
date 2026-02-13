@@ -107,6 +107,11 @@
             text-overflow: ellipsis;
             white-space: nowrap;
         }
+
+        .folder-info-wrapper {
+            display: flex;
+            align-items: center;
+        }
     }
 
     .folder-edit-input {
