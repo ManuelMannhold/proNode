@@ -4,11 +4,13 @@ import { MatIconModule } from '@angular/material/icon';
 import { NoteService } from '../../../core/services/note/note.service';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { AuthService } from '../../../core/services/auth/auth.service';
+import { ProfileMenu } from "../../../features/dashboard/components/profile-menu/profile-menu";
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, MatIconModule, MatTooltipModule],
+  imports: [CommonModule, MatIconModule, MatTooltipModule, ProfileMenu, MatMenuModule],
   templateUrl: 'header.html',
   styleUrl: 'header.scss',
 })

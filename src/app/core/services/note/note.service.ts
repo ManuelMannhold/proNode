@@ -41,7 +41,7 @@ export class NoteService {
           this.selectedNote.set(updatedNote);
         }
       }
-    }, { allowSignalWrites: true });
+    });
   }
 
   private initFirebaseSync() {

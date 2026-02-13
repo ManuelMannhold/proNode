@@ -132,3 +132,26 @@ input {
     }
   }
 }
+
+.custom-glass-dialog .mat-mdc-dialog-container .mdc-dialog__surface {
+  background: rgba(17, 34, 64, 0.95) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 77, 77, 0.3);
+  border-radius: 12px;
+}
+
+.custom-snackbar {
+  background: rgba(17, 34, 64, 0.9) !important;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(0, 162, 255, 0.3);
+  border-radius: 8px;
+  color: #ccd6f6 !important;
+  
+  .mat-mdc-snack-bar-label {
+    font-family: 'Inter', sans-serif;
+  }
+
+  .mat-mdc-snack-bar-action {
+    color: #00a2ff !important;
+  }
+}

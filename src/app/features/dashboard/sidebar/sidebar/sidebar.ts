@@ -19,6 +19,8 @@ import { DragDropModule, CdkDragHandle } from '@angular/cdk/drag-drop';
 import { Auth, signOut, user } from '@angular/fire/auth';
 import { MatDividerModule } from '@angular/material/divider';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { AuthService } from '../../../../core/services/auth/auth.service';
+import { ProfileMenu } from "../../components/profile-menu/profile-menu";
 
 @Component({
   selector: 'app-sidebar',
@@ -26,7 +28,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
     MatIconModule,
     MatButtonModule, MatTooltipModule, MatRippleModule, MatMenuModule,
     MatDividerModule,
-    MatButtonModule],
+    MatButtonModule, ProfileMenu],
   templateUrl: './sidebar.html',
   styleUrl: './sidebar.scss',
   animations: [
@@ -49,6 +51,7 @@ export class Sidebar {
   public selectedNote = this.noteService.selectedNote;
   private snackBar = inject(MatSnackBar);
   private auth = inject(Auth);
+  public authService = inject(AuthService);
 
   expandedFolderIds = signal<Set<string>>(new Set());
   folders = this.noteService.folders;
@@ -91,38 +94,6 @@ export class Sidebar {
   }
 
   /**
-   * Derives a display name from user object properties (displayName or email).
-   * @param {any} user - The current user object.
-   * @returns {string} The formatted name, 'Gast', or 'User'.
-   */
-  getUserDisplayName(user: any): string {
-    if (!user) return 'Gast';
-    if (user.displayName) return user.displayName;
-    if (user.email) {
-      const name = user.email.split('@')[0];
-      return name.charAt(0).toUpperCase() + name.slice(1).replace(/[._]/g, ' ');
-    }
-    return 'User';
-  }
-
-  /**
-   * Displays a temporary notification regarding the availability of settings.
-   */
-  goToSettings() {
-    this.snackBar.open('Einstellungen folgen bald...', 'OK', { duration: 2000 });
-  }
-
-  /**
-   * Clears local session data, signs out from Firebase, and redirects to login.
-   * @returns {Promise<void>}
-   */
-  async logout() {
-    localStorage.removeItem('currentUser');
-    await signOut(this.auth);
-    this.router.navigate(['/login']);
-  }
-
-  /**
    * Toggles the global sidebar expansion state via the note service.
    */
   toggleSidebar() {
@@ -137,6 +108,16 @@ export class Sidebar {
     if (window.innerWidth < 768) {
       this.isExpanded.set(false);
     }
+  }
+
+  /**
+  * Clears local session data, signs out from Firebase, and redirects to login.
+  * @returns {Promise<void>}
+  */
+  async logout() {
+    localStorage.removeItem('currentUser');
+    await signOut(this.auth);
+    this.router.navigate(['/login']);
   }
 
   /**

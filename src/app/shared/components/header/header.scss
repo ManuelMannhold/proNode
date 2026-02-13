@@ -67,12 +67,33 @@ mat-icon {
     }
 }
 
+.user-section {
+    cursor: pointer;
+    &:hover {
+        color: lightgray;
+        background-color: rgba(255, 255, 255, 0.1);
+        border-radius: 20px;
+    }
+}
+
 @keyframes sync-pulse {
-    0% { transform: scale(1); opacity: 1; }
-    50% { transform: scale(1.2); opacity: 0.5; }
-    100% { transform: scale(1); opacity: 1; }
+    0% {
+        transform: scale(1);
+        opacity: 1;
+    }
+
+    50% {
+        transform: scale(1.2);
+        opacity: 0.5;
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
 
 .avatar-circle {
     color: white;
+    cursor: pointer;
 }

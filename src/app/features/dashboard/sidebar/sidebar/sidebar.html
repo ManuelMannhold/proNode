@@ -103,7 +103,6 @@
         </div>
         }
     </div>
-
     <button mat-icon-button (click)="logout()" class="logout-button">
         <mat-icon>logout</mat-icon>
     </button>
@@ -116,25 +115,7 @@
     </div>
 </div>
 
-<mat-menu #profileMenu="matMenu" xPosition="after" yPosition="above" class="custom-profile-menu">
-    <div class="menu-header-info">
-        <div class="avatar-large">{{ getUserDisplayName(currentUser()).charAt(0) }}</div>
-        <div class="text-info">
-            <strong>{{ getUserDisplayName(currentUser()) }}</strong>
-            <span>{{ currentUser()?.email }}</span>
-        </div>
-    </div>
-    <mat-divider></mat-divider>
-    <button mat-menu-item (click)="goToSettings()">
-        <mat-icon>settings</mat-icon>
-        <span>Einstellungen</span>
-    </button>
-    <button mat-menu-item (click)="logout()" class="logout-item">
-        <mat-icon>logout</mat-icon>
-        <span>Abmelden</span>
-    </button>
-</mat-menu>
-
+@if(isMobile()) {
 <nav class="mobile-bottom-nav">
     <button class="nav-item" (click)="toggleSidebar()" [class.active]="isExpanded()">
         <mat-icon>folder</mat-icon>
@@ -143,8 +124,11 @@
     <button class="nav-item action-button" (click)="openCreateNoteDialog()">
         <mat-icon>add</mat-icon>
     </button>
-    <button class="nav-item" [matMenuTriggerFor]="profileMenu">
+    <button class="nav-item" [matMenuTriggerFor]="profileMenuComp.profileMenu || null">
         <mat-icon>person</mat-icon>
         <span>Profil</span>
     </button>
 </nav>
+}
+
+<app-profile-menu #profileMenuComp></app-profile-menu>

@@ -7,10 +7,19 @@ import {
   createUserWithEmailAndPassword,
   signOut,
   authState,
-  signInAnonymously
+  signInAnonymously,
+  deleteUser
 } from '@angular/fire/auth';
+import {
+  getFirestore,
+  doc,
+  deleteDoc
+} from '@angular/fire/firestore';
 import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { MatDialog } from '@angular/material/dialog';
+import { DeleteConfirmDialog } from '../../../features/dashboard/components/delete-confirm-dialog/delete-confirm-dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -18,8 +27,18 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class AuthService {
   private auth = inject(Auth);
   private router = inject(Router);
+  private dialog = inject(MatDialog);
+  private snackBar = inject(MatSnackBar);
   user = toSignal(authState(this.auth));
   user$ = authState(this.auth);
+  private showMessage(message: string) {
+    this.snackBar.open(message, 'OK', {
+      duration: 5000,
+      horizontalPosition: 'center',
+      verticalPosition: 'bottom',
+      panelClass: ['custom-snackbar']
+    });
+  }
 
   /**
    * Authenticates a user with email and password.
@@ -86,5 +105,33 @@ export class AuthService {
     await signOut(this.auth);
     this.router.navigate(['/login']);
   }
-}
 
+  async deleteUserAccount() {
+  const user = this.auth.currentUser;
+  if (!user) return;
+
+  const dialogRef = this.dialog.open(DeleteConfirmDialog, {
+    width: '350px',
+    panelClass: 'custom-glass-dialog'
+  });
+
+  dialogRef.afterClosed().subscribe(async (confirmed) => {
+    if (!confirmed) return;
+
+    try {
+      await deleteUser(user);
+      this.showMessage('Account erfolgreich gelöscht. Auf Wiedersehen!');
+      this.router.navigate(['/login']);
+      
+    } catch (error: any) {
+      console.error("Löschfehler:", error);
+      if (error.code === 'auth/requires-recent-login') {
+        this.showMessage('Sicherheits-Check: Bitte logge dich erneut ein, um das Löschen zu bestätigen.');
+        await this.logout();
+      } else {
+        this.showMessage('Etwas ist schiefgelaufen. Bitte versuche es später erneut.');
+      }
+    }
+  });
+}
+}

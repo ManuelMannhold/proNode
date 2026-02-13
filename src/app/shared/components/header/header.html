@@ -6,7 +6,7 @@
     </div>
     
     <div class="user-section" *ngIf="authService.user()">
-        <div class="user-badge">
+        <div class="user-badge" [matMenuTriggerFor]="profileMenuComp.profileMenu">
             <span class="status-indicator" 
                   [class.saving]="noteService.isSaving()"
                   [matTooltip]="noteService.isSaving() ? 'Synchronisiere...' : 'Gesichert'">
@@ -18,3 +18,5 @@
         </div>
     </div>
 </header>
+
+<app-profile-menu #profileMenuComp></app-profile-menu>

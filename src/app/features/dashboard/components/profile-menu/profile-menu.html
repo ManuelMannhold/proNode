@@ -1,0 +1,24 @@
+<mat-menu #profileMenu="matMenu" xPosition="after" yPosition="above" class="custom-profile-menu">
+    <div class="menu-header-info">
+        <div class="avatar-large">{{ getUserDisplayName(currentUser()).charAt(0) }}</div>
+        <div class="text-info">
+            <strong>{{ getUserDisplayName(currentUser()) }}</strong>
+            <span>{{ currentUser()?.email }}</span>
+        </div>
+    </div>
+    <mat-divider></mat-divider>
+    <button mat-menu-item (click)="goToSettings()" class="settings-button">
+    <mat-icon>settings</mat-icon>
+    <span>Einstellungen</span>
+  </button>
+
+  <button mat-menu-item (click)="authService.deleteUserAccount()" class="delete-account-btn">
+    <mat-icon>person_remove</mat-icon>
+    <span>Account löschen</span>
+  </button>
+
+  <button mat-menu-item (click)="authService.logout()" class="logout-button">
+    <mat-icon>logout</mat-icon>
+    <span>Abmelden</span>
+  </button>
+</mat-menu>

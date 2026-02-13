@@ -1,0 +1,8 @@
+<h2 mat-dialog-title>Account löschen?</h2>
+<mat-dialog-content>
+  Bist du sicher? Alle deine Daten werden unwiderruflich gelöscht.
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()">Abbrechen</button>
+  <button mat-raised-button color="warn" (click)="onConfirm()">Ja, Löschen</button>
+</mat-dialog-actions>

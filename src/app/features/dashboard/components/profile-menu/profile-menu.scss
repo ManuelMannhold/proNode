@@ -1,0 +1,62 @@
+button {
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+::ng-deep {
+    .mat-mdc-menu-panel.custom-profile-menu {
+        background: rgba(17, 34, 64, 0.98);
+        backdrop-filter: blur(15px);
+        border: 1px solid rgba(0, 162, 255, 0.2);
+        border-radius: 12px;
+        min-width: 220px;
+
+        .mat-mdc-menu-content {
+            display: flex;
+            flex-direction: column;
+            padding: 8px 0;
+        }
+
+        .mat-mdc-menu-item {
+            background: transparent;
+            color: #ccd6f6;
+
+            .mat-icon {
+                color: #00a2ff;
+                margin-right: 12px;
+            }
+
+            &:hover {
+                background: rgba(0, 162, 255, 0.1);
+            }
+        }
+
+        .settings-button {
+            background-color: rgba(17, 34, 64, 0.98);
+            cursor: pointer;
+            color: white;
+
+            &:hover {
+                background: rgba(0, 162, 255, 0.1);
+            }
+        }
+
+        .delete-account-btn,
+        .logout-button {
+            color: #ff5252;
+            background: rgba(17, 34, 64, 0.98);
+            cursor: pointer;
+
+            .mat-icon {
+                color: #ff5252;
+            }
+
+            &:hover {
+                background: rgba(0, 162, 255, 0.1);
+            }
+        }
+    }
+}
