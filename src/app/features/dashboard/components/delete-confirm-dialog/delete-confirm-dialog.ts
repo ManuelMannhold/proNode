@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialogContent, MatDialogActions, MatDialogRef } from "@angular/material/dialog";
+import { AuthService } from '../../../../core/services/auth/auth.service';
 
 @Component({
   selector: 'app-delete-confirm-dialog',
@@ -10,6 +11,11 @@ import { MatDialogContent, MatDialogActions, MatDialogRef } from "@angular/mater
 export class DeleteConfirmDialog {
   constructor(private dialogRef: MatDialogRef<DeleteConfirmDialog>) { }
 
+  private authService = inject(AuthService);
+
   onCancel(): void { this.dialogRef.close(false); }
-  onConfirm(): void { this.dialogRef.close(true); }
+  onConfirm(): void {
+    this.authService.deleteUserAccount();
+    this.dialogRef.close(true);
+  }
 }

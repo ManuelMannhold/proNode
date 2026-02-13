@@ -20,6 +20,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { MatDialog } from '@angular/material/dialog';
 import { DeleteConfirmDialog } from '../../../features/dashboard/components/delete-confirm-dialog/delete-confirm-dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Database, remove, ref } from '@angular/fire/database';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,7 @@ export class AuthService {
   private router = inject(Router);
   private dialog = inject(MatDialog);
   private snackBar = inject(MatSnackBar);
+  private db = inject(Database);
   user = toSignal(authState(this.auth));
   user$ = authState(this.auth);
   private showMessage(message: string) {
@@ -107,31 +109,33 @@ export class AuthService {
   }
 
   async deleteUserAccount() {
-  const user = this.auth.currentUser;
-  if (!user) return;
+    const user = this.auth.currentUser;
+    if (!user) return;
+    const userId = user.uid;
 
-  const dialogRef = this.dialog.open(DeleteConfirmDialog, {
-    width: '350px',
-    panelClass: 'custom-glass-dialog'
-  });
+    const dialogRef = this.dialog.open(DeleteConfirmDialog, {
+      width: '350px',
+      panelClass: 'custom-glass-dialog'
+    });
 
-  dialogRef.afterClosed().subscribe(async (confirmed) => {
-    if (!confirmed) return;
+    dialogRef.afterClosed().subscribe(async (confirmed) => {
+      if (!confirmed) return;
+      try {
+        const userDocRef = ref(this.db, `users/${userId}`);
+        await remove(userDocRef);
+        await deleteUser(user);
+        this.showMessage('Account erfolgreich gelöscht. Auf Wiedersehen!');
+        this.router.navigate(['/login']);
 
-    try {
-      await deleteUser(user);
-      this.showMessage('Account erfolgreich gelöscht. Auf Wiedersehen!');
-      this.router.navigate(['/login']);
-      
-    } catch (error: any) {
-      console.error("Löschfehler:", error);
-      if (error.code === 'auth/requires-recent-login') {
-        this.showMessage('Sicherheits-Check: Bitte logge dich erneut ein, um das Löschen zu bestätigen.');
-        await this.logout();
-      } else {
-        this.showMessage('Etwas ist schiefgelaufen. Bitte versuche es später erneut.');
+      } catch (error: any) {
+        console.error("Löschfehler:", error);
+        if (error.code === 'auth/requires-recent-login') {
+          this.showMessage('Sicherheits-Check: Bitte logge dich erneut ein, um das Löschen zu bestätigen.');
+          await this.logout();
+        } else {
+          this.showMessage('Etwas ist schiefgelaufen. Bitte versuche es später erneut.');
+        }
       }
-    }
-  });
-}
+    });
+  }
 }

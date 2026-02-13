@@ -95,8 +95,15 @@ export class Login {
         this.router.navigate(['/dashboard']);
       }
     } catch (error: any) {
-      this.handleAuthError(error);
-    } finally {
+      console.error("Login Fehler:", error.code);
+
+      if (error.code === 'auth/invalid-credential') {
+        this.snackBar.open('E-Mail oder Passwort falsch.', 'OK', { duration: 5000 });
+      } else {
+        this.snackBar.open('Ein Fehler ist aufgetreten. Bitte versuche es später erneut.', 'OK', { duration: 5000 });
+      }
+    }
+    finally {
       this.isLoading.set(false);
     }
   }

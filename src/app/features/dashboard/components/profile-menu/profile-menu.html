@@ -8,17 +8,19 @@
     </div>
     <mat-divider></mat-divider>
     <button mat-menu-item (click)="goToSettings()" class="settings-button">
-    <mat-icon>settings</mat-icon>
-    <span>Einstellungen</span>
-  </button>
+        <mat-icon>settings</mat-icon>
+        <span>Einstellungen</span>
+    </button>
 
-  <button mat-menu-item (click)="authService.deleteUserAccount()" class="delete-account-btn">
-    <mat-icon>person_remove</mat-icon>
-    <span>Account löschen</span>
-  </button>
+    @if(authService.user() && !authService.user()?.isAnonymous) {
+    <button mat-menu-item (click)="authService.deleteUserAccount()" class="delete-account-btn">
+        <mat-icon>person_remove</mat-icon>
+        <span>Account löschen</span>
+    </button>
+    }
 
-  <button mat-menu-item (click)="authService.logout()" class="logout-button">
-    <mat-icon>logout</mat-icon>
-    <span>Abmelden</span>
-  </button>
+    <button mat-menu-item (click)="authService.logout()" class="logout-button">
+        <mat-icon>logout</mat-icon>
+        <span>Abmelden</span>
+    </button>
 </mat-menu>
