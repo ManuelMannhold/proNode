@@ -7,7 +7,7 @@ input {
 form {
   @media(max-height: 780px) {
     .full-width {
-      margin-bottom: unset !important;
+      margin-bottom: unset;
     }
   }
 }
@@ -61,7 +61,7 @@ form {
       margin-bottom: 15px;
     }
 
-    padding: 25px !important;
+    padding: 25px;
   }
 }
 
@@ -293,15 +293,15 @@ form {
 
   /* 1. Den Standard-Rahmen ausblenden oder dezent färben */
   .mat-mdc-text-field-wrapper .mdc-notched-outline__leading {
-    border-color: rgba(255, 255, 255, 0.2) !important;
+    border-color: rgba(255, 255, 255, 0.2);
   }
 
   .mat-mdc-form-field-flex {
-    padding-left: unset !important;
+    padding-left: unset;
   }
 
   .mdc-text-field--outlined .mdc-notched-outline .mdc-notched-outline__leading {
-    width: unset !important;
+    width: unset;
   }
 
   .mat-mdc-form-field:not(.mat-form-field-disabled) .mat-mdc-floating-label.mdc-floating-label {
@@ -314,13 +314,13 @@ form {
     .mdc-notched-outline__leading,
     .mdc-notched-outline__notch,
     .mdc-notched-outline__trailing {
-      border-color: #00a2ff !important;
+      border-color: #00a2ff;
     }
   }
 
   /* 3. Den Hintergrund des Inputs anpassen (Glassmorphism Effekt) */
   .mat-mdc-text-field-wrapper {
-    background-color: rgba(255, 255, 255, 0.05) !important;
+    background-color: rgba(255, 255, 255, 0.05);
   }
 }
 
@@ -331,8 +331,8 @@ form {
 
 /* 1. Das Haupt-Label (Email / Password) - Knallweiß statt Grau */
 ::ng-deep .mat-mdc-form-field .mdc-floating-label {
-  color: white !important;
-  font-weight: 500 !important;
+  color: white;
+  font-weight: 500;
   letter-spacing: 0.5px;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
 }
@@ -340,30 +340,30 @@ form {
 /* 2. Wenn das Label oben schwebt (Floating) */
 ::ng-deep .mat-mdc-form-field.mat-focused .mdc-floating-label,
 ::ng-deep .mat-mdc-form-field .mdc-floating-label--float-above {
-  color: #00a2ff !important;
-  background-color: transparent !important;
+  color: #00a2ff;
+  background-color: transparent;
 }
 
 /* 3. Der Eingabetext (das getippte Wort) */
 ::ng-deep .mat-mdc-input-element {
-  color: white !important;
-  font-size: 1rem !important;
+  color: white;
+  font-size: 1rem;
 }
 
 ::ng-deep .mdc-notched-outline__leading,
 ::ng-deep .mdc-notched-outline__notch,
 ::ng-deep .mdc-notched-outline__trailing {
-  border-color: rgba(255, 255, 255, 0.5) !important;
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 /* 5. Rahmen bei Fokus (Klick ins Feld) */
 ::ng-deep .mat-focused .mdc-notched-outline__leading,
 ::ng-deep .mat-focused .mdc-notched-outline__notch,
 ::ng-deep .mat-focused .mdc-notched-outline__trailing {
-  border-color: #00a2ff !important;
+  border-color: #00a2ff;
 }
 
 /* 6. Die Icons (Mail/Lock) aufhellen */
 ::ng-deep .mat-mdc-form-field mat-icon {
-  color: rgba(255, 255, 255, 0.8) !important;
+  color: rgba(255, 255, 255, 0.8);
 }

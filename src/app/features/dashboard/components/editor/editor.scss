@@ -35,7 +35,7 @@
 
             &:focus,
             &:hover {
-                border-bottom: 1px solid rgba(56, 189, 248, 0.3) !important;
+                border-bottom: 1px solid rgba(56, 189, 248, 0.3) ;
             }
 
             &::placeholder {
@@ -43,7 +43,7 @@
             }
 
             &.invalid {
-                border-bottom-color: #ff4757 !important;
+                border-bottom-color: #ff4757 ;
                 color: #ff4757;
                 animation: shake 0.4s;
             }
