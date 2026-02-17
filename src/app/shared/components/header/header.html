@@ -5,7 +5,7 @@
         <span class="bracket">{{ '}' }}</span>
     </div>
     
-    <div class="user-section" *ngIf="authService.user()">
+    <div class="user-section" *ngIf="isLoggedIn()">
         <div class="user-badge" [matMenuTriggerFor]="profileMenuComp.profileMenu">
             <span class="status-indicator" 
                   [class.saving]="noteService.isSaving()"
@@ -13,7 +13,7 @@
             </span>
             
             <div class="avatar-circle">
-                {{ displayLetter() }}
+                {{ displayName() }}
             </div>
         </div>
     </div>

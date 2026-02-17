@@ -1,4 +1,4 @@
-import { Component, computed, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, computed, effect, inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { NoteService } from '../../../core/services/note/note.service';
@@ -17,20 +17,27 @@ import { MatMenuModule } from '@angular/material/menu';
 export class Header {
   public noteService = inject(NoteService);
   public authService = inject(AuthService);
+  private cd = inject(ChangeDetectorRef);
+  isLoggedIn = signal(false);
+  displayName = signal<string>('...');
 
-  displayLetter = computed(() => {
-    const user = this.authService.user();
+  constructor() {
+    effect(() => {
+      const user = this.authService.user();
+      let name = 'U';
 
-    if (!user || user.isAnonymous) {
-      return 'Gast';
-    }
+      if (!user || user.isAnonymous) {
+        name = 'Gast';
+      } else if (user.email) {
+        const namePart = user.email.split('@')[0];
+        name = namePart.charAt(0).toUpperCase() + namePart.slice(1);
+      }
 
-    if (user.email) {
-      const namePart = user.email.split('@')[0];
-
-      return namePart.charAt(0).toUpperCase() + namePart.slice(1);
-    }
-
-    return 'U';
-  });
+      Promise.resolve().then(() => {
+        this.isLoggedIn.set(!!user);
+        this.displayName.set(name);
+        this.cd.detectChanges();
+      });
+    });
+  }
 }
