@@ -1,8 +1,8 @@
 .dialog-container {
-  background: rgba(17, 34, 64, 0.95); 
+  background: rgba(17, 34, 64, 0.95);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(0, 162, 255, 0.2); 
+  border: 1px solid rgba(0, 162, 255, 0.2);
   border-radius: 20px;
   color: #ccd6f6;
   padding: 30px;
@@ -24,94 +24,97 @@ h2 {
   margin-top: 10px;
 
   .save-btn {
-  background-color: #00a2ff ;
-  color: white ;
-  box-shadow: 0 0 10px rgba(0, 162, 255, 0.3);
-  
-  &:disabled {
-    background-color: rgba(255, 255, 255, 0.1) ;
-    color: rgba(255, 255, 255, 0.3) ;
+    background-color: #00a2ff;
+    color: white;
+    box-shadow: 0 0 10px rgba(0, 162, 255, 0.3);
+
+    &:disabled {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.3);
+    }
+  }
+
+  .cancel-btn {
+    color: #8892b0;
+    margin-right: 10px;
   }
 }
 
-.cancel-btn {
-  color: #8892b0 ;
-  margin-right: 10px;
-}
-}
-
-::ng-deep .mat-mdc-select-value{
-  color: white ;
+::ng-deep .mat-mdc-select-value {
+  color: white;
 }
 
 ::ng-deep .mat-mdc-select-panel {
-  background: rgba(17, 34, 64, 0.95) ;
+  background: rgba(17, 34, 64, 0.95);
   backdrop-filter: blur(10px);
   border: 1px solid rgba(0, 162, 255, 0.2);
-  
+
   .mat-mdc-option {
-    color: #ccd6f6 ;
+    color: #ccd6f6;
+
     &:hover {
-      background: rgba(0, 162, 255, 0.1) ;
+      background: rgba(0, 162, 255, 0.1);
     }
+
     &.mdc-list-item--selected {
-      color: #00a2ff ;
-      background: rgba(0, 162, 255, 0.15) ;
+      color: #00a2ff;
+      background: rgba(0, 162, 255, 0.15);
     }
   }
 }
 
 .full-width {
-    width: 100%;
-    margin-bottom: 15px;
+  width: 100%;
+  margin-bottom: 15px;
 }
 
 mat-form-field {
-    width: 100%;
+  width: 100%;
 }
 
 ::ng-deep .mat-mdc-select-panel {
-    background-color: #112240 ;
-    border: 1px solid rgba(0, 162, 255, 0.2);
-    
-    &::-webkit-scrollbar {
-        width: 6px;
-    }
-    &::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 10px;
-    }
+  background-color: #112240;
+  border: 1px solid rgba(0, 162, 255, 0.2);
+
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+  }
 }
 
 ::ng-deep .mat-mdc-option {
-    color: #ccd6f6 ;
-    
-    .mdc-list-item__primary-text {
-        white-space: normal ;
-        display: -webkit-box ;
-        -webkit-line-clamp: 2; 
-        -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        line-height: 1.3;
-        font-size: 0.9rem;
-    }
+  color: #ccd6f6;
 
-    &:hover:not(.mat-mdc-option-disabled), 
-    &.mat-mdc-option-active {
-        background-color: rgba(0, 162, 255, 0.1) ;
-    }
+  .mdc-list-item__primary-text {
+    white-space: normal !important;
+    display: -webkit-box !important;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.3;
+    font-size: 0.9rem;
+  }
 
-    &.mat-mdc-selected {
-        color: #00a2ff ;
-        background-color: rgba(0, 162, 255, 0.15) ;
-    }
+  &:hover:not(.mat-mdc-option-disabled),
+  &.mat-mdc-option-active {
+    background-color: rgba(0, 162, 255, 0.1) !important;
+  }
+
+  &.mat-mdc-selected {
+    color: #00a2ff !important;
+    background-color: rgba(0, 162, 255, 0.15) !important;
+  }
 }
 
 ::ng-deep .custom-glass-dialog {
   .mat-mdc-form-field-label {
-    color: rgba(255, 255, 255, 0.7) ;
-    display: block ;
+    color: rgba(255, 255, 255, 0.7) !important;
+    display: block !important;
   }
 
   .button-row {
@@ -122,31 +125,33 @@ mat-form-field {
   }
 
   .cancel-btn {
-    background: transparent ;
-    color: #8892b0 ;
-    border: 1px solid rgba(255, 255, 255, 0.1) ;
+    background: transparent !important;
+    color: #8892b0 !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+
     &:hover {
-      background: rgba(255, 255, 255, 0.05) ;
-      color: white ;
+      background: rgba(255, 255, 255, 0.05) !important;
+      color: white !important;
     }
   }
 
   .save-btn {
     &:not(:disabled) {
-      background: #00a2ff ;
-      color: #020c1b ;
+      background: #00a2ff !important;
+      color: #020c1b !important;
       box-shadow: 0 4px 15px rgba(0, 162, 255, 0.4);
     }
+
     &:disabled {
-      background: rgba(255, 255, 255, 0.05) ;
-      color: rgba(255, 255, 255, 0.2) ;
+      background: rgba(255, 255, 255, 0.05) !important;
+      color: rgba(255, 255, 255, 0.2) !important;
     }
   }
 }
 
 .save-btn:disabled {
-  background: rgba(255, 255, 255, 0.05) ;
-  color: rgba(255, 255, 255, 0.2) ;
-  border: 1px solid rgba(255, 255, 255, 0.1) ;
+  background: rgba(255, 255, 255, 0.05) !important;
+  color: rgba(255, 255, 255, 0.2) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
   cursor: not-allowed;
 }
